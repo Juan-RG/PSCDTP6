@@ -12,7 +12,7 @@
 #---------------------------------------------------------
 CC=g++
 
-CLIENT=MainCliente
+CLIENT=MainPublicador
 MULTI_SERVER=MainServer
 MONITOR=MonitorConexiones
 SOCKET_DIR=Socket

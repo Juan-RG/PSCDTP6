@@ -1,10 +1,4 @@
-//*****************************************************************
-// File:   Cliente.cpp
-// Author: PSCD-Unizar
-// Date:   noviembre 2015
-// Coms:   Ejemplo de cliente con comunicación síncrona mediante sockets
-//
-//*****************************************************************
+
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -22,7 +16,6 @@ int main(int argc, char* argv[]) {
     const string PUBLICADOR = "PUBLICADOR";
     const string BUSCADOR = "BUSCADOR";
     const string DESCONEXION = "DESCONEXION";
-
 
     // Dirección y número donde escucha el proceso servidor
     string SERVER_ADDRESS = "localhost";                                            //configruar para coger de arv
@@ -88,8 +81,25 @@ int main(int argc, char* argv[]) {
     cout << mensaje + "\n";
 
     //cortamos el string recibido con los datos ip1,ip2,ip3,puerto
-    //hilo para utilizar el linda driver con la conexion
+    //hilo para utilizar el linda driver con la conexion o bucle
     //join del hilo para cuando finalice
+
+    for (int i = 0;i < 10; i++){
+        int precioMin = 1, precioMax = 3;
+        //Calculamos un valor aleatorio entre el min y el max
+        int numeroAleatorio = rand () % (precioMax - precioMin + 1) + precioMin;
+        int p;
+        for(int j = 0; j < numeroAleatorio; j++){
+            //leer conescutivas con i
+            //RN O RDN la eliminamos o no?¿?¿
+            if(j == 0){
+               // string oferta = pirzarra.RdN([?p,?CiudadOrigen,?CiudadDestino,?Precio]); //poner mas datos en rd de tupla --- cambiar string por tupla
+            }else{
+                //string oferta = pirzarra.RdN([p+1,?CiudadOrigen,?CiudadDestino,?Precio]); //poner mas datos en rd de tupla
+            }
+            //printf(oferta);
+        }
+    }
 
     sleep(10);
     mensaje = DESCONEXION;
