@@ -3,10 +3,11 @@
 #include <chrono>
 #include <thread>
 #include "Socket/Socket.hpp"
+#include "LindaDriver.hpp"
 
 using namespace std;
 
-const int MESSAGE_SIZE = 100; //mensajes de no más 4000 caracteres
+//const int MESSAGE_SIZE = 100; //mensajes de no más 4000 caracteres
 
 void asignarCiudad(string *ciudad) {
     int valorMin = 1, valorMax = 10;
@@ -48,12 +49,14 @@ void asignarCiudad(string *ciudad) {
 
 
 int main(int argc, char* argv[]) {
+    const string PUBLICADOR = "PUBLICADOR";
+    const string BUSCADOR = "BUSCADOR";
+    /*
     // servidor
     const string CONEXION_ESTABLECIDA = "CONEXION ESTABLECIDA";
     // cliente
     string CONECTAR = "CONECTAR";
-    const string PUBLICADOR = "PUBLICADOR";
-    const string BUSCADOR = "BUSCADOR";
+
     const string DESCONEXION = "DESCONEXION";
 
     // Dirección y número donde escucha el proceso servidor
@@ -87,8 +90,8 @@ int main(int argc, char* argv[]) {
     string mensaje;
     int read_bytes;   // num de bytes recibidos en un mensaje
     int send_bytes;   // num de bytes enviados en un mensaje
-    string buffer; 
-    
+    string buffer;
+
     // solicitamos registro
     mensaje = CONECTAR;
     send_bytes = chan.Send(socket_fd, mensaje);
@@ -98,15 +101,15 @@ int main(int argc, char* argv[]) {
         chan.Close(socket_fd);
         exit(1);
     }
-    
+
     read_bytes = chan.Recv(socket_fd, buffer, MESSAGE_SIZE);
-    
+
     if (buffer.compare(CONEXION_ESTABLECIDA) != 0) {
         cout << "error: no se ha respondido bien al pedir alta registro" << endl;
         chan.Close(socket_fd);
         exit(1);
     }
-    
+
     mensaje = PUBLICADOR;                                                     //CONFIGURAR PARA CADA CASO
     send_bytes = chan.Send(socket_fd, mensaje);
     if(send_bytes == -1) {
@@ -118,10 +121,14 @@ int main(int argc, char* argv[]) {
     //datos de conexion
     read_bytes = chan.Recv(socket_fd, buffer, MESSAGE_SIZE);
     cout << mensaje + "\n";
+    */
 
     //cortamos el string recibido con los datos ip1,ip2,ip3,puerto
     //hilo para utilizar el linda driver con la conexion o bucle
     //join del hilo para cuando finalice
+
+    //LindaDriver pizarra(argv[1],argv[2]);
+    LindaDriver pizarra("192.90.12.2",22,BUSCADOR);
     int totalTuplas;
     //extraeremos la tupla de RN['totalTuplas',?totalTuplas]
     string origen;
@@ -143,6 +150,7 @@ int main(int argc, char* argv[]) {
     //linda.Pn['totalTuplas',totalTuplas+1]
 
     sleep(10);
+   /*
     mensaje = DESCONEXION;
     send_bytes = chan.Send(socket_fd, mensaje);
     if(send_bytes == -1) {
@@ -156,6 +164,6 @@ int main(int argc, char* argv[]) {
     if(error_code == -1) {
         cerr << "Error cerrando el socket: " << strerror(errno) << endl;
     }
-
-    return error_code;
+    */
+    return 0;
 }

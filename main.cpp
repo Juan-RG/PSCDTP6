@@ -13,6 +13,8 @@ int main() {
     s1.insert(4);
     s1.insert(5);
 
+    s1.erase(2);
+
     // printing set s1
     set<int, greater<int> >::iterator itr;
     cout << "\nThe set s1 is : \n";

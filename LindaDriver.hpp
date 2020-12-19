@@ -33,7 +33,7 @@ static const string MENSAJE_RDN = "RDN,";
 class LindaDriver {
 public:
 	//constructores -----------------------------
-	LindaDriver(string ipServerRegistro, int puertoServerRegistro);
+	LindaDriver(string ipServerRegistro, int puertoServerRegistro,string tipo);
 	//destructor -----------------------------
 	~LindaDriver();
 	//operadores -----------------------------
