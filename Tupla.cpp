@@ -253,9 +253,12 @@ void Tupla::from_string(string s) {
 }
 
 bool Tupla::match(Tupla p) {
+    if (p.size() != data->size()) { // si las tuplas tienen dif tamaño
+        return false;
+    }
     bool rep = false;
     int w = 0;
-    string palabra;
+    string palabra = " ";
 
     struct comodines{
 	    string valor; 	    
@@ -267,7 +270,7 @@ bool Tupla::match(Tupla p) {
     std::cout << "vars inicializadas" << std::endl;
 
     for(int i=0;i<p.size();i++) {
-        std::cout << "iter" << std::endl;
+        std::cout << "iter" << i << std::endl;
 	    rep = false;
         palabra = data->at(i);
 
@@ -286,18 +289,29 @@ bool Tupla::match(Tupla p) {
             
             } 
             if(!rep) {
-                std::cout << "no es repetido" << std::endl;
+                std::cout << "no es repetido, w= " << w  << "i= " << i << std::endl;
 	            Comodin[w].valor = data->at(i);
 	            Comodin[w].palabra = p.get(i);
-                w++;
+                std::cout << "hola?" << std::endl;
+	            w++;
             }
 	    } else{
             std::cout << "palabra[0] != '?'" << std::endl;
+            std::cout << data->at(i) << std::endl;
+            std::cout << p.get(i) << std::endl;
+            std::cout << "....." << std::endl;
 
-            if(data->at(i) != p.get(i)){//if6
+            string stringTemp1 = data->at(i);
+            string stringTemp2 = p.get(i);
+
+            std::cout << stringTemp1.length() << std::endl;
+            std::cout << stringTemp2.length() << std::endl;
+
+            if((stringTemp1).compare(stringTemp2) != 0) {//if6
                 std::cout << "retorno" << std::endl;
-                return false;
-	        }   
+                return false;//
+	        }
 	    }
     }
+    return true;
 }
