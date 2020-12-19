@@ -52,21 +52,32 @@ int main(int argc, char* argv[]) {
     const string PUBLICADOR = "PUBLICADOR";
     const string BUSCADOR = "BUSCADOR";
 
-    Tupla t1("cosa1");
-    Tupla t2("cosa1", "cosa2");
+    //Tupla t1("cosa1");
+    //Tupla t2("cosa1", "cosa2","cosa3");
+    //Tupla t3("cosa1", "cosa2","cosa3");
     Tupla t4("cosa1", "cosa2","cosa3");
     Tupla t5("cosa1", "cosa2","cosa3","cosa4");
     Tupla t6("cosa1", "cosa2","cosa3","cosa4","cosa1");
-    Tupla t3("?X");
-
+    //Tupla t3("?X");
+/*
     std::cout << t1.to_string() << std::endl;
     std::cout << t2.to_string() << std::endl;
     std::cout << t3.to_string() << std::endl;
+*/
+   // bool a = t2.match(t3);
+    //printf("%d",a);
+    Tupla t1("1","mi casa","árbol");  // 3 elementos
+    Tupla t2("?X","mi casa","árbol");
+    Tupla t3("aprieta","el","pan","45","34","88");
+    if(t2.match(t1)){
+        cout << "Match";
+    }else{
+        cout << "Dont match";
+    }
 
-    //Tupla temp;
-    cout<<"error\n";
-    t6.from_string("[string,string2,string3,string4,string5]");
-    t2.from_string("[string,string2]");
+    t3.from_string("[a,b,c,45,34,pan]");
+    cout << t3.to_string() << endl;
+
 
    // std::cout << temp.to_string() << std::endl;
 

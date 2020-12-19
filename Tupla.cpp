@@ -263,24 +263,24 @@ bool Tupla::match(Tupla p) {
     };
 
     comodines Comodin[p.size()];
-
     std::cout << "vars inicializadas" << std::endl;
 
-    for(int i=0;i<p.size();i++) {
+    for(int i = 0;i < p.size();i++) {
         std::cout << "iter" << std::endl;
 	    rep = false;
         palabra = data->at(i);
 
 	    if(palabra[0] == '?'){//if1
+            cout<< "if\n";
 	        std::cout << "palabra[0] == '?'" << std::endl;
-
-	        for(int j=0;j<w;j++) {
+	        for(int j = 0;j < w; j++) {
 	            std::cout << "vuelta en comprobacion comodines" << std::endl;
                 if(data->at(i) == Comodin[j].valor){
 		            if(p.get(i) != Comodin[j].palabra){
                         std::cout << "retorno" << std::endl;
 			            return false;
                     }
+		            cout<<"paso aa \n";
 	                rep = true;
                 }
             
@@ -292,12 +292,15 @@ bool Tupla::match(Tupla p) {
                 w++;
             }
 	    } else{
+	        cout<< "else\n";
             std::cout << "palabra[0] != '?'" << std::endl;
-
+            cout << "n "<< i <<"\n";
+            cout << this->size() << " aa " << p.size()<<"\n";
             if(data->at(i) != p.get(i)){//if6
                 std::cout << "retorno" << std::endl;
                 return false;
-	        }   
+	        }
+
 	    }
     }
 }
