@@ -16,11 +16,11 @@ int main(int argc, char* argv[]) {
     const string PUBLICADOR = "PUBLICADOR";
     const string BUSCADOR = "BUSCADOR";
     const string DESCONEXION = "DESCONEXION";
-
+    //sdfsdfs
     // Dirección y número donde escucha el proceso servidor
     string SERVER_ADDRESS = "localhost";                                            //configruar para coger de arv
     int SERVER_PORT = 2021;                                             //configruar para coger de arv
-
+    //sdfsdfs
     // Creación del socket con el que se llevará a cabo
     // la comunicación con el servidor.
     Socket chan(SERVER_ADDRESS, SERVER_PORT);
@@ -48,8 +48,8 @@ int main(int argc, char* argv[]) {
     string mensaje;
     int read_bytes;   // num de bytes recibidos en un mensaje
     int send_bytes;   // num de bytes enviados en un mensaje
-    string buffer; 
-    
+    string buffer;
+
     // solicitamos registro
     mensaje = CONECTAR;
     send_bytes = chan.Send(socket_fd, mensaje);
@@ -59,15 +59,15 @@ int main(int argc, char* argv[]) {
         chan.Close(socket_fd);
         exit(1);
     }
-    
+
     read_bytes = chan.Recv(socket_fd, buffer, MESSAGE_SIZE);
-    
+
     if (buffer.compare(CONEXION_ESTABLECIDA) != 0) {
         cout << "error: no se ha respondido bien al pedir alta registro" << endl;
         chan.Close(socket_fd);
         exit(1);
     }
-    
+
     mensaje = BUSCADOR;                                                     //CONFIGURAR PARA CADA CASO
     send_bytes = chan.Send(socket_fd, mensaje);
     if(send_bytes == -1) {
