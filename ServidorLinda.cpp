@@ -7,6 +7,7 @@
 
 #include "Socket.hpp"
 #include "MonitorServidor.hpp"
+#include "Tupla.hpp"
 #include <iostream>
 #include <thread>
 #include <cstdlib>
@@ -43,7 +44,7 @@ void trocea_3(string s, string &operacion, string &tupla) {
 }
 
 //-------------------------------------------------------------
-void servCliente(Socket& soc, int client_fd, MonitorServidor& monServ, multiset<Tupla> &almacen) {
+void servCliente(Socket& soc, int client_fd, MonitorServidor& mS, multiset<Tupla> &almacen) {
 	// Buffer para recibir el mensaje
     int length = 100;
     string buffer;
@@ -80,14 +81,14 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& monServ, multiset<
                 soc.Close(client_fd); // Cerramos los sockets.
                 exit(1);
             }
+            mS.guardar(tuplaTemp);
 			almacen.insert(tuplaTemp); //Guardamos en la coleccion la tupla que nos han pasado
 		} else if(operacion == MENSAJE_RN) {//Lee tupla y la borra de memoria
             iter_fin = almacen.end();           //Buscamos la posicion final
 			iter = almacen.find(tuplaTemp);     //Guardamos donde a encontrado la tupla a sacar
-			if(iter != iter_fin){
-				almacen.erase(almacen.find(tuplaTemp));	//Borra la tupla una sola vez, si la ha encontrado
+			if(iter != iter_fin) {
 				tuplaTemp = tuplaTemp.to_string();		//Pasamos la tupla encontrada a string para enviarla
-
+                mS.borrar(tuplaTemp);     //Borra la tupla una sola vez, si la ha encontrado
 				send_bytes = soc.Send(client_fd, tuplaTemp);    //Enviamos la tupla
 				if(send_bytes == -1) {
 					cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
@@ -101,7 +102,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& monServ, multiset<
 			iter = almacen.find(tuplaTemp);     //Guardamos donde a encontrado la tupla a sacar
 			if(iter != iter_fin) {
 				tuplaTemp = tuplaTemp.to_string();		//Pasamos la tupla encontrada a string para enviarla
-
+                mS.disponible(tuplaTemp);
 				send_bytes = soc.Send(client_fd, tuplaTemp);    //Enviamos la tupla
 				if(send_bytes == -1) {
 					cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
