@@ -13,8 +13,7 @@ int main() {
     s1.insert(5);
 //////////
     s1.erase(2);
-    s1.erase(2);
-    s1.erase(2);
+    //Esto es codigo (se supone)
 
     // printing set s1
     set<int, greater<int> >::iterator itr;
