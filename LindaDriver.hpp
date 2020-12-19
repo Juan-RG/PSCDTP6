@@ -73,11 +73,11 @@ private:
 	// Socket chanServer3; // Servidor de tuplas de tamaño 6
 	
 	string ip_server_1;
-	//string puerto_server_1;
+	string puerto_server_1;
 	string ip_server_2;
-	//string puerto_server_2;
+	string puerto_server_2;
 	string ip_server_3;
-	//string puerto_server_3;
+	string puerto_server_3;
 	string puerto;
 	//string tipo_cliente; // PUBLICADOR | BUSCADOR, de momento no se lo guarda
 };
