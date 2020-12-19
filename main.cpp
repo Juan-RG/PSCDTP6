@@ -11,18 +11,6 @@ int main() {
     s1.insert(3);
     s1.insert(4);
     s1.insert(5);
-//////////
-    s1.erase(2);
-    s1.insert(1);
-    s1.insert(2);
-    s1.insert(3);
-    s1.insert(4);
-    s1.insert(5);
-    s1.insert(1);
-    s1.insert(2);
-    s1.insert(3);
-    s1.insert(4);
-    s1.insert(5);
     // printing set s1
     set<int, greater<int> >::iterator itr;
     cout << "\nThe set s1 is : \n";

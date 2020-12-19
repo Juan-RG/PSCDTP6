@@ -4,8 +4,10 @@
 #include <thread>
 #include "Socket/Socket.hpp"
 #include "LindaDriver.hpp"
+#include <set>
 
 using namespace std;
+
 
 //const int MESSAGE_SIZE = 100; //mensajes de no más 4000 caracteres
 
@@ -69,6 +71,29 @@ int main(int argc, char* argv[]) {
     Tupla t1("1","mi casa","árbol");  // 3 elementos
     Tupla t2("?X","mi casa","árbol");
     Tupla t3("aprieta","el","pan","45","34","88");
+
+    set<Tupla*> s1;
+    s1.insert(&t1);
+    s1.insert(&t2);
+    s1.insert(&t3);
+    s1.insert(&t4);
+
+    multiset<Tupla>::iterator itr;
+    cout << "\nThe set s1 is : \n";
+    for (itr = s1.begin();
+         itr != s1.end(); ++itr)
+    {
+        cout << ',' << **itr.to_string();
+    }
+    cout << endl;
+
+    auto& p = s1;
+    cout << p.
+    /*
+    for (auto& currentElement : s1){
+        currentElement
+    }*/
+
     if(t2.match(t1)){
         cout << "Match";
     }else{
