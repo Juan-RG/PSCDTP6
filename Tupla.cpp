@@ -12,7 +12,7 @@
 #include <iostream> //                                                              <<-------------------------------------BOrrame pls
 #include <sstream>  // stringstream para reemplazar sscanf
 
-
+Prueba git
 Tupla::Tupla(int n) {
     data = new vector<string>(n,"");
 }
@@ -122,7 +122,7 @@ void Tupla::from_string(string s) {
         //set(0, "s1");
         //Tupla(s1);
         //Meter string en data
-    }else if(strings == 2){
+    }else if (strings == 2){
         //scanf(s.c_str(), "[%s,%s]", &s1, &s2);
         stringstream s_stream(s); //create string stream from the string
         string substr;
