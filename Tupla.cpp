@@ -256,31 +256,46 @@ bool Tupla::match(Tupla p) {
     bool rep = false;
     int w = 0;
     string palabra;
+
     struct comodines{
 	    string valor; 	    
         string palabra; 	
     };
+
     comodines Comodin[p.size()];
+
+    std::cout << "vars inicializadas" << std::endl;
+
     for(int i=0;i<p.size();i++) {
+        std::cout << "iter" << std::endl;
 	    rep = false;
         palabra = data->at(i);
+
 	    if(palabra[0] == '?'){//if1
-	        for(int j=0;j<w;j++){
+	        std::cout << "palabra[0] == '?'" << std::endl;
+
+	        for(int j=0;j<w;j++) {
+	            std::cout << "vuelta en comprobacion comodines" << std::endl;
                 if(data->at(i) == Comodin[j].valor){
 		            if(p.get(i) != Comodin[j].palabra){
+                        std::cout << "retorno" << std::endl;
 			            return false;
                     }
 	                rep = true;
                 }
             
             } 
-            if(!rep){
+            if(!rep) {
+                std::cout << "no es repetido" << std::endl;
 	            Comodin[w].valor = data->at(i);
 	            Comodin[w].palabra = p.get(i);
                 w++;
             }
 	    } else{
+            std::cout << "palabra[0] != '?'" << std::endl;
+
             if(data->at(i) != p.get(i)){//if6
+                std::cout << "retorno" << std::endl;
                 return false;
 	        }   
 	    }
