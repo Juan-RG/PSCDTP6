@@ -128,7 +128,7 @@ int main(int argc, char* argv[]) {
     //join del hilo para cuando finalice
 
     //LindaDriver pizarra(argv[1],argv[2]);
-    LindaDriver pizarra("192.90.12.2",22,BUSCADOR);
+    LindaDriver pizarra("localhost",2021,BUSCADOR);
     int totalTuplas;
     //extraeremos la tupla de RN['totalTuplas',?totalTuplas]
     string origen;

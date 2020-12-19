@@ -33,12 +33,14 @@ void comprobarErrorEnvio(Socket &soc, int client_fd, int send_bytes);
 
 //-------------------------------------------------------------
 void servCliente(Socket &soc, int client_fd, MonitorConexiones& monitorCone, const int i, const string ip1, const string ip2,
-                 const string ip3, const int puerto) {
+                 const string ip3, const int puerto1, const int puerto2, const int puerto3) {
     // Buffer para recibir el mensaje
     int length = tamanioBufferMensaje;
     string buffer = "";
     bool out = false; // Inicialmente no salir del bucle
+    int rcv_bytes;
     /*******************************************************************           ENVIO CONECTAR */
+  /*
     int rcv_bytes = soc.Recv(client_fd,buffer,length);
     comprobarErrorRecepcion(soc, client_fd, rcv_bytes);
     cout << "Mensaje del cliente " + to_string(i)  + " recibido : " + buffer + "\n";
@@ -50,8 +52,10 @@ void servCliente(Socket &soc, int client_fd, MonitorConexiones& monitorCone, con
     }
     // Enviamos la respuesta
     /*******************************************************************           ENVIO CONEXION ESTABLECIDA */
+    /*
     int send_bytes = soc.Send(client_fd, CONEXION_ESTABLECIDA);
     comprobarErrorEnvio(soc, client_fd, send_bytes);
+     */
     //--Serivicio-----
     /*******************************************************************            ESPERANDO TIPO DE CLIENTE PUBLICADOR BUSCADOR */
     rcv_bytes = soc.Recv(client_fd,buffer,length);
@@ -62,9 +66,9 @@ void servCliente(Socket &soc, int client_fd, MonitorConexiones& monitorCone, con
         if(buffer == BUSCADOR ){
             monitorCone.puedeConectar();
             cout << "paso\n";
-            datosConexion = ip1+","+ip2+","+ip3+","+to_string(puerto);                          //llevar a metodo
+            datosConexion = ip1+","+ip2+","+ip3+","+to_string(puerto1)+","+to_string(puerto2)+","+to_string(puerto3);                          //llevar a metodo
         }else{
-            datosConexion = ip1+","+ip2+","+ip3+","+to_string(puerto);
+            datosConexion = ip1+","+ip2+","+ip3+","+to_string(puerto1)+","+to_string(puerto2)+","+to_string(puerto3);
         }
         cout << datosConexion;
         /*******************************************************************            ENVIO DATOS */
@@ -82,6 +86,7 @@ void servCliente(Socket &soc, int client_fd, MonitorConexiones& monitorCone, con
     monitorCone.liberarConexion();                                              //ELIMINAR EL METODO Y LIBERAR BIEN :>
     comprobarErrorRecepcion(soc, client_fd, rcv_bytes);
     //if(buffer == DESCONEXION)                                                 //mirar la elegancia de esto
+    printf("FINAL \n");
 }
 
 void comprobarErrorEnvio(Socket &soc, int client_fd, int send_bytes) {
@@ -117,9 +122,12 @@ int main(int numArg, char *args[]) {
         exit(1);
     }
      */
-    string ip1;
-    string ip2;
-    string ip3;
+    string ip1="192.20.1.2";
+    string ip2="192.20.1.2";
+    string ip3="192.20.1.2";
+    int puerto1 = 22;
+    int puerto2 = 23;
+    int puerto3 = 24;
     //total de conexiones;
     //const int N = atoi(args[2]);
     const int N = 100;                      //INTENTAR MIRAR PARA NO LIMITAR
@@ -138,6 +146,7 @@ int main(int numArg, char *args[]) {
     // Puerto donde escucha el proceso servidor
     //int SERVER_PORT = atoi(args[1]);
     int SERVER_PORT = 2021;
+    //
     /*
     if(N==0){
         cerr << "error asignacion de puerto: " + string(strerror(errno)) + "\n";
@@ -176,7 +185,7 @@ int main(int numArg, char *args[]) {
             exit(1);
         }
 
-        cliente[i] = thread(&servCliente, ref(chan), client_fd[i],ref(monitorC), i, ip1, ip2, ip3, SERVER_PORT); //lanzar servicio para cliente modelo RPC
+        cliente[i] = thread(&servCliente, ref(chan), client_fd[i],ref(monitorC), i, ip1, ip2, ip3, puerto1, puerto2, puerto3); //lanzar servicio para cliente modelo RPC
         cout << "Nuevo cliente " + to_string(i) + " aceptado" + "\n";
     }
 

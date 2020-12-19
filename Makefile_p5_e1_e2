@@ -17,6 +17,7 @@ MULTI_SERVER=MainServer
 MONITOR=MonitorConexiones
 SOCKET_DIR=Socket
 SOCKET=${SOCKET_DIR}/Socket
+LINDA_DRIVER=LindaDriver
 
 CPPFLAGS=-I. -I${SOCKET_DIR} -O2 -std=c++11 -lsockets # Flags compilacion
 LDFLAGS=-pthread # Flags linkado threads
@@ -33,8 +34,8 @@ ${CLIENT}.o: ${CLIENT}.cpp
 	${CC} -c ${CPPFLAGS} ${CLIENT}.cpp
 
 # Linkado
-${CLIENT}: ${SOCKET}.o ${CLIENT}.o  
-	${CC} ${LDFLAGS} ${SOCKET}.o ${CLIENT}.o -o ${CLIENT} ${SOCKETSFLAGS}
+${CLIENT}: ${LINDA_DRIVER}.o ${SOCKET}.o ${CLIENT}.o  
+	${CC} ${LDFLAGS} ${LINDA_DRIVER}.o ${SOCKET}.o ${CLIENT}.o -o ${CLIENT} ${SOCKETSFLAGS}
 #-----------------------------------------------------------
 #-----------------------------------------------------------
 # MONITOR
@@ -42,9 +43,14 @@ ${CLIENT}: ${SOCKET}.o ${CLIENT}.o
 ${MONITOR}.o: ${MONITOR}.hpp ${MONITOR}.cpp
 	${CC} -c ${CPPFLAGS} ${MONITOR}.cpp -o ${MONITOR}.o
 
+# MONITOR
+# Compilacion
+${LINDA_DRIVER}.o: ${LINDA_DRIVER}.hpp ${LINDA_DRIVER}.cpp
+	${CC} -c ${CPPFLAGS} ${LINDA_DRIVER}.cpp -o ${LINDA_DRIVER}.o
+
 # Linkado
 ${CLIENT}: ${SOCKET}.o ${CLIENT}.o  
-	${CC} ${LDFLAGS} ${SOCKET}.o ${CLIENT}.o -o ${CLIENT} ${SOCKETSFLAGS}
+	${CC} ${LDFLAGS} ${LINDA_DRIVER}.o ${SOCKET}.o ${CLIENT}.o -o ${CLIENT} ${SOCKETSFLAGS}
 #-----------------------------------------------------------
 
 #-----------------------------------------------------------

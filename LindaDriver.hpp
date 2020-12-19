@@ -17,23 +17,30 @@ using namespace std;
 
 static const int MESSAGE_SIZE = 5000; // tamaño máximo de los mensajes 
 static const int NUM_MAX_INTENTOS = 50;
-static const string SOLICITUD_IP_SERVER_1 = "IP_1";
-static const string SOLICITUD_PUERTO_SERVER_1 = "P_1";
-static const string SOLICITUD_IP_SERVER_2 = "IP_2";
-static const string SOLICITUD_PUERTO_SERVER_2 = "P_2";
-static const string SOLICITUD_IP_SERVER_3 = "IP_3";
-static const string SOLICITUD_PUERTO_SERVER_3 = "P_3";
+//static const string SOLICITUD_IP_SERVER_1 = "IP_1";
+//static const string SOLICITUD_PUERTO_SERVER_1 = "P_1";
+//static const string SOLICITUD_IP_SERVER_2 = "IP_2";
+//static const string SOLICITUD_PUERTO_SERVER_2 = "P_2";
+//static const string SOLICITUD_IP_SERVER_3 = "IP_3";
+//static const string SOLICITUD_PUERTO_SERVER_3 = "P_3";
 static const string RESPUESTA_CONFIRMACION = "OK";
 static const string MENSAJE_PN = "PN,";
 static const string MENSAJE_RN = "RN,";
 //static const string MENSAJE_RN_2 = "RN_2,";
 static const string MENSAJE_RDN = "RDN,";
 //static const string MENSAJE_RDN_2 = "RDN_2,";
+static const string MENSAJE_DESCONEXION = "DESCONEXION";
 
 class LindaDriver {
 public:
 	//constructores -----------------------------
+/*<<<<<<< HEAD
 	LindaDriver(string ipServerRegistro, int puertoServerRegistro,string tipo);
+=======
+
+>>>>>>> 63b10faad2fba1977004c0adf34ceed29a0fbc27
+ */
+    LindaDriver(string ipServerRegistro, int puertoServerRegistro, string tipoCliente);
 	//destructor -----------------------------
 	~LindaDriver();
 	//operadores -----------------------------
@@ -66,10 +73,12 @@ private:
 	// Socket chanServer3; // Servidor de tuplas de tamaño 6
 	
 	string ip_server_1;
-	string puerto_server_1;
+	//string puerto_server_1;
 	string ip_server_2;
-	string puerto_server_2;
+	//string puerto_server_2;
 	string ip_server_3;
-	string puerto_server_3;
+	//string puerto_server_3;
+	string puerto;
+	//string tipo_cliente; // PUBLICADOR | BUSCADOR, de momento no se lo guarda
 };
 #endif
