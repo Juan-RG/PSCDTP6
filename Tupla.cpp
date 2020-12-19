@@ -100,11 +100,13 @@ void Tupla::from_string(string s) {
     string s1,s2,s3,s4,s5,s6;
     string buffer;
 
-    for(int i = 0; i<s.length();i++){
+    for(int i = 0; i<s.length();i++){                                                       //controlar en un futuro que si tupla.size() de 2 y el string sea de 4
+                                                                                            //controlar o error o new de tupla. con el nuevo tamaño
         if(s[i]==','){
             strings++;
         }
     }
+    //if(strings != this->size()){}
     //data = new vector<string>(strings,"");
 
     if(strings == 1){
