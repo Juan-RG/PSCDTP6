@@ -12,7 +12,7 @@
 #include <iostream> //                                                              <<-------------------------------------BOrrame pls
 #include <sstream>  // stringstream para reemplazar sscanf
 
-Prueba git
+
 Tupla::Tupla(int n) {
     data = new vector<string>(n,"");
 }
