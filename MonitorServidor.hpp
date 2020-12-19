@@ -12,6 +12,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <set>
+#include "Tupla.hpp"
 ///HAY QUE METER EL TIPO TUPLA :)
 
 //-----------------------------------------------------
@@ -23,15 +24,17 @@ class MonitorServidor {
 
 		condition_variable enEspera;
 
-		set<Tupla> almacen;
+        multiset<Tupla> almacen;
 
 	public:
 		//------------------------- constructor
-		MonitorServidor(const multiset<Tupla> almacen);
+		MonitorServidor(multiset<Tupla> *almacen);
 		//------------------------- destructor
 		~MonitorServidor();
 		//Los "r" serán los recursos que se quieren reservar o liberar.
 
-		void disponible(multiset<Tupla> almacen);
+		void disponible(Tupla tupla);
+        void borrar (Tupla tupla);
+		void guardar (Tupla tupla);
 };
 #endif

@@ -5,17 +5,30 @@
 // Coms:	Este fichero contiene la especificación de las funciones del MonitorServidor.
 //--------------------------------------------------------------------------------------------------
 
-#include "Downloads/MonitorServidor.hpp"
+#include "MonitorServidor.hpp"
+
 
 //------------------------- constructor
-MonitorServidor::MonitorServidor(const multiset<Tupla> almacen){
-	this->almacen = almacen;
+MonitorServidor::MonitorServidor(multiset<Tupla> *almacen){
+	this->almacen = *almacen;
 }
 
 //------------------------- destructor
 MonitorServidor::~MonitorServidor(){}
 
-void MonitorServidor::disponible(multiset<Tupla> almacen){
+void MonitorServidor::disponible(Tupla tupla) {
 	unique_lock<mutex> lck(mtx);
-
+    almacen.find(tupla);
+    enEspera.notify_one();
 }
+void MonitorServidor::borrar(Tupla tupla) {
+    unique_lock<mutex> lck(mtx);
+    //almacen.erase(almacen.find(tuplaTemp));
+    enEspera.notify_one();
+}
+void MonitorServidor::guardar(Tupla tupla) {
+    unique_lock<mutex> lck(mtx)
+    //almacen.insert(tupla);
+    enEspera.notify_all();
+}
+
