@@ -54,6 +54,9 @@ int main(int argc, char* argv[]) {
 
     Tupla t1("cosa1");
     Tupla t2("cosa1", "cosa2");
+    Tupla t4("cosa1", "cosa2","cosa3");
+    Tupla t5("cosa1", "cosa2","cosa3","cosa4");
+    Tupla t6("cosa1", "cosa2","cosa3","cosa4","cosa1");
     Tupla t3("?X");
 
     std::cout << t1.to_string() << std::endl;
@@ -62,6 +65,7 @@ int main(int argc, char* argv[]) {
 
     //Tupla temp;
     cout<<"error\n";
+    t6.from_string("[string,string2,string3,string4,string5]");
     t2.from_string("[string,string2]");
 
    // std::cout << temp.to_string() << std::endl;
