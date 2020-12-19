@@ -6,7 +6,7 @@
 //--------------------------------------------------------------------------------------------------
 
 #include "Socket.hpp"
-#include "../../Downloads/MonitorServidor.hpp"
+#include "MonitorServidor.hpp"
 #include <iostream>
 #include <thread>
 #include <cstdlib>
@@ -23,6 +23,7 @@ using namespace std;
 static const string MENSAJE_PN = "PN,";
 static const string MENSAJE_RN = "RN,";
 static const string MENSAJE_RDN = "RDN,";
+static const string MENSAJE_DESCONEXION = "DESCONEXION";
 
 static const string RECIBIDO = "OK";
 

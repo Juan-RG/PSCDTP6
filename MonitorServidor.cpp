@@ -5,7 +5,7 @@
 // Coms:	Este fichero contiene la especificación de las funciones del MonitorServidor.
 //--------------------------------------------------------------------------------------------------
 
-#include "../../Downloads/MonitorServidor.hpp"
+#include "MonitorServidor.hpp"
 
 //------------------------- constructor
 MonitorServidor::MonitorServidor(const multiset<Tupla> almacen){
