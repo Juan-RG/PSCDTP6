@@ -91,34 +91,60 @@ string Tupla::get(int pos) {
 void Tupla::set(int pos, string value) {
     data->at(pos) = value;
 }
-
 void Tupla::from_string(string s) {
     assert(s.length()>2 && s[0]=='[' && s[s.length()-1]==']');
     int strings = 1;
     string s1,s2,s3,s4,s5,s6;
     string buffer;
+
     for(int i = 0; i<s.length();i++){
         if(s[i]==','){
             strings++;
         }
     }
+    //data = new vector<string>(strings,"");
+
     if(strings == 1){
         sscanf(buffer.c_str(), "[%s]", &s1);
+        //this->Tupla.set(0, s1);
+
+        data->at(0) = s1;
+        //Tupla(s1);
         //Meter string en data
     }else if(strings == 2){
-        sscanf(buffer.c_str(), "[%s,%s]", &s1, &s2);
+        sscanf(s.c_str(), "[%s,%s]", &s1, &s2);
+        //data->at(0) = s1;
+        //data->at(1) = s2;
         //Meter string en data
     }else if(strings == 3){
-        sscanf(buffer.c_str(), "[%s,%s,%s]", &s1, &s2, &s3);
+        sscanf(s.c_str(), "[%s,%s,%s]", &s1, &s2, &s3);
+        data->at(0) = s1;
+        data->at(1) = s2;
+        data->at(2) = s3;
         //Meter string en data
     }else if(strings == 4){
-        sscanf(buffer.c_str(), "[%s,%s,%s,%s]", &s1, &s2, &s3, &s4);
+        sscanf(s.c_str(), "[%s,%s,%s,%s]", &s1, &s2, &s3, &s4);
+        data->at(0) = s1;
+        data->at(1) = s2;
+        data->at(2) = s3;
+        data->at(3) = s4;
         //Meter string en data
     }else if(strings == 5){
-        sscanf(buffer.c_str(), "[%s,%s,%s,%s,%s]", &s1, &s2, &s3, &s4, &s5);
+        sscanf(s.c_str(), "[%s,%s,%s,%s,%s]", &s1, &s2, &s3, &s4, &s5);
+        data->at(0) = s1;
+        data->at(1) = s2;
+        data->at(2) = s3;
+        data->at(3) = s4;
+        data->at(4) = s5;
         //Meter string en data
     }else if(strings == 6){
         sscanf(s.c_str(), "[%s,%s,%s,%s,%s,%s]", &s1, &s2, &s3, &s4, &s5, &s6);
+        data->at(0) = s1;
+        data->at(1) = s2;
+        data->at(2) = s3;
+        data->at(3) = s4;
+        data->at(4) = s5;
+        data->at(5) = s6;
         //Meter string en data
     }
     
@@ -151,7 +177,7 @@ bool Tupla::match(Tupla p) {
 	            Comodin[w].palabra = p.get(i);
                 w++;
             }
-	    }else{
+	    } else{
             if(data->at(i) != p.get(i)){//if6
                 return false;
 	        }   

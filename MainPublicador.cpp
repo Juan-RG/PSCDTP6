@@ -51,6 +51,20 @@ void asignarCiudad(string *ciudad) {
 int main(int argc, char* argv[]) {
     const string PUBLICADOR = "PUBLICADOR";
     const string BUSCADOR = "BUSCADOR";
+
+    Tupla t1("cosa1");
+    Tupla t2("cosa1", "cosa2");
+    Tupla t3("?X");
+
+    std::cout << t1.to_string() << std::endl;
+    std::cout << t2.to_string() << std::endl;
+    std::cout << t3.to_string() << std::endl;
+
+    //Tupla temp;
+    t2.from_string("[string,string2]");
+
+   // std::cout << temp.to_string() << std::endl;
+
     /*
     // servidor
     const string CONEXION_ESTABLECIDA = "CONEXION ESTABLECIDA";
