@@ -7,6 +7,17 @@ int main() {
     set<int> s1;
 
     // insert elements in random order
+    //dsfsdfsdf
+    //sdfsdfsdfs
+     //sdfsdfsdfs
+     //sdfsdfsdfs
+      //sdfsdfsdfs
+     s1.insert(1);
+    s1.insert(2);
+    s1.insert(3);
+    s1.insert(4);
+    s1.insert(5);
+
     s1.insert(1);
     s1.insert(2);
     s1.insert(3);
