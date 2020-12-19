@@ -61,6 +61,7 @@ int main(int argc, char* argv[]) {
     std::cout << t3.to_string() << std::endl;
 
     //Tupla temp;
+    cout<<"error\n";
     t2.from_string("[string,string2]");
 
    // std::cout << temp.to_string() << std::endl;

@@ -10,6 +10,7 @@
 #include <cassert>
 #include "Tupla.hpp"
 
+
 Tupla::Tupla(int n) {
     data = new vector<string>(n,"");
 }
@@ -105,16 +106,18 @@ void Tupla::from_string(string s) {
     //data = new vector<string>(strings,"");
 
     if(strings == 1){
-        sscanf(buffer.c_str(), "[%s]", &s1);
+       sscanf(buffer.c_str(), "[%s]", &s1);
         //this->Tupla.set(0, s1);
-
         data->at(0) = s1;
         //Tupla(s1);
         //Meter string en data
     }else if(strings == 2){
-        sscanf(s.c_str(), "[%s,%s]", &s1, &s2);
-        //data->at(0) = s1;
-        //data->at(1) = s2;
+        int i = sscanf(s.c_str(), "[%s,%s]", &s1, &s2);
+        cout<<"asda" << i + "\n";
+        //s1 = "hola";
+        //s2 = "asda";
+        data->at(0) = s1;
+        data->at(1) = s2;
         //Meter string en data
     }else if(strings == 3){
         sscanf(s.c_str(), "[%s,%s,%s]", &s1, &s2, &s3);
