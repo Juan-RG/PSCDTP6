@@ -16,6 +16,8 @@ local.properties
 .project
 build
 
+#ficheroConf codeBlocks
+*.cbp
 # External tool builders
 .externalToolBuilders/
 
