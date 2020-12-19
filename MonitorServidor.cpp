@@ -15,7 +15,19 @@ MonitorServidor::MonitorServidor(const multiset<Tupla> almacen){
 //------------------------- destructor
 MonitorServidor::~MonitorServidor(){}
 
-void MonitorServidor::disponible(multiset<Tupla> almacen){
+void MonitorServidor::disponible(Tupla tupla) {
 	unique_lock<mutex> lck(mtx);
-
+    almacen.find(tupla);
+    enEspera.notify_one();
 }
+void MonitorServidor::borrar(Tupla tupla) {
+    unique_lock<mutex> lck(mtx);
+    almacen.erase(almacen.find(tuplaTemp));
+    enEspera.notify_one();
+}
+void MonitorServidor::guardar(Tupla tupla) {
+    unique_lock<mutex> lck(mtx)
+    almacen.insert(tupla);
+    enEspera.notify_all();
+}
+

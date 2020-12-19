@@ -32,6 +32,8 @@ class MonitorServidor {
 		~MonitorServidor();
 		//Los "r" serán los recursos que se quieren reservar o liberar.
 
-		void disponible(multiset<Tupla> almacen);
+		void disponible(Tupla tupla);
+        void borrar (Tupla tupla);
+		void guardar (Tupla tupla);
 };
 #endif
