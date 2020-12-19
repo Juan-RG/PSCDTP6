@@ -18,6 +18,7 @@ build
 
 #ficheroConf codeBlocks
 *.cbp
+pscd.cbp
 # External tool builders
 .externalToolBuilders/
 
