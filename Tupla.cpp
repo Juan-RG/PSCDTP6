@@ -9,6 +9,8 @@
 #include <string>
 #include <cassert>
 #include "Tupla.hpp"
+#include <iostream> //                                                              <<-------------------------------------BOrrame pls
+#include <sstream>  // stringstream para reemplazar sscanf
 
 Tupla::Tupla(int n) {
     data = new vector<string>(n,"");
@@ -106,48 +108,84 @@ void Tupla::from_string(string s) {
 
     if(strings == 1){
         sscanf(buffer.c_str(), "[%s]", &s1);
+        std::cout << s1 << std::endl;
         //this->Tupla.set(0, s1);
-
-        data->at(0) = s1;
+        //set(0, "s1");
         //Tupla(s1);
         //Meter string en data
     }else if(strings == 2){
-        sscanf(s.c_str(), "[%s,%s]", &s1, &s2);
+        //scanf(s.c_str(), "[%s,%s]", &s1, &s2);
+        stringstream s_stream(s); //create string stream from the string
+        string substr;
+        getline(s_stream, substr, '['); //get first string delimited by comma
+        getline(s_stream, substr, ','); //get first string delimited by comma
+        //this->ip_server_1 = substr;
+        s1 = substr;
+        getline(s_stream, substr, ','); //get first string delimited by comma
+        s2 = substr;
+        s2[s2.length() - 1] = '\0';
+        std::cout << s1 << std::endl;
+        std::cout << s2 << std::endl;
+        data->at(0) = s1;
+        data->at(1) = s2;
+        //std::cout << s1 << std::endl;
+        //std::cout << s2 << std::endl;
+        //set(0, "s1");
+        //set(1, "s2");
         //data->at(0) = s1;
         //data->at(1) = s2;
         //Meter string en data
     }else if(strings == 3){
-        sscanf(s.c_str(), "[%s,%s,%s]", &s1, &s2, &s3);
-        data->at(0) = s1;
-        data->at(1) = s2;
-        data->at(2) = s3;
+        scanf(s.c_str(), "[%s,%s,%s]", &s1, &s2, &s3);
+        std::cout << s1 << std::endl;
+        std::cout << s2 << std::endl;
+        std::cout << s3 << std::endl;
+        //data->at(0) = s1;
+        //data->at(1) = s2;
+        //data->at(2) = s3;
         //Meter string en data
     }else if(strings == 4){
         sscanf(s.c_str(), "[%s,%s,%s,%s]", &s1, &s2, &s3, &s4);
-        data->at(0) = s1;
-        data->at(1) = s2;
-        data->at(2) = s3;
-        data->at(3) = s4;
+        std::cout << s1 << std::endl;
+        std::cout << s2 << std::endl;
+        std::cout << s3 << std::endl;
+        std::cout << s4 << std::endl;
+
+        //data->at(0) = s1;
+        //data->at(1) = s2;
+        //data->at(2) = s3;
+        //data->at(3) = s4;
         //Meter string en data
     }else if(strings == 5){
         sscanf(s.c_str(), "[%s,%s,%s,%s,%s]", &s1, &s2, &s3, &s4, &s5);
-        data->at(0) = s1;
-        data->at(1) = s2;
-        data->at(2) = s3;
-        data->at(3) = s4;
-        data->at(4) = s5;
+        std::cout << s1 << std::endl;
+        std::cout << s2 << std::endl;
+        std::cout << s3 << std::endl;
+        std::cout << s4 << std::endl;
+        std::cout << s5 << std::endl;
+        //data->at(0) = s1;
+        //data->at(1) = s2;
+        //data->at(2) = s3;
+        //data->at(3) = s4;
+        //data->at(4) = s5;
         //Meter string en data
     }else if(strings == 6){
         sscanf(s.c_str(), "[%s,%s,%s,%s,%s,%s]", &s1, &s2, &s3, &s4, &s5, &s6);
-        data->at(0) = s1;
-        data->at(1) = s2;
-        data->at(2) = s3;
-        data->at(3) = s4;
-        data->at(4) = s5;
-        data->at(5) = s6;
+        std::cout << s1 << std::endl;
+        std::cout << s2 << std::endl;
+        std::cout << s3 << std::endl;
+        std::cout << s4 << std::endl;
+        std::cout << s5 << std::endl;
+        std::cout << s6 << std::endl;
+        //data->at(0) = s1;
+        //data->at(1) = s2;
+        //data->at(2) = s3;
+        //data->at(3) = s4;
+        //data->at(4) = s5;
+        //data->at(5) = s6;
         //Meter string en data
     }
-    
+
 }
 
 bool Tupla::match(Tupla p) {
@@ -159,7 +197,7 @@ bool Tupla::match(Tupla p) {
         string palabra; 	
     };
     comodines Comodin[p.size()];
-    for(int i=0;i<p.size();i++){
+    for(int i=0;i<p.size();i++) {
 	    rep = false;
         palabra = data->at(i);
 	    if(palabra[0] == '?'){//if1
