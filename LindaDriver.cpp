@@ -75,8 +75,9 @@ LindaDriver::LindaDriver(string ipServerRegistro, int puertoServerRegistro, stri
 
     // TODO: probar si acaso funciona...
     std::istringstream stream_buffer(buffer);
-    stream_buffer >> this->ip_server_1 >> "," >> this->ip_server_2 >> "," >> this->ip_server_3 >> "," >> this->puerto;
-    some_stream >> num1 >> num2 >> type3;
+    //stream_buffer >> this->ip_server_1 >> "," >> this->ip_server_2 >> "," >> this->ip_server_3 >> "," >> this->puerto;
+    stream_buffer >> this->ip_server_1 >> this->ip_server_2 >> this->ip_server_3 >> this->puerto;
+    //some_stream >> num1 >> num2 >> type3;
 
     // solicitamos los datos del servidor 1
 //    mensaje = SOLICITUD_IP_SERVER_1;
@@ -150,9 +151,9 @@ LindaDriver::LindaDriver(string ipServerRegistro, int puertoServerRegistro, stri
     //this->chanServer3 = new Socket(ip_server_3, stoi(puerto));
     
     std::cout   << "Datos de los servidores:\n" 
-                << "Server 1(tam. 1 a 3): " << this->ip_server_1 << ":" << this->puerto << "\n"
-                << "Server 2(tam. 4 a 5): " << this->ip_server_2 << ":" << this->puerto << "\n"
-                << "Server 3(tam. 6): " << this->ip_server_3 << ":" << this->puerto << std::endl;
+                << "Server 1(tam. 1 a 3): '" << this->ip_server_1 << "':'" << this->puerto << "'\n"
+                << "Server 2(tam. 4 a 5): '" << this->ip_server_2 << "':'" << this->puerto << "'\n"
+                << "Server 3(tam. 6): '" << this->ip_server_3 << "':'" << this->puerto << std::endl;
 }
 
 //destructor -----------------------------
