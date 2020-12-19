@@ -77,13 +77,9 @@ LindaDriver::LindaDriver(string ipServerRegistro, int puertoServerRegistro, stri
     //sscanf(buffer.c_str(), "%s,%s,%s,%s", &this->ip_server_1.c_str(), &this->ip_server_2.c_str(), &this->ip_server_3.c_str(), &this->puerto.c_str());
 
     // TODO: probar si acaso funciona...
-    std::istringstream stream_buffer(buffer);
-    //stream_buffer >> this->ip_server_1 >> "," >> this->ip_server_2 >> "," >> this->ip_server_3 >> "," >> this->puerto;
-    stream_buffer >> this->ip_server_1 >> this->ip_server_2 >> this->ip_server_3 >> this->puerto;
-    //some_stream >> num1 >> num2 >> type3;
-    // 3 direcciones IP (1,2,3) + 3 puertos (1,2,3)
-    regex er("([0-9]+.[0-9]+.[0-9]+.[0-9]+),([0-9]+.[0-9]+.[0-9]+.[0-9]+),([0-9]+.[0-9]+.[0-9]+.[0-9]+),([0-9]+.[0-9]+.[0-9]+.[0-9]+),[0-9]+,[0-9]+,[0-9]+");
-    smatch sm; //almacenará los resultado del "matching"
+    // regex er("([0-9]+\\\\.[0-9]+\\\\.[0-9]+\\\\.[0-9]+),([0-9]+\\\\.[0-9]+\\\\.[0-9]+\\\\.[0-9]+),([0-9]+\\\\.[0-9]+\\\\.[0-9]+\\\\.[0-9]+),([0-9]+\\\\.[0-9]+\\\\.[0-9]+\\\\.[0-9]+),[0-9]+,[0-9]+,[0-9]+");
+    //regex er(".,.,.,.,.,.");
+    //smatch sm; //almacenará los resultado del "matching"
 
     //busca la "er" en "s", almacenando los resultados en "sm"
     //sm[0] es todo el contenido en que se ha hecho el "matching"
@@ -91,89 +87,22 @@ LindaDriver::LindaDriver(string ipServerRegistro, int puertoServerRegistro, stri
     //sm[2] la parte correspondiente a la segunda expresión regular entre paréntesis.
     //      También [0-9]+ en este caso
     //...
-    regex_search(buffer, sm, er);
-    //escribirlar como strings
-    // for (int i=0; i<sm.size(); i++) {
-    // 	cout << "sm[" << i << "]: " << sm[i].str() << endl;
-    // }
-    //también se pueden convertir en números con "stoi", claro
+    //regex_search(buffer, sm, er);
 
-    this->ip_server_1 = sm[0];
-    this->ip_server_2 = sm[1];
-    this->ip_server_3 = sm[2];
-    this->puerto_server_1 = sm[3];
-    this->puerto_server_2 = sm[4];
-    this->puerto_server_3 = sm[5];
-    //n1 = stoi(sm[1].str());
-    //n2 = stoi(sm[2].str());
-    //n3 = stoi(sm[3].str());
-    //n4 = stoi(sm[4].str());
-
-    // solicitamos los datos del servidor 1
-//    mensaje = SOLICITUD_IP_SERVER_1;
-//    send_bytes = chan.Send(socket_fd, mensaje);
-//    if(send_bytes == -1) {
-//        cerr << "Error al enviar datos: " << strerror(errno) << endl;
-//        // Cerramos el socket
-//        chan.Close(socket_fd);
-//        exit(1);
-//    }
-//    read_bytes = chan.Recv(socket_fd, buffer, MESSAGE_SIZE);
-//    this->ip_server_1 = buffer;
-//    mensaje = SOLICITUD_puerto;
-//    send_bytes = chan.Send(socket_fd, mensaje);
-//    if(send_bytes == -1) {
-//        cerr << "Error al enviar datos: " << strerror(errno) << endl;
-//        // Cerramos el socket
-//        chan.Close(socket_fd);
-//        exit(1);
-//    }
-//    read_bytes = chan.Recv(socket_fd, buffer, MESSAGE_SIZE);
-//    this->puerto = buffer;
-//
-//    // solicitamos los datos del servidor 2
-//    mensaje = SOLICITUD_IP_SERVER_2;
-//    send_bytes = chan.Send(socket_fd, mensaje);
-//    if(send_bytes == -1) {
-//        cerr << "Error al enviar datos: " << strerror(errno) << endl;
-//        // Cerramos el socket
-//        chan.Close(socket_fd);
-//        exit(1);
-//    }
-//    read_bytes = chan.Recv(socket_fd, buffer, MESSAGE_SIZE);
-//    this->ip_server_2 = buffer;
-//    mensaje = SOLICITUD_puerto;
-//    send_bytes = chan.Send(socket_fd, mensaje);
-//    if(send_bytes == -1) {
-//        cerr << "Error al enviar datos: " << strerror(errno) << endl;
-//        // Cerramos el socket
-//        chan.Close(socket_fd);
-//        exit(1);
-//    }
-//    read_bytes = chan.Recv(socket_fd, buffer, MESSAGE_SIZE);
-//    this->puerto = buffer;
-//
-//    // solicitamos los datos del servidor 3
-//    mensaje = SOLICITUD_IP_SERVER_3;
-//    send_bytes = chan.Send(socket_fd, mensaje);
-//    if(send_bytes == -1) {
-//        cerr << "Error al enviar datos: " << strerror(errno) << endl;
-//        // Cerramos el socket
-//        chan.Close(socket_fd);
-//        exit(1);
-//    }
-//    read_bytes = chan.Recv(socket_fd, buffer, MESSAGE_SIZE);
-//    this->ip_server_3 = buffer;
-//    mensaje = SOLICITUD_puerto;
-//    send_bytes = chan.Send(socket_fd, mensaje);
-//    if(send_bytes == -1) {
-//        cerr << "Error al enviar datos: " << strerror(errno) << endl;
-//        // Cerramos el socket
-//        chan.Close(socket_fd);
-//        exit(1);
-//    }
-//    read_bytes = chan.Recv(socket_fd, buffer, MESSAGE_SIZE);
-//    this->puerto = buffer;
+    stringstream s_stream(buffer); //create string stream from the string
+    string substr;
+    getline(s_stream, substr, ','); //get first string delimited by comma
+    this->ip_server_1 = substr;
+    getline(s_stream, substr, ','); //get first string delimited by comma
+    this->ip_server_2 = substr;
+    getline(s_stream, substr, ','); //get first string delimited by comma
+    this->ip_server_3 = substr;
+    getline(s_stream, substr, ','); //get first string delimited by comma
+    this->puerto_server_1 = substr;
+    getline(s_stream, substr, ','); //get first string delimited by comma
+    this->puerto_server_2 = substr;
+    getline(s_stream, substr, ','); //get first string delimited by comma
+    this->puerto_server_3 = substr;
     
     // creo que será así? Resulta que no...
     //this->chanServer1 = new Socket(ip_server_1, stoi(puerto));
@@ -183,7 +112,7 @@ LindaDriver::LindaDriver(string ipServerRegistro, int puertoServerRegistro, stri
     std::cout   << "Datos de los servidores:\n" 
                 << "Server 1(tam. 1 a 3): '"    << this->ip_server_1 << "':'"  << this->puerto_server_1 << "'\n"
                 << "Server 2(tam. 4 a 5): '"    << this->ip_server_2 << "':'"  << this->puerto_server_2 << "'\n"
-                << "Server 3(tam. 6): '"        << this->ip_server_3 << "':'"  << this->puerto_server_3 << std::endl;
+                << "Server 3(tam. 6): '"        << this->ip_server_3 << "':'"  << this->puerto_server_3 << "'" <<std::endl;
 }
 
 //destructor -----------------------------
