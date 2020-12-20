@@ -30,6 +30,7 @@ public:
 	Tupla(string s1, string s2, string s3, string s4, string s5, string s6);
 	//Creo una tupla a partir de otra. Se trata de un duplicado
 	Tupla(Tupla& t);
+    Tupla(const Tupla& t);
 	
 	//destructor -----------------------------
 	~Tupla();
@@ -42,7 +43,7 @@ public:
 	//Pre:
 	//Post: devuelve la representación de la tupla como un string.
 	//Com:  Ver ejemplos en mainLindaDriver.cpp
-	string to_string();
+	 string to_string();
 
 	//Pre:  "s" tiene el formato adecuado para una tupla: "[val1,val2,..]"
 	//      correspondiente al tamaño de "this"
@@ -60,6 +61,9 @@ public:
 	//Pre:  "p" es un patrón
 	//Post: ¿Se emparejan "this" y "p"?
 	bool match(Tupla p);
+
+    bool operator<(const Tupla b) const;
+
 private:
 	//la tupla se almacenará como un vector de strings. Dado que antes
 	//de su declaración no se conoce el número de componentes, declaramos

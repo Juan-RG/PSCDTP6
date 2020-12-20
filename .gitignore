@@ -1,3 +1,9 @@
+*
+!*.cpp
+!*.hpp
+!Makefile*
+!Socket
+
 cmake-build-debug/
 cmake-build-debug/*
 CMakeLists.txt

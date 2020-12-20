@@ -11,6 +11,7 @@ using namespace std;
 
 //const int MESSAGE_SIZE = 100; //mensajes de no más 4000 caracteres
 
+
 void asignarCiudad(string *ciudad) {
     int valorMin = 1, valorMax = 10;
     //Calculamos un valor aleatorio entre el min y el max
@@ -71,29 +72,48 @@ int main(int argc, char* argv[]) {
     Tupla t1("1","mi casa","árbol");  // 3 elementos
     Tupla t2("?X","mi casa","árbol");
     Tupla t3("aprieta","el","pan","45","34","88");
+    Tupla t7("el","pan","45","34","88");
+   // Tupla t(t3);
 
-    set<Tupla*> s1;
-    s1.insert(&t1);
-    s1.insert(&t2);
-    s1.insert(&t3);
-    s1.insert(&t4);
+    set<Tupla> s1;
+    s1.insert(t1);
+    s1.insert(t2);
+    s1.insert(t3);
+    s1.insert(t7);
+    s1.insert(t2);
 
-    multiset<Tupla>::iterator itr;
-    cout << "\nThe set s1 is : \n";
-    for (itr = s1.begin();
-         itr != s1.end(); ++itr)
-    {
-        cout << ',' << **itr.to_string();
+    set<Tupla, less<Tupla> >::iterator itr;
+
+    for (set<Tupla>::iterator i = s1.begin(); i != s1.end(); i++) {
+        Tupla t(*i);
+        cout << t.to_string();
     }
+    cout<< "\n";
+    Tupla t22("?X","árbol");
+    set<Tupla>::iterator i = s1.find(t2);
+    if(i != s1.end()){
+        Tupla p(*i);
+        cout << p.to_string() <<"   " << t3.to_string()<< "\n";
+    }
+    s1.erase(t3);
+    for (set<Tupla>::iterator i = s1.begin(); i != s1.end(); i++) {
+        Tupla t(*i);
+        cout << t.to_string();
+    }
+    cout << "\nThe set s1 is : \n";
+    // printing set s1
+    //set<Tupla,std::less<Tupla>>::iterator itr;
+    cout << "\nThe set s1 is : \n";
+
+
     cout << endl;
 
-    auto& p = s1;
-    cout << p.
+
     /*
     for (auto& currentElement : s1){
         currentElement
     }*/
-
+/*
     if(t2.match(t1)){
         cout << "Match";
     }else{
@@ -102,7 +122,7 @@ int main(int argc, char* argv[]) {
 
     t3.from_string("[a,b,c,45,34,pan]");
     cout << t3.to_string() << endl;
-
+*/
 
    // std::cout << temp.to_string() << std::endl;
 

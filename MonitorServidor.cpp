@@ -27,7 +27,7 @@ void MonitorServidor::borrar(Tupla tupla) {
     enEspera.notify_one();
 }
 void MonitorServidor::guardar(Tupla tupla) {
-    unique_lock<mutex> lck(mtx)
+    unique_lock<mutex> lck(mtx);
     //almacen.insert(tupla);
     enEspera.notify_all();
 }

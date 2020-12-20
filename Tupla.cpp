@@ -70,6 +70,21 @@ Tupla::Tupla(Tupla& t) {
     }
 }
 
+Tupla::Tupla(const Tupla& t) {
+    data = new vector<string>(t.data->size(),"");
+    for(int i = 0;i<t.data->size();i++){
+        data->at(i)=t.data->at(i);
+    }
+}
+bool Tupla::operator<(const Tupla b) const
+{
+    if (this->data->at(0) == b.data->at(0)){
+        return false;
+    }
+    return true;
+    //return this->data->size() > b.data->size();
+}
+
 Tupla::~Tupla() {
     delete data;
 }
