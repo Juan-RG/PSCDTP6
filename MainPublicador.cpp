@@ -80,7 +80,7 @@ int main(int argc, char* argv[]) {
     s1.insert(t2);
     s1.insert(t3);
     s1.insert(t7);
-    s1.insert(t2);
+
 
     set<Tupla, less<Tupla> >::iterator itr;
 

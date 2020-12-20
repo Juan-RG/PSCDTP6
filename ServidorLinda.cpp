@@ -46,7 +46,7 @@ void trocea_3(string s, string &operacion, string &tupla) {
 }
 
 //-------------------------------------------------------------
-void servCliente(Socket& soc, int client_fd, MonitorServidor& mS, multiset<Tupla> &almacen) {
+void servCliente(Socket& soc, int client_fd, MonitorServidor& mS, set<Tupla> &almacen) {
 	// Buffer para recibir el mensaje
     int length = 100;
     string buffer;
@@ -57,8 +57,8 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS, multiset<Tupla
 	string operacion;
 	string tupla;
 
-	multiset <Tupla> :: iterator iter;			//para saber donde buscar en la lista
-	multiset <Tupla> :: iterator iter_fin;		//para conparar si estamos en la posicion final
+	set <Tupla> :: iterator iter;			//para saber donde buscar en la lista
+	set <Tupla> :: iterator iter_fin;		//para conparar si estamos en la posicion final
 	Tupla tuplaTemp("");                            //Para buscar la tupla en la memoria
 
     bool out = false; // Inicialmente no salir del bucle
@@ -66,7 +66,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS, multiset<Tupla
 	while(!out) {
 		// Recibimos el mensaje del cliente
 		rcv_bytes = soc.Recv(client_fd,buffer,length);
-
+        cout << "paso \n";
 		if (rcv_bytes == -1) {
 			cerr << "Error al recibir datos: " + string(strerror(errno)) + "\n";
 			soc.Close(client_fd); // Cerramos los sockets.
@@ -117,6 +117,26 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS, multiset<Tupla
 }
 
 int main(int argc, char *argv[]) {
+    string buffer = "[PN][1,zaragoza,valencia,5]";
+    string operacion,tupla;
+    trocea_3(buffer, operacion, tupla);
+    set<Tupla> almacenPrueba;
+    MonitorServidor mS1(&almacenPrueba);
+    Tupla t(4);
+    t.from_string(tupla);
+    mS1.guardar(t);
+   buffer = "[PN][2,zaragoza,valencia,5]";
+    trocea_3(buffer, operacion, tupla);
+    Tupla t1(4);
+    t1.from_string(tupla);
+    mS1.guardar(t1);
+    buffer = "[PN][3,zaragoza,valencia,5]";
+    trocea_3(buffer, operacion, tupla);
+    Tupla t2(4);
+    t2.from_string(tupla);
+    mS1.guardar(t2);
+
+    cout<<"buffer" + buffer+ " operacion "+ operacion +" tupla "+ tupla+"\n";
 	if (argc != 2) {
         cerr << "Número de parámetros incorrecto \n";
         cerr << "Introduce ./ServidorMulticliente, puerto del servidor para hacer bind\n";
@@ -125,7 +145,7 @@ int main(int argc, char *argv[]) {
     const int N = 5;
 
 	//Creamos el tipo de set que vamos a usar (donde guardamos las tuplas)
-	multiset<Tupla> almacen;
+	set<Tupla> almacen;
 
 	MonitorServidor mS(&almacen);
 

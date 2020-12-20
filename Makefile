@@ -10,7 +10,7 @@ LINDA_DRIVER=LindaDriver
 CLIENTE_PUBLICADOR=MainPublicador
 CLIENTE_BUSCADOR=MainBuscador
 
-SERVER_REGISTRO=MainServer
+SERVER_REGISTRO=MainServerDespliegue
 MONITOR_CONEXIONES=MonitorConexiones
 
 SERVER_LINDA=ServidorLinda

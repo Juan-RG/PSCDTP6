@@ -24,11 +24,11 @@ class MonitorServidor {
 
 		condition_variable enEspera;
 
-        multiset<Tupla> almacen;
+        set<Tupla> almacen;
 
 	public:
 		//------------------------- constructor
-		MonitorServidor(multiset<Tupla> *almacen);
+		MonitorServidor(set<Tupla> *almacen);
 		//------------------------- destructor
 		~MonitorServidor();
 		//Los "r" serán los recursos que se quieren reservar o liberar.

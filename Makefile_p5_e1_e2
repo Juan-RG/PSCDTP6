@@ -13,7 +13,7 @@
 CC=g++
 
 CLIENT=MainPublicador
-MULTI_SERVER=MainServer
+MULTI_SERVER=MainServerDespliegue
 SERVER_LINDA=ServidorLinda
 MONITOR_LINDA=MonitorServidor
 MONITOR=MonitorConexiones

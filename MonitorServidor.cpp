@@ -9,7 +9,7 @@
 
 
 //------------------------- constructor
-MonitorServidor::MonitorServidor(multiset<Tupla> *almacen){
+MonitorServidor::MonitorServidor(set<Tupla> *almacen){
 	this->almacen = *almacen;
 }
 
@@ -28,7 +28,15 @@ void MonitorServidor::borrar(Tupla tupla) {
 }
 void MonitorServidor::guardar(Tupla tupla) {
     unique_lock<mutex> lck(mtx);
-    //almacen.insert(tupla);
+    almacen.insert(tupla);
     enEspera.notify_all();
+    cout<<"entro\n";
+    cout<< almacen.size()<<"\n";
+    for (set<Tupla>::iterator i = almacen.begin(); i != almacen.end(); i++) {
+        Tupla t(*i);
+        cout << t.to_string()<<"\n";
+
+    }
+    cout<<"fin entro\n";
 }
 
