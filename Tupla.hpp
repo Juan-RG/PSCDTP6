@@ -38,12 +38,12 @@ public:
 	//operadores -----------------------------
 	//Pre:
 	//Post: devuelve el tamaño de la tupla
-	int size();
+	int size() const;
 
 	//Pre:
 	//Post: devuelve la representación de la tupla como un string.
 	//Com:  Ver ejemplos en mainLindaDriver.cpp
-	 string to_string();
+	string to_string() const;
 
 	//Pre:  "s" tiene el formato adecuado para una tupla: "[val1,val2,..]"
 	//      correspondiente al tamaño de "this"
@@ -52,7 +52,7 @@ public:
 
 	//Pre:  0<="pos"<this->size()
 	//Post: devuelve el elemento en la posición "pos" de la tupla
-	string get(int pos);
+	string get(int pos) const;
 
 	//Pre:  0<="pos"<this->size()
 	//Post: pone "value" en la posición "pos" de la tupla	

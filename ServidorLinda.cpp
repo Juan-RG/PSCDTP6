@@ -32,21 +32,27 @@ static const string RECIBIDO = "OK";
 
 //-------------------------------------------------------------
 void trocea_3(string s, string &operacion, string &tupla) {
-	const char delim1[] = "["; //los separadores aquí son ","
+	const char delim1[] = ","; //los separadores aquí son ","
 	char* token;
 	char* copia = strdup(s.c_str()); //trabajaremos sobre una copia
 
-	token = strtok(copia, delim1); //hasta el primer '['
+	//token = strtok(copia, delim1); //hasta el primer '[' <---- NOK
+    token = strtok(copia, delim1);
 	operacion = token;
 
-	token = strtok(nullptr, "");
+	token = strtok(nullptr, "\n");
 	tupla = token;
 
-	tupla = "["+tupla;
+	//tupla = "["+tupla; <---- NOK
 }
+void prueba(MonitorServidor& mS){
+    Tupla tprueba("prueba1","prueba");
 
+    sleep(2);
+    mS.guardar(tprueba);
+}
 //-------------------------------------------------------------
-void servCliente(Socket& soc, int client_fd, MonitorServidor& mS, set<Tupla> &almacen) {
+void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 	// Buffer para recibir el mensaje
     int length = 100;
     string buffer;
@@ -59,7 +65,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS, set<Tupla> &al
 
 	set <Tupla> :: iterator iter;			//para saber donde buscar en la lista
 	set <Tupla> :: iterator iter_fin;		//para conparar si estamos en la posicion final
-	Tupla tuplaTemp("");                            //Para buscar la tupla en la memoria
+	Tupla tuplaTemp("");                    //Para buscar la tupla en la memoria
 
     bool out = false; // Inicialmente no salir del bucle
 
@@ -83,11 +89,11 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS, set<Tupla> &al
                 soc.Close(client_fd); // Cerramos los sockets.
                 exit(1);
             }
-            mS.guardar(tuplaTemp);
-			almacen.insert(tuplaTemp); //Guardamos en la coleccion la tupla que nos han pasado
+            mS.guardar(tuplaTemp);    //Guardamos en la coleccion la tupla que nos han pasado(llamamos al monitor)
+			//almacen.insert(tuplaTemp);
 		} else if(operacion == MENSAJE_RN) {//Lee tupla y la borra de memoria
-            iter_fin = almacen.end();           //Buscamos la posicion final
-			iter = almacen.find(tuplaTemp);     //Guardamos donde a encontrado la tupla a sacar
+            //iter_fin = almacen.end();           //Buscamos la posicion final
+			/*iter = almacen.find(tuplaTemp);     //Guardamos donde a encontrado la tupla a sacar
 			if(iter != iter_fin) {
 				tuplaTemp = tuplaTemp.to_string();		//Pasamos la tupla encontrada a string para enviarla
                 mS.borrar(tuplaTemp);     //Borra la tupla una sola vez, si la ha encontrado
@@ -97,11 +103,11 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS, set<Tupla> &al
 					soc.Close(client_fd); // Cerramos los sockets.
 					exit(1);
 				}
-			}
+			}*/
 		} else if(operacion == MENSAJE_RDN) {//lee tupla y la copia
 			//Algo similar a lo anterior pero que si lo encuentra (iter != iterFin), solo lo "copia" y lo envia
-			iter_fin = almacen.end();           //Buscamos la posicion final
-			iter = almacen.find(tuplaTemp);     //Guardamos donde a encontrado la tupla a sacar
+			//iter_fin = almacen.end();           //Buscamos la posicion final
+			/*iter = almacen.find(tuplaTemp);     //Guardamos donde a encontrado la tupla a sacar
 			if(iter != iter_fin) {
 				tuplaTemp = tuplaTemp.to_string();		//Pasamos la tupla encontrada a string para enviarla
                 mS.disponible(tuplaTemp);
@@ -111,39 +117,55 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS, set<Tupla> &al
 					soc.Close(client_fd); // Cerramos los sockets.
 					exit(1);
 				}
-			}
+			}*/
 		}
 	}
 }
 
 int main(int argc, char *argv[]) {
-    string buffer = "[PN][1,zaragoza,valencia,5]";
+    Tupla tprueba("prueba1","prueba");
+
+    // PRUEBAS de añadir tuplas al set con el monitor
+    string buffer = "PN,[1,zaragoza,valencia,5]";
     string operacion,tupla;
     trocea_3(buffer, operacion, tupla);
-    set<Tupla> almacenPrueba;
+    cout << "buffer: '"<<  buffer << "' operacion '" << operacion << "' tupla '" << tupla << "'" << endl;
+    multiset<Tupla> almacenPrueba;
     MonitorServidor mS1(&almacenPrueba);
-    Tupla t(4);
+    Tupla t(4); // TODO: Ver si se puede meter el constructor en from_string, tal que no haya que decir el tamaño de la tupla antes de meterle el string
     t.from_string(tupla);
+    thread p(&prueba, ref(mS1));
     mS1.guardar(t);
-   buffer = "[PN][2,zaragoza,valencia,5]";
+    mS1.guardar(tprueba);
+    mS1.borrar(tprueba);
+    mS1.borrar(tprueba);
+
+    p.join();
+    buffer = "PN,[2,teruel,34]";
     trocea_3(buffer, operacion, tupla);
-    Tupla t1(4);
+    cout << "buffer: '"<<  buffer << "' operacion '" << operacion << "' tupla '" << tupla << "'" << endl;
+    Tupla t1(4); // TODO: Ver si se puede meter el constructor en from_string, tal que no haya que decir el tamaño de la tupla antes de meterle el string
     t1.from_string(tupla);
     mS1.guardar(t1);
-    buffer = "[PN][3,zaragoza,valencia,5]";
+
+    buffer = "PN,[3,Madrid,La nada,5]";
     trocea_3(buffer, operacion, tupla);
-    Tupla t2(4);
+    cout << "buffer: '"<<  buffer << "' operacion '" << operacion << "' tupla '" << tupla << "'" << endl;
+    Tupla t2(4); // TODO: Ver si se puede meter el constructor en from_string, tal que no haya que decir el tamaño de la tupla antes de meterle el string
     t2.from_string(tupla);
     mS1.guardar(t2);
+    mS1.guardar(t2);
+    mS1.guardar(t2);
+    mS1.guardar(t2);
+    mS1.guardar(t2);
     cout<< "Guardo otra vez la tupla\n";
-    buffer = "[PN][3,zaragoza,valencia,5]";
+    buffer = "PN,[3,Madrid,La nada,5]";
     trocea_3(buffer, operacion, tupla);
     Tupla t3(4);
     t3.from_string(tupla);
-    mS1.guardar(t3);
+    mS1.guardar(t);
 
-    cout<<"buffer" + buffer+ " operacion "+ operacion +" tupla "+ tupla+"\n";
-	if (argc != 2) {
+    if (argc != 2) {
         cerr << "Número de parámetros incorrecto \n";
         cerr << "Introduce ./ServidorMulticliente, puerto del servidor para hacer bind\n";
         exit(1); // finaliza el programa indicando salida incorrecta (1)
@@ -151,7 +173,7 @@ int main(int argc, char *argv[]) {
     const int N = 5;
 
 	//Creamos el tipo de set que vamos a usar (donde guardamos las tuplas)
-	set<Tupla> almacen;
+    multiset<Tupla> almacen;
 
 	MonitorServidor mS(&almacen);
 
@@ -189,7 +211,7 @@ int main(int argc, char *argv[]) {
             exit(1);
         }
 
-        cliente[i] = thread(&servCliente, ref(chan), client_fd[i], ref(mS), ref(almacen));
+        cliente[i] = thread(&servCliente, ref(chan), client_fd[i], ref(mS));
     }
 
     //¿Qué pasa si algún thread acaba inesperadamente?

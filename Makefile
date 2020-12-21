@@ -85,7 +85,7 @@ ${SERVER_REGISTRO}: ${MONITOR_CONEXIONES}.o ${SOCKET}.o ${SERVER_REGISTRO}.o
 #-----------------------------------------------------------
 # MONITOR_LINDA
 # Compilacion
-${MONITOR_LINDA}.o: ${MONITOR_LINDA}.cpp
+${MONITOR_LINDA}.o: ${TUPLA}.o ${MONITOR_LINDA}.cpp
 	${CC} -c ${MONITOR_LINDA}.cpp
 
 #-----------------------------------------------------------

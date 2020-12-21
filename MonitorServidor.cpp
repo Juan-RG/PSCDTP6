@@ -9,36 +9,57 @@
 
 
 //------------------------- constructor
-MonitorServidor::MonitorServidor(set<Tupla> *almacen){
+MonitorServidor::MonitorServidor(multiset<Tupla> *almacen){
 	this->almacen = *almacen;
 }
 
 //------------------------- destructor
 MonitorServidor::~MonitorServidor(){}
 
-void MonitorServidor::disponible(Tupla tupla) {
+void MonitorServidor::RdN(Tupla tupla) {
 	unique_lock<mutex> lck(mtx);
-    almacen.find(tupla);
-    enEspera.notify_one();
+    while (almacen.find(tupla) == almacen.end()){
+        enEspera.wait(lck);
+    }
+
 }
-void MonitorServidor::borrar(Tupla tupla) {
-    unique_lock<mutex> lck(mtx);
-    //almacen.erase(almacen.find(tuplaTemp));
-    enEspera.notify_one();
-}
-void MonitorServidor::guardar(Tupla tupla) {
+void MonitorServidor::RN(Tupla tupla) {
     unique_lock<mutex> lck(mtx);
     const bool is_in = almacen.find(tupla) != almacen.end();
-    cout << is_in <<" que me dices \n";
-    set<Tupla>::iterator y = almacen.find(tupla);
-    if(y == almacen.end()){
-        cout<<"nO ENTIENDO NADA \n";
+    cout << "que me dices "<< is_in<<"\n";
+    while (almacen.find(tupla) == almacen.end()){
+        cout<< "esperando\n";
+        enEspera.wait(lck);
     }
-    if(y != almacen.end()){   //control si ya existe el que vamos a guardar
+    cout<< "paso eliminando\n";
+    almacen.erase(tupla);
+}
+void MonitorServidor::PN(Tupla tupla) {
+    unique_lock<mutex> lck(mtx);
+    almacen.insert(tupla);
+    enEspera.notify_all();
+    for (set<Tupla>::iterator i = almacen.begin(); i != almacen.end(); i++) {
+        Tupla t(*i);
+        cout << t.to_string()<<"\n";
+
+    }
+    /*
+    const bool is_in = almacen.find(tupla) != almacen.end();
+    set<Tupla>::iterator y = almacen.find(tupla);
+    if(is_in){   //control si ya existe el que vamos a guardar
         cout << "entro repe!!!!!!!!!!!!!!!!!!!!!!!\n";
         Tupla t(*y);
+        cout<< " t "<< t.to_string() + "\n";
         string value = t.get(0);
-        cout << value << "  aa" << tupla.get(0)<< "\n";
+        cout<< "asdasdasda\n";
+        set<Tupla>::iterator final = almacen.end();
+        cout<< "asdasdasda\n";
+        final--;
+        Tupla tfinal(*final);
+        cout << "paso\n";
+        cout << tupla.to_string()<<" t final\n";
+        cout << "paso\n";
+        cout << value << "  aa" << tfinal.get(0)<< "\n";
 
     }else{
         almacen.insert(tupla);
@@ -52,6 +73,6 @@ void MonitorServidor::guardar(Tupla tupla) {
         }
         cout<<"fin entro\n";
     }
-
+    */
 }
 

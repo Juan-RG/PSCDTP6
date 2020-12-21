@@ -78,10 +78,11 @@ Tupla::Tupla(const Tupla& t) {
 }
 bool Tupla::operator<(const Tupla b) const
 {
-    if (this->data->at(0) == b.data->at(0)){
-        return false;
-    }
-    return true;
+    return (this->data->at(0) < b.data->at(0));
+    //if (this->data->at(0) == b.data->at(0)){
+    //    return false;
+    //}
+    //return true;
     //return this->data->size() > b.data->size();
 }
 
@@ -89,11 +90,11 @@ Tupla::~Tupla() {
     delete data;
 }
 
-int Tupla::size() {
+int Tupla::size() const{
     return data->size();
 }
 
-string Tupla::to_string() {
+string Tupla::to_string() const{
     string res = "[";
     for (int i=0; i<data->size()-1; i++) {
         res = res + data->at(i) + ",";
@@ -102,7 +103,7 @@ string Tupla::to_string() {
     return res;
 }
 
-string Tupla::get(int pos) {
+string Tupla::get(int pos) const{
     return data->at(pos);
 }
 
@@ -114,13 +115,20 @@ void Tupla::from_string(string s) {
     int strings = 1;
     string s1,s2,s3,s4,s5,s6;
     string buffer;
-
     for(int i = 0; i<s.length();i++){                                                       //controlar en un futuro que si tupla.size() de 2 y el string sea de 4
                                                                                             //controlar o error o new de tupla. con el nuevo tamaño
         if(s[i]==','){
             strings++;
         }
     }
+
+    // TODO: Ahora que ya sabemos como machacar data y ponerle un nuevo size, se puede reescribir from_string más compacta
+    //       y evitar tener que adivinar el tamaño de la tupla al hacer from_string (se usaría una plantilla con tamaño
+    //       por defecto que luego se modificaría)
+    delete data;
+    data = new vector<string>(strings,"");
+    cout << "Ahora data es de tamaño " << data->size() << endl;
+
     //if(strings != this->size()){}
     //data = new vector<string>(strings,"");
 

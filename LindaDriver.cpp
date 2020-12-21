@@ -123,67 +123,67 @@ LindaDriver::~LindaDriver(){
 //operadores ----------------------------
 //PostNote
 void LindaDriver::PN(const Tupla t) {
-//    string mensaje;
-//    int read_bytes;   // num de bytes recibidos en un mensaje
-//    int send_bytes;   // num de bytes enviados en un mensaje
-//    int socket_fd;
-//    string buffer;
-//    Socket chanServer1(this->ip_server_1, stoi(this->puerto));
-//    Socket chanServer2(this->ip_server_2, stoi(this->puerto));
-//    Socket chanServer3(this->ip_server_3, stoi(this->puerto));
-//    mensaje = MENSAJE_PN + t.to_string();
-//
-//    if (t.size() < 4) { // tam. 1 a 3, va al servidor 1
-//        conectar(chanServer1, socket_fd);
-//
-//        // manda el código de operación junto a la tupla convertida a string
-//        send_bytes = chanServer1.Send(socket_fd, mensaje);
-//        if(send_bytes == -1) {
-//            cerr << "Error al enviar datos: " << strerror(errno) << endl;
-//            // Cerramos el socket
-//            chanServer1.Close(socket_fd);
-//            exit(1);
-//        }
-//
-//        // Espera a recibir una confirmación
-//        read_bytes = chanServer1.Recv(socket_fd, buffer, MESSAGE_SIZE);
-//        chanServer1.Close(socket_fd); // y cierra el socket
-//    } else if (t.size() < 6) { // tam. 4 a 5, va al servidor 2
-//        conectar(chanServer2, socket_fd);
-//
-//        // manda el código de operación junto a la tupla convertida a string
-//        send_bytes = chanServer2.Send(socket_fd, mensaje);
-//        if(send_bytes == -1) {
-//            cerr << "Error al enviar datos: " << strerror(errno) << endl;
-//            // Cerramos el socket
-//            chanServer2.Close(socket_fd);
-//            exit(1);
-//        }
-//
-//        // Espera a recibir una confirmación
-//        read_bytes = chanServer2.Recv(socket_fd, buffer, MESSAGE_SIZE);
-//        chanServer2.Close(socket_fd); // y cierra el socket
-//    } else { // tam. 6, va al servidor 3
-//        conectar(chanServer3, socket_fd);
-//
-//        // manda el código de operación junto a la tupla convertida a string
-//        send_bytes = chanServer3.Send(socket_fd, mensaje);
-//        if(send_bytes == -1) {
-//            cerr << "Error al enviar datos: " << strerror(errno) << endl;
-//            // Cerramos el socket
-//            chanServer3.Close(socket_fd);
-//            exit(1);
-//        }
-//
-//        // Espera a recibir una confirmación
-//        read_bytes = chanServer3.Recv(socket_fd, buffer, MESSAGE_SIZE);
-//        chanServer3.Close(socket_fd); // y cierra el socket
-//    }
-//
-//    if (buffer != RESPUESTA_CONFIRMACION) {
-//        std::cerr << "error al enviar la tupla " << t.to_string()
-//                  << " en la operación PN" << std::endl;
-//    }
+    string mensaje;
+    int read_bytes;   // num de bytes recibidos en un mensaje
+    int send_bytes;   // num de bytes enviados en un mensaje
+    int socket_fd;
+    string buffer;
+    Socket chanServer1(this->ip_server_1, stoi(this->puerto));
+    Socket chanServer2(this->ip_server_2, stoi(this->puerto));
+    Socket chanServer3(this->ip_server_3, stoi(this->puerto));
+    mensaje = MENSAJE_PN + t.to_string();
+
+    if (t.size() < 4) { // tam. 1 a 3, va al servidor 1
+        conectar(chanServer1, socket_fd);
+
+        // manda el código de operación junto a la tupla convertida a string
+        send_bytes = chanServer1.Send(socket_fd, mensaje);
+        if(send_bytes == -1) {
+            cerr << "Error al enviar datos: " << strerror(errno) << endl;
+            // Cerramos el socket
+            chanServer1.Close(socket_fd);
+            exit(1);
+        }
+
+        // Espera a recibir una confirmación
+        read_bytes = chanServer1.Recv(socket_fd, buffer, MESSAGE_SIZE);
+        chanServer1.Close(socket_fd); // y cierra el socket
+    } else if (t.size() < 6) { // tam. 4 a 5, va al servidor 2
+        conectar(chanServer2, socket_fd);
+
+        // manda el código de operación junto a la tupla convertida a string
+        send_bytes = chanServer2.Send(socket_fd, mensaje);
+        if(send_bytes == -1) {
+            cerr << "Error al enviar datos: " << strerror(errno) << endl;
+            // Cerramos el socket
+            chanServer2.Close(socket_fd);
+            exit(1);
+        }
+
+        // Espera a recibir una confirmación
+        read_bytes = chanServer2.Recv(socket_fd, buffer, MESSAGE_SIZE);
+        chanServer2.Close(socket_fd); // y cierra el socket
+    } else { // tam. 6, va al servidor 3
+        conectar(chanServer3, socket_fd);
+
+        // manda el código de operación junto a la tupla convertida a string
+        send_bytes = chanServer3.Send(socket_fd, mensaje);
+        if(send_bytes == -1) {
+            cerr << "Error al enviar datos: " << strerror(errno) << endl;
+            // Cerramos el socket
+            chanServer3.Close(socket_fd);
+            exit(1);
+        }
+
+        // Espera a recibir una confirmación
+        read_bytes = chanServer3.Recv(socket_fd, buffer, MESSAGE_SIZE);
+        chanServer3.Close(socket_fd); // y cierra el socket
+    }
+
+    if (buffer != RESPUESTA_CONFIRMACION) {
+        std::cerr << "error al enviar la tupla " << t.to_string()
+                  << " en la operación PN" << std::endl;
+    }
 }
     
 
