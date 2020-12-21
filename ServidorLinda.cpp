@@ -135,6 +135,12 @@ int main(int argc, char *argv[]) {
     Tupla t2(4);
     t2.from_string(tupla);
     mS1.guardar(t2);
+    cout<< "Guardo otra vez la tupla\n";
+    buffer = "[PN][3,zaragoza,valencia,5]";
+    trocea_3(buffer, operacion, tupla);
+    Tupla t3(4);
+    t3.from_string(tupla);
+    mS1.guardar(t3);
 
     cout<<"buffer" + buffer+ " operacion "+ operacion +" tupla "+ tupla+"\n";
 	if (argc != 2) {

@@ -28,15 +28,30 @@ void MonitorServidor::borrar(Tupla tupla) {
 }
 void MonitorServidor::guardar(Tupla tupla) {
     unique_lock<mutex> lck(mtx);
-    almacen.insert(tupla);
-    enEspera.notify_all();
-    cout<<"entro\n";
-    cout<< almacen.size()<<"\n";
-    for (set<Tupla>::iterator i = almacen.begin(); i != almacen.end(); i++) {
-        Tupla t(*i);
-        cout << t.to_string()<<"\n";
-
+    const bool is_in = almacen.find(tupla) != almacen.end();
+    cout << is_in <<" que me dices \n";
+    set<Tupla>::iterator y = almacen.find(tupla);
+    if(y == almacen.end()){
+        cout<<"nO ENTIENDO NADA \n";
     }
-    cout<<"fin entro\n";
+    if(y != almacen.end()){   //control si ya existe el que vamos a guardar
+        cout << "entro repe!!!!!!!!!!!!!!!!!!!!!!!\n";
+        Tupla t(*y);
+        string value = t.get(0);
+        cout << value << "  aa" << tupla.get(0)<< "\n";
+
+    }else{
+        almacen.insert(tupla);
+        enEspera.notify_all();
+        cout<<"entro\n";
+        cout<< almacen.size()<<"\n";
+        for (set<Tupla>::iterator i = almacen.begin(); i != almacen.end(); i++) {
+            Tupla t(*i);
+            cout << t.to_string()<<"\n";
+
+        }
+        cout<<"fin entro\n";
+    }
+
 }
 
