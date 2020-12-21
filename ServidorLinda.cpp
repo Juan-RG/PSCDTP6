@@ -49,7 +49,7 @@ void prueba(MonitorServidor& mS){
     Tupla tprueba("prueba1","prueba");
 
     sleep(2);
-    mS.guardar(tprueba);
+    mS.PN(tprueba);
 }
 //-------------------------------------------------------------
 void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
@@ -63,8 +63,8 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 	string operacion;
 	string tupla;
 
-	set <Tupla> :: iterator iter;			//para saber donde buscar en la lista
-	set <Tupla> :: iterator iter_fin;		//para conparar si estamos en la posicion final
+	//set <Tupla> :: iterator iter;			//para saber donde buscar en la lista
+	//set <Tupla> :: iterator iter_fin;		//para conparar si estamos en la posicion final
 	Tupla tuplaTemp("");                    //Para buscar la tupla en la memoria
 
     bool out = false; // Inicialmente no salir del bucle
@@ -89,7 +89,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
                 soc.Close(client_fd); // Cerramos los sockets.
                 exit(1);
             }
-            mS.guardar(tuplaTemp);    //Guardamos en la coleccion la tupla que nos han pasado(llamamos al monitor)
+            mS.PN(tuplaTemp);    //Guardamos en la coleccion la tupla que nos han pasado(llamamos al monitor)
 			//almacen.insert(tuplaTemp);
 		} else if(operacion == MENSAJE_RN) {//Lee tupla y la borra de memoria
             //iter_fin = almacen.end();           //Buscamos la posicion final
@@ -135,10 +135,10 @@ int main(int argc, char *argv[]) {
     Tupla t(4); // TODO: Ver si se puede meter el constructor en from_string, tal que no haya que decir el tamaño de la tupla antes de meterle el string
     t.from_string(tupla);
     thread p(&prueba, ref(mS1));
-    mS1.guardar(t);
-    mS1.guardar(tprueba);
-    mS1.borrar(tprueba);
-    mS1.borrar(tprueba);
+    mS1.PN(t);
+    mS1.PN(tprueba);
+    mS1.RN(tprueba);
+    mS1.RN(tprueba);
 
     p.join();
     buffer = "PN,[2,teruel,34]";
@@ -146,24 +146,24 @@ int main(int argc, char *argv[]) {
     cout << "buffer: '"<<  buffer << "' operacion '" << operacion << "' tupla '" << tupla << "'" << endl;
     Tupla t1(4); // TODO: Ver si se puede meter el constructor en from_string, tal que no haya que decir el tamaño de la tupla antes de meterle el string
     t1.from_string(tupla);
-    mS1.guardar(t1);
+    mS1.PN(t1);
 
     buffer = "PN,[3,Madrid,La nada,5]";
     trocea_3(buffer, operacion, tupla);
     cout << "buffer: '"<<  buffer << "' operacion '" << operacion << "' tupla '" << tupla << "'" << endl;
     Tupla t2(4); // TODO: Ver si se puede meter el constructor en from_string, tal que no haya que decir el tamaño de la tupla antes de meterle el string
     t2.from_string(tupla);
-    mS1.guardar(t2);
-    mS1.guardar(t2);
-    mS1.guardar(t2);
-    mS1.guardar(t2);
-    mS1.guardar(t2);
+    mS1.PN(t2);
+    mS1.PN(t2);
+    mS1.PN(t2);
+    mS1.PN(t2);
+    mS1.PN(t2);
     cout<< "Guardo otra vez la tupla\n";
     buffer = "PN,[3,Madrid,La nada,5]";
     trocea_3(buffer, operacion, tupla);
     Tupla t3(4);
     t3.from_string(tupla);
-    mS1.guardar(t);
+    mS1.PN(t);
 
     if (argc != 2) {
         cerr << "Número de parámetros incorrecto \n";
