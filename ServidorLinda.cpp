@@ -32,17 +32,18 @@ static const string RECIBIDO = "OK";
 
 //-------------------------------------------------------------
 void trocea_3(string s, string &operacion, string &tupla) {
-	const char delim1[] = "["; //los separadores aquí son ","
+	const char delim1[] = ","; //los separadores aquí son ","
 	char* token;
 	char* copia = strdup(s.c_str()); //trabajaremos sobre una copia
 
-	token = strtok(copia, delim1); //hasta el primer '['
+	//token = strtok(copia, delim1); //hasta el primer '[' <---- NOK
+    token = strtok(copia, delim1);
 	operacion = token;
 
-	token = strtok(nullptr, "");
+	token = strtok(nullptr, "\n");
 	tupla = token;
 
-	tupla = "["+tupla;
+	//tupla = "["+tupla; <---- NOK
 }
 
 //-------------------------------------------------------------
@@ -117,27 +118,33 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS, set<Tupla> &al
 }
 
 int main(int argc, char *argv[]) {
-    string buffer = "[PN][1,zaragoza,valencia,5]";
+
+    // PRUEBAS de añadir tuplas al set con el monitor
+    string buffer = "PN,[1,zaragoza,valencia,5]";
     string operacion,tupla;
     trocea_3(buffer, operacion, tupla);
+    cout << "buffer: '"<<  buffer << "' operacion '" << operacion << "' tupla '" << tupla << "'" << endl;
     set<Tupla> almacenPrueba;
     MonitorServidor mS1(&almacenPrueba);
-    Tupla t(4);
+    Tupla t(4); // TODO: Ver si se puede meter el constructor en from_string, tal que no haya que decir el tamaño de la tupla antes de meterle el string
     t.from_string(tupla);
     mS1.guardar(t);
-   buffer = "[PN][2,zaragoza,valencia,5]";
+
+    buffer = "PN,[2,teruel,Las vegas,7]";
     trocea_3(buffer, operacion, tupla);
-    Tupla t1(4);
+    cout << "buffer: '"<<  buffer << "' operacion '" << operacion << "' tupla '" << tupla << "'" << endl;
+    Tupla t1(4); // TODO: Ver si se puede meter el constructor en from_string, tal que no haya que decir el tamaño de la tupla antes de meterle el string
     t1.from_string(tupla);
     mS1.guardar(t1);
-    buffer = "[PN][3,zaragoza,valencia,5]";
+
+    buffer = "PN,[3,Madrid,La nada,5]";
     trocea_3(buffer, operacion, tupla);
-    Tupla t2(4);
+    cout << "buffer: '"<<  buffer << "' operacion '" << operacion << "' tupla '" << tupla << "'" << endl;
+    Tupla t2(4); // TODO: Ver si se puede meter el constructor en from_string, tal que no haya que decir el tamaño de la tupla antes de meterle el string
     t2.from_string(tupla);
     mS1.guardar(t2);
 
-    cout<<"buffer" + buffer+ " operacion "+ operacion +" tupla "+ tupla+"\n";
-	if (argc != 2) {
+    if (argc != 2) {
         cerr << "Número de parámetros incorrecto \n";
         cerr << "Introduce ./ServidorMulticliente, puerto del servidor para hacer bind\n";
         exit(1); // finaliza el programa indicando salida incorrecta (1)
