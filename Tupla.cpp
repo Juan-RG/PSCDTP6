@@ -90,11 +90,11 @@ Tupla::~Tupla() {
     delete data;
 }
 
-int Tupla::size() {
+int Tupla::size() const{
     return data->size();
 }
 
-string Tupla::to_string() {
+string Tupla::to_string() const{
     string res = "[";
     for (int i=0; i<data->size()-1; i++) {
         res = res + data->at(i) + ",";
@@ -103,7 +103,7 @@ string Tupla::to_string() {
     return res;
 }
 
-string Tupla::get(int pos) {
+string Tupla::get(int pos) const{
     return data->at(pos);
 }
 
