@@ -16,14 +16,20 @@ MonitorServidor::MonitorServidor(multiset<Tupla> *almacen){
 //------------------------- destructor
 MonitorServidor::~MonitorServidor(){}
 
-void MonitorServidor::RdN(Tupla tupla) {
+void MonitorServidor::RdN(Tupla tupla) {                     //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
 	unique_lock<mutex> lck(mtx);
     while (almacen.find(tupla) == almacen.end()){
         enEspera.wait(lck);
     }
 
 }
-void MonitorServidor::RN(Tupla tupla) {
+void MonitorServidor::RdN_2(Tupla t1, Tupla t2) {  //TODO: Desarrollar
+
+}
+void MonitorServidor::RN_2(Tupla t1, Tupla t2) {  //TODO: Desarrollar
+
+}
+    void MonitorServidor::RN(Tupla tupla) {                         //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
     unique_lock<mutex> lck(mtx);
     const bool is_in = almacen.find(tupla) != almacen.end();
     cout << "que me dices "<< is_in<<"\n";
@@ -35,7 +41,7 @@ void MonitorServidor::RN(Tupla tupla) {
     almacen.erase(tupla);
 }
 void MonitorServidor::PN(Tupla tupla) {
-    unique_lock<mutex> lck(mtx);
+    unique_lock<mutex> lck(mtx);            //TODO: Que pasaria si meten una tupla con el patron de busqueda ?¿?¿?¿ ?A-Z
     almacen.insert(tupla);
     enEspera.notify_all();
     for (set<Tupla>::iterator i = almacen.begin(); i != almacen.end(); i++) {
