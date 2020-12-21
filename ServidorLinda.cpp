@@ -23,9 +23,9 @@
 
 using namespace std;
 
-static const string MENSAJE_PN = "PN,";
-static const string MENSAJE_RN = "RN,";
-static const string MENSAJE_RDN = "RDN,";
+static const string MENSAJE_PN = "PN";
+static const string MENSAJE_RN = "RN";
+static const string MENSAJE_RDN = "RDN";
 static const string MENSAJE_DESCONEXION = "DESCONEXION";
 
 static const string RECIBIDO = "OK";
