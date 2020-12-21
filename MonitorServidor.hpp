@@ -13,7 +13,6 @@
 #include <condition_variable>
 #include <set>
 #include "Tupla.hpp"
-///HAY QUE METER EL TIPO TUPLA :)
 
 //-----------------------------------------------------
 using namespace std; //mutex, condition_variable, etc.

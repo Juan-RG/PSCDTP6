@@ -59,7 +59,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS, set<Tupla> &al
 
 	set <Tupla> :: iterator iter;			//para saber donde buscar en la lista
 	set <Tupla> :: iterator iter_fin;		//para conparar si estamos en la posicion final
-	Tupla tuplaTemp("");                            //Para buscar la tupla en la memoria
+	Tupla tuplaTemp("");                    //Para buscar la tupla en la memoria
 
     bool out = false; // Inicialmente no salir del bucle
 
@@ -83,11 +83,11 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS, set<Tupla> &al
                 soc.Close(client_fd); // Cerramos los sockets.
                 exit(1);
             }
-            mS.guardar(tuplaTemp);
-			almacen.insert(tuplaTemp); //Guardamos en la coleccion la tupla que nos han pasado
+            mS.guardar(tuplaTemp);    //Guardamos en la coleccion la tupla que nos han pasado(llamamos al monitor)
+			//almacen.insert(tuplaTemp);
 		} else if(operacion == MENSAJE_RN) {//Lee tupla y la borra de memoria
             iter_fin = almacen.end();           //Buscamos la posicion final
-			iter = almacen.find(tuplaTemp);     //Guardamos donde a encontrado la tupla a sacar
+			/*iter = almacen.find(tuplaTemp);     //Guardamos donde a encontrado la tupla a sacar
 			if(iter != iter_fin) {
 				tuplaTemp = tuplaTemp.to_string();		//Pasamos la tupla encontrada a string para enviarla
                 mS.borrar(tuplaTemp);     //Borra la tupla una sola vez, si la ha encontrado
@@ -97,11 +97,11 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS, set<Tupla> &al
 					soc.Close(client_fd); // Cerramos los sockets.
 					exit(1);
 				}
-			}
+			}*/
 		} else if(operacion == MENSAJE_RDN) {//lee tupla y la copia
 			//Algo similar a lo anterior pero que si lo encuentra (iter != iterFin), solo lo "copia" y lo envia
 			iter_fin = almacen.end();           //Buscamos la posicion final
-			iter = almacen.find(tuplaTemp);     //Guardamos donde a encontrado la tupla a sacar
+			/*iter = almacen.find(tuplaTemp);     //Guardamos donde a encontrado la tupla a sacar
 			if(iter != iter_fin) {
 				tuplaTemp = tuplaTemp.to_string();		//Pasamos la tupla encontrada a string para enviarla
                 mS.disponible(tuplaTemp);
@@ -111,7 +111,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS, set<Tupla> &al
 					soc.Close(client_fd); // Cerramos los sockets.
 					exit(1);
 				}
-			}
+			}*/
 		}
 	}
 }

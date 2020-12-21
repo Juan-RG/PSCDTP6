@@ -35,7 +35,6 @@ void MonitorServidor::guardar(Tupla tupla) {
     for (set<Tupla>::iterator i = almacen.begin(); i != almacen.end(); i++) {
         Tupla t(*i);
         cout << t.to_string()<<"\n";
-
     }
     cout<<"fin entro\n";
 }
