@@ -130,7 +130,7 @@ int main(int argc, char *argv[]) {
     t.from_string(tupla);
     mS1.guardar(t);
 
-    buffer = "PN,[2,teruel,Las vegas,7]";
+    buffer = "PN,[2,teruel,34]";
     trocea_3(buffer, operacion, tupla);
     cout << "buffer: '"<<  buffer << "' operacion '" << operacion << "' tupla '" << tupla << "'" << endl;
     Tupla t1(4); // TODO: Ver si se puede meter el constructor en from_string, tal que no haya que decir el tamaño de la tupla antes de meterle el string
