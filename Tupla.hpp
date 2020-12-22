@@ -61,7 +61,7 @@ public:
 	//Pre:  "p" es un patrón
 	//Post: ¿Se emparejan "this" y "p"?
 	bool match(Tupla p);
-
+    void trocear(string elem[],int strings, string s);
     bool operator<(const Tupla b) const;
 
 private:

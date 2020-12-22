@@ -110,11 +110,24 @@ string Tupla::get(int pos) const{
 void Tupla::set(int pos, string value) {
     data->at(pos) = value;
 }
+
+void Tupla::trocear(string elem[],int strings, string s) {
+    stringstream s_stream(s); //create string stream from the string
+    string substr;
+    int i;
+    getline(s_stream, substr, '['); //get first string delimited by comma
+    for(i = 0; i < strings-1; i++){
+        getline(s_stream, substr, ','); //get first string delimited by comma
+        elem[i]=substr;
+    }
+    getline(s_stream, substr, ']');
+    elem[i]=substr;
+}
+
 void Tupla::from_string(string s) {
     assert(s.length()>2 && s[0]=='[' && s[s.length()-1]==']');
     int strings = 1;
-    string s1,s2,s3,s4,s5,s6;
-    string buffer;
+    string elem[6];
     for(int i = 0; i<s.length();i++){                                                       //controlar en un futuro que si tupla.size() de 2 y el string sea de 4
                                                                                             //controlar o error o new de tupla. con el nuevo tamaño
         if(s[i]==','){
@@ -133,33 +146,16 @@ void Tupla::from_string(string s) {
     //data = new vector<string>(strings,"");
 
     if(strings == 1){
-        stringstream s_stream(s); //create string stream from the string
-        string substr;
-        getline(s_stream, substr, '['); //get first string delimited by comma
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        //this->ip_server_1 = substr;
-        s1 = substr;
-        s1[s1.length() - 1] = '\0';
-        data->at(0) = s1;
+        trocear(elem,strings,s);
+        data = new vector<string>{elem[0]};
 
         //set(0, "s1");
         //Tupla(s1);
         //Meter string en data
     }else if (strings == 2){
         //scanf(s.c_str(), "[%s,%s]", &s1, &s2);
-        stringstream s_stream(s); //create string stream from the string
-        string substr;
-        getline(s_stream, substr, '['); //get first string delimited by comma
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        //this->ip_server_1 = substr;
-        s1 = substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        s2 = substr;
-        s2[s2.length() - 1] = '\0';
-        std::cout << s1 << std::endl;
-        std::cout << s2 << std::endl;
-        data->at(0) = s1;
-        data->at(1) = s2;
+        trocear(elem,strings,s);
+        data = new vector<string>{elem[0],elem[1]};
         //std::cout << s1 << std::endl;
         //std::cout << s2 << std::endl;
         //set(0, "s1");
@@ -168,108 +164,22 @@ void Tupla::from_string(string s) {
         //data->at(1) = s2;
         //Meter string en data
     }else if(strings == 3){
-        stringstream s_stream(s); //create string stream from the string
-        string substr;
-        getline(s_stream, substr, '['); //get first string delimited by comma
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        //this->ip_server_1 = substr;
-        s1 = substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        s2 = substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        s3 = substr;
-        s3[s3.length() - 1] = '\0';
-        std::cout << s1 << std::endl;
-        std::cout << s2 << std::endl;
-        std::cout << s3 << std::endl;
-        data->at(0) = s1;
-        data->at(1) = s2;
-        data->at(2) = s3;
+        trocear(elem,strings,s);
+        data = new vector<string>{elem[0],elem[1],elem[2]};
         //Meter string en data
     }else if(strings == 4){
         //sscanf(s.c_str(), "[%s,%s,%s,%s]", &s1, &s2, &s3, &s4);
-        stringstream s_stream(s); //create string stream from the string
-        string substr;
-        getline(s_stream, substr, '['); //get first string delimited by comma
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        //this->ip_server_1 = substr;
-        s1 = substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        s2 = substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        s3 = substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        s4 = substr;
-        s4[s4.length() - 1] = '\0';
-        std::cout << s1 << std::endl;
-        std::cout << s2 << std::endl;
-        std::cout << s3 << std::endl;
-        std::cout << s4 << std::endl;
-
-        data->at(0) = s1;
-        data->at(1) = s2;
-        data->at(2) = s3;
-        data->at(3) = s4;
+        trocear(elem,strings,s);
+        data = new vector<string>{elem[0],elem[1],elem[2],elem[3]};
         //Meter string en data
     }else if(strings == 5){
         //sscanf(s.c_str(), "[%s,%s,%s,%s,%s]", &s1, &s2, &s3, &s4, &s5);
-        stringstream s_stream(s); //create string stream from the string
-        string substr;
-        getline(s_stream, substr, '['); //get first string delimited by comma
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        //this->ip_server_1 = substr;
-        s1 = substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        s2 = substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        s3 = substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        s4 = substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        s5 = substr;
-        s5[s5.length() - 1] = '\0';
-        std::cout << s1 << std::endl;
-        std::cout << s2 << std::endl;
-        std::cout << s3 << std::endl;
-        std::cout << s4 << std::endl;
-        std::cout << s5 << std::endl;
-        data->at(0) = s1;
-        data->at(1) = s2;
-        data->at(2) = s3;
-        data->at(3) = s4;
-        data->at(4) = s5;
-        //Meter string en data
+        trocear(elem,strings,s);
+        data = new vector<string>{elem[0],elem[1],elem[2],elem[3],elem[4]};ta
     }else if(strings == 6){
         //sscanf(s.c_str(), "[%s,%s,%s,%s,%s,%s]", &s1, &s2, &s3, &s4, &s5, &s6);
-        stringstream s_stream(s); //create string stream from the string
-        string substr;
-        getline(s_stream, substr, '['); //get first string delimited by comma
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        //this->ip_server_1 = substr;
-        s1 = substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        s2 = substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        s3 = substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        s4 = substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        s5 = substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
-        s6 = substr;
-        s6[s6.length() - 1] = '\0';
-        std::cout << s1 << std::endl;
-        std::cout << s2 << std::endl;
-        std::cout << s3 << std::endl;
-        std::cout << s4 << std::endl;
-        std::cout << s5 << std::endl;
-        std::cout << s6 << std::endl;
-        data->at(0) = s1;
-        data->at(1) = s2;
-        data->at(2) = s3;
-        data->at(3) = s4;
-        data->at(4) = s5;
-        data->at(5) = s6;
+        trocear(elem,strings,s);
+        data = new vector<string>{elem[0],elem[1],elem[2],elem[3],elem[4],elem[5]};
         //Meter string en data
     }
 
