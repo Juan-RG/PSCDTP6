@@ -48,8 +48,14 @@ void trocea_3(string s, string &operacion, string &tupla) {
 void prueba(MonitorServidor& mS){
     Tupla tprueba("prueba1","prueba");
 
-    sleep(2);
+    sleep(3);
     mS.PN(tprueba);
+}
+void prueba1(MonitorServidor& mS){
+    Tupla tprueba("prueba1","prueba");
+    //sleep(2);
+    mS.RN(tprueba);
+    cout<<"salgo dormido\n";
 }
 //-------------------------------------------------------------
 void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
@@ -124,7 +130,12 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 
 int main(int argc, char *argv[]) {
     Tupla tprueba("prueba1","prueba");
-
+    Tupla match("prueba1","prueba");
+    Tupla matchG("?Z","prueba");
+    cout << "primera prueba "<< tprueba.match(match)<<"\n";
+    cout << "2 prueba "<< match.match(tprueba)<<"\n";
+    cout << "3 prueba "<< tprueba.match(matchG)<<"\n";
+    cout << "4 prueba "<< matchG.match(tprueba)<<"\n";
     // PRUEBAS de añadir tuplas al set con el monitor
     string buffer = "PN,[1,zaragoza,valencia,5]";
     string operacion,tupla;
@@ -135,11 +146,14 @@ int main(int argc, char *argv[]) {
     Tupla t(4); // TODO: Ver si se puede meter el constructor en from_string, tal que no haya que decir el tamaño de la tupla antes de meterle el string
     t.from_string(tupla);
     thread p(&prueba, ref(mS1));
+    thread p1(&prueba1, ref(mS1));
+    thread p2(&prueba1, ref(mS1));
     mS1.PN(t);
     mS1.PN(tprueba);
     mS1.RN(tprueba);
-    mS1.RN(tprueba);
 
+    p1.join();
+    p2.join();
     p.join();
     buffer = "PN,[2,teruel,34]";
     trocea_3(buffer, operacion, tupla);

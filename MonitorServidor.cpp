@@ -31,7 +31,7 @@ void MonitorServidor::RN_2(Tupla t1, Tupla t2) {  //TODO: Desarrollar
 }
     void MonitorServidor::RN(Tupla tupla) {                         //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
     unique_lock<mutex> lck(mtx);
-    const bool is_in = almacen.find(tupla) != almacen.end();
+    const bool is_in = almacen.find(tupla) != almacen.end();            // Todo: if con find para detectar si la tupla esta si no comprobacion recorriendo el multiset con match
     cout << "que me dices "<< is_in<<"\n";
     while (almacen.find(tupla) == almacen.end()){
         cout<< "esperando\n";
