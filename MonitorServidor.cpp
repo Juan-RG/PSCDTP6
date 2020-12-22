@@ -6,7 +6,7 @@
 //--------------------------------------------------------------------------------------------------
 
 #include "MonitorServidor.hpp"
-
+#include "Tupla.hpp"
 
 //------------------------- constructor
 MonitorServidor::MonitorServidor(multiset<Tupla> *almacen){
@@ -21,7 +21,7 @@ void MonitorServidor::PN(Tupla tupla) {
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
 
-    /*for (set<Tupla>::iterator i = almacen.begin(); i != almacen.end(); i++) {
+   /* for (set<Tupla>::iterator i = almacen.begin(); i != almacen.end(); i++) {
         Tupla t(*i);
         cout << t.to_string()<<"\n";
     }
@@ -58,7 +58,7 @@ void MonitorServidor::PN(Tupla tupla) {
     */
 }
 
-void MonitorServidor::RdN(Tupla tupla) {                     //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
+void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
 	unique_lock<mutex> lck(mtx);
 
     /*while (almacen.find(tupla) == almacen.end()){
@@ -66,22 +66,22 @@ void MonitorServidor::RdN(Tupla tupla) {                     //TODO: Tenemos que
     }*/
 
     multiset <Tupla> :: iterator itr;
-    Tupla tuplaDelIterador;
+    Tupla tuplaDelIterador(*itr);
 
-   // itr = almacen.begin();  //Inicializamos el iterador a la primera posicion del almacen (multiset)
-    while(!tupla.match(*itr)){
-        for (itr = almacen.begin(); itr != almacen.end(); ++itr){
-            //tuplaDelIterador = *itr;
-            if(tupla.match(*itr)){
-                break;
-            }
+    while(!tupla.match(tuplaDelIterador)){
+        //tuplaDelIterador = *itr;
+        //Buscamos en el almacen la tupla que queremos, hasta encontrarla o terminar la iteracion
+        for (itr = almacen.begin(); itr!= almacen.end() || tupla.match(tuplaDelIterador); ++itr) {
+            tuplaDelIterador = *itr;
         }
-        if(!tupla.match(*itr)){
+        //Si no la encuentra se pondra en espera hasta nuevo aviso
+        if(!tupla.match(tuplaDelIterador)){
             enEspera.wait(lck);
         }
     }
 
-
+    //Si llega hasta aqui es que la ha encontrado
+    tupla = tuplaDelIterador;       //Pasamos por referencia la tupla para reenviarsela al lindaDriver
 }
 
 void MonitorServidor::RN(Tupla tupla) {                         //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z

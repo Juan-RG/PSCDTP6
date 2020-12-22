@@ -106,9 +106,9 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 		        exit(1);
 		    }
 		} else if(operacion == MENSAJE_RN){
+		    mS.RN(tuplaTemp);
 
-
-            send_bytes = soc.Send(client_fd, tuplaTemp.to_string());    //Enviamos la tupla
+            send_bytes = soc.Send(client_fd, tuplaTemp.to_string());    //Enviamos la tupla encontrada
             if(send_bytes == -1) {
                 cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                 soc.Close(client_fd); // Cerramos los sockets.
