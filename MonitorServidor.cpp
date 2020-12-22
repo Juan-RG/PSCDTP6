@@ -60,17 +60,31 @@ void MonitorServidor::PN(Tupla tupla) {
 
 void MonitorServidor::RdN(Tupla tupla) {                     //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
 	unique_lock<mutex> lck(mtx);
-    while (almacen.find(tupla) == almacen.end()){
+
+    /*while (almacen.find(tupla) == almacen.end()){
         enEspera.wait(lck);
+    }*/
+
+    multiset <Tupla> :: iterator itr;
+    Tupla tuplaDelIterador;
+
+   // itr = almacen.begin();  //Inicializamos el iterador a la primera posicion del almacen (multiset)
+    while(!tupla.match(*itr)){
+        for (itr = almacen.begin(); itr != almacen.end(); ++itr){
+            //tuplaDelIterador = *itr;
+            if(tupla.match(*itr)){
+                break;
+            }
+        }
+        if(!tupla.match(*itr)){
+            enEspera.wait(lck);
+        }
     }
-}
-void MonitorServidor::RdN_2(Tupla t1, Tupla t2) {  //TODO: Desarrollar
+
 
 }
-void MonitorServidor::RN_2(Tupla t1, Tupla t2) {  //TODO: Desarrollar
 
-}
-    void MonitorServidor::RN(Tupla tupla) {                         //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
+void MonitorServidor::RN(Tupla tupla) {                         //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
     unique_lock<mutex> lck(mtx);
     const bool is_in = almacen.find(tupla) != almacen.end();            // Todo: if con find para detectar si la tupla esta si no comprobacion recorriendo el multiset con match
     cout << "que me dices "<< is_in<<"\n";
@@ -81,5 +95,13 @@ void MonitorServidor::RN_2(Tupla t1, Tupla t2) {  //TODO: Desarrollar
     cout<< "paso eliminando\n";
     almacen.erase(tupla);
 }
+
+void MonitorServidor::RdN_2(Tupla t1, Tupla t2) {  //TODO: Desarrollar
+
+}
+void MonitorServidor::RN_2(Tupla t1, Tupla t2) {  //TODO: Desarrollar
+
+}
+
 
 

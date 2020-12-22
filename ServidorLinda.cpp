@@ -26,8 +26,10 @@ using namespace std;
 static const string MENSAJE_PN = "PN";
 static const string MENSAJE_RN = "RN";
 static const string MENSAJE_RDN = "RDN";
-static const string MENSAJE_DESCONEXION = "DESCONEXION";
+static const string MENSAJE_RN_2 = "RN_2";
+static const string MENSAJE_RDN_2 = "RDN_2";
 
+static const string MENSAJE_DESCONEXION = "DESCONEXION";
 static const string RECIBIDO = "OK";
 
 //-------------------------------------------------------------
@@ -42,10 +44,8 @@ void trocea_3(string s, string &operacion, string &tupla) {
 
 	token = strtok(nullptr, "\n");
 	tupla = token;
-
-	//tupla = "["+tupla; <---- NOK
 }
-void prueba(MonitorServidor& mS){
+/*void prueba(MonitorServidor& mS){
     Tupla tprueba("prueba1","prueba");
 
     sleep(3);
@@ -56,7 +56,7 @@ void prueba1(MonitorServidor& mS){
     //sleep(2);
     mS.RN(tprueba);
     cout<<"salgo dormido\n";
-}
+}*/
 //-------------------------------------------------------------
 void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 	// Buffer para recibir el mensaje
@@ -105,7 +105,34 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 		        soc.Close(client_fd); // Cerramos los sockets.
 		        exit(1);
 		    }
-		}
+		} else if(operacion == MENSAJE_RN){
+
+
+            send_bytes = soc.Send(client_fd, tuplaTemp.to_string());    //Enviamos la tupla
+            if(send_bytes == -1) {
+                cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
+                soc.Close(client_fd); // Cerramos los sockets.
+                exit(1);
+            }
+		} else if(operacion == MENSAJE_RDN_2){
+
+
+            send_bytes = soc.Send(client_fd, tuplaTemp.to_string());    //Enviamos la tupla
+            if(send_bytes == -1) {
+                cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
+                soc.Close(client_fd); // Cerramos los sockets.
+                exit(1);
+            }
+        } else if(operacion == MENSAJE_RN_2){
+
+
+            send_bytes = soc.Send(client_fd, tuplaTemp.to_string());    //Enviamos la tupla
+            if(send_bytes == -1) {
+                cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
+                soc.Close(client_fd); // Cerramos los sockets.
+                exit(1);
+            }
+        }
 	}
 }
 
