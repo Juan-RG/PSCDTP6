@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------------------------------
 // File:    MonitorServidor.hpp
-// Author:  Daniel Ariza Antón y Miguel Beltrán Pardos.
+// Author:
 // Date:    diciembre 2020
 // Coms:	Este fichero contiene la declaración de las funciones y variables del MonitorServidor.
 //--------------------------------------------------------------------------------------------------
@@ -23,17 +23,20 @@ class MonitorServidor {
 
 		condition_variable enEspera;
 
-        set<Tupla> almacen;
+        multiset<Tupla> almacen;
 
 	public:
 		//------------------------- constructor
-		MonitorServidor(set<Tupla> *almacen);
+		MonitorServidor(multiset<Tupla> *almacen);
 		//------------------------- destructor
 		~MonitorServidor();
 		//Los "r" serán los recursos que se quieren reservar o liberar.
 
-		void disponible(Tupla tupla);
-        void borrar (Tupla tupla);
-		void guardar (Tupla tupla);
+        void PN (Tupla tupla);
+        void RdN(Tupla &tupla);
+        void RN (Tupla &tupla);
+        void RdN_2(Tupla t1, Tupla t2);
+        void RN_2(Tupla t1, Tupla t2);
+
 };
 #endif

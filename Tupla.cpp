@@ -199,52 +199,52 @@ bool Tupla::match(Tupla p) {
     };
 
     comodines Comodin[p.size()];
-    std::cout << "vars inicializadas" << std::endl;
+    //std::cout << "vars inicializadas" << std::endl;
 
 
     for(int i=0;i<p.size();i++) {
-        std::cout << "iter" << i << std::endl;
+        //std::cout << "iter" << i << std::endl;
 	    rep = false;
         palabra = data->at(i);
 
 	    if(palabra[0] == '?'){//if1
-            cout<< "if\n";
-	        std::cout << "palabra[0] == '?'" << std::endl;
+            //cout<< "if\n";
+	        //std::cout << "palabra[0] == '?'" << std::endl;
 	        for(int j = 0;j < w; j++) {
-	            std::cout << "vuelta en comprobacion comodines" << std::endl;
+	           // std::cout << "vuelta en comprobacion comodines" << std::endl;
                 if(data->at(i) == Comodin[j].valor){
 		            if(p.get(i) != Comodin[j].palabra){
-                        std::cout << "retorno" << std::endl;
+                        //std::cout << "retorno" << std::endl;
 			            return false;
                     }
-		            cout<<"paso aa \n";
+		            //cout<<"paso aa \n";
 	                rep = true;
                 }
             
             } 
             if(!rep) {
-                std::cout << "no es repetido, w= " << w  << "i= " << i << std::endl;
+                //std::cout << "no es repetido, w= " << w  << "i= " << i << std::endl;
 	            Comodin[w].valor = data->at(i);
 	            Comodin[w].palabra = p.get(i);
-                std::cout << "hola?" << std::endl;
+                //std::cout << "hola?" << std::endl;
 	            w++;
             }
 	    } else{
-	        cout<< "else\n";
-            std::cout << "palabra[0] != '?'" << std::endl;
+            //cout<< "else\n";
+            //std::cout << "palabra[0] != '?'" << std::endl;
 
-            std::cout << data->at(i) << std::endl;
-            std::cout << p.get(i) << std::endl;
-            std::cout << "....." << std::endl;
+            // std::cout << data->at(i) << std::endl;
+            //std::cout << p.get(i) << std::endl;
+            //std::cout << "....." << std::endl;
 
             string stringTemp1 = data->at(i);
             string stringTemp2 = p.get(i);
 
-            std::cout << stringTemp1.length() << std::endl;
-            std::cout << stringTemp2.length() << std::endl;
+            //std::cout << stringTemp1.length() << std::endl;
+            //std::cout << stringTemp2.length() << std::endl;
 
             if((stringTemp1).compare(stringTemp2) != 0) {//if6
-                std::cout << "retorno" << std::endl;
+                //std::cout << "retorno" << std::endl;
                 return false;//
 	        }
 	    }
