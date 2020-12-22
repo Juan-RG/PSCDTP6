@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------------------------------
 // File:    MonitorServidor.hpp
-// Author:  Daniel Ariza Antón y Miguel Beltrán Pardos.
+// Author:
 // Date:    diciembre 2020
 // Coms:	Este fichero contiene la declaración de las funciones y variables del MonitorServidor.
 //--------------------------------------------------------------------------------------------------
