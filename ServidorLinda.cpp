@@ -139,14 +139,17 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 }
 
 int main(int argc, char *argv[]) {
-    Tupla tprueba("prueba1","prueba");
+
+    /*
     Tupla match("prueba1","prueba");
     Tupla matchG("?Z","prueba");
+
     cout << "primera prueba "<< tprueba.match(match)<<"\n";
     cout << "2 prueba "<< match.match(tprueba)<<"\n";
     cout << "3 prueba "<< tprueba.match(matchG)<<"\n";
     cout << "4 prueba "<< matchG.match(tprueba)<<"\n";
     // PRUEBAS de añadir tuplas al set con el monitor
+
     string buffer = "PN,[1,zaragoza,valencia,5]";
     string operacion,tupla;
     trocea_3(buffer, operacion, tupla);
@@ -155,7 +158,7 @@ int main(int argc, char *argv[]) {
     MonitorServidor mS1(&almacenPrueba);
     Tupla t(4); // TODO: Ver si se puede meter el constructor en from_string, tal que no haya que decir el tamaño de la tupla antes de meterle el string
     t.from_string(tupla);
-    thread p(&prueba, ref(mS1));
+    thread p(&prueba1, ref(mS1));
     thread p1(&prueba1, ref(mS1));
     thread p2(&prueba1, ref(mS1));
     mS1.PN(t);
@@ -188,7 +191,7 @@ int main(int argc, char *argv[]) {
     Tupla t3(4);
     t3.from_string(tupla);
     mS1.PN(t);
-
+    */
     if (argc != 2) {
         cerr << "Número de parámetros incorrecto \n";
         cerr << "Introduce ./ServidorMulticliente, puerto del servidor para hacer bind\n";
@@ -200,7 +203,16 @@ int main(int argc, char *argv[]) {
     multiset<Tupla> almacen;
 
 	MonitorServidor mS(&almacen);
-
+    Tupla tprueba("prueba1","prueba");
+    Tupla tprueba2("prueba2","prueba");
+    cout << "creada tupla prueba 1" << endl;
+    mS.PN(tprueba2);
+    mS.PN(tprueba);
+    cout << "posteada tupla prueba 1 2 veces" << endl;
+    mS.RdN(tprueba);
+    cout << "leída tupla prueba 1" << endl;
+    //mS1.RdN(tprueba2);
+    cout << "leída tupla inexistente" << endl;
     // Puerto donde escucha el proceso servidor
     int SERVER_PORT = atoi(argv[1]);
     thread cliente[N];

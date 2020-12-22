@@ -6,6 +6,8 @@
 //--------------------------------------------------------------------------------------------------
 
 #include "MonitorServidor.hpp"
+#include <iostream>
+
 #include "Tupla.hpp"
 
 //------------------------- constructor
@@ -64,11 +66,23 @@ void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el ca
     /*while (almacen.find(tupla) == almacen.end()){
         enEspera.wait(lck);
     }*/
-
+    cout << "hola" << endl;
     multiset <Tupla> :: iterator itr;
+    //Tupla(tuplaDelIterador);
     Tupla tuplaDelIterador(*itr);
 
-    while(!tupla.match(tuplaDelIterador)){
+    itr = almacen.begin();  //Inicializamos el iterador a la primera posicion del almacen (multiset)
+    if (tupla.match(*itr)) {
+        cout << "tupla encontrada";
+    }
+    /*while(!tupla.match(*itr)){
+        cout << "comienza el while" << endl;
+        for (itr = almacen.begin(); itr != almacen.end(); ++itr){
+            //tuplaDelIterador = *itr;
+            if(tupla.match(*itr)){
+                cout << "tupla encontrada";
+            }*/
+    /*while(!tupla.match(tuplaDelIterador)){
         //tuplaDelIterador = *itr;
         //Buscamos en el almacen la tupla que queremos, hasta encontrarla o terminar la iteracion
         for (itr = almacen.begin(); itr!= almacen.end() || tupla.match(tuplaDelIterador); ++itr) {
@@ -78,7 +92,7 @@ void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el ca
         if(!tupla.match(tuplaDelIterador)){
             enEspera.wait(lck);
         }
-    }
+    }*/
 
     //Si llega hasta aqui es que la ha encontrado
     tupla = tuplaDelIterador;       //Pasamos por referencia la tupla para reenviarsela al lindaDriver
