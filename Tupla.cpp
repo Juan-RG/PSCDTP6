@@ -175,7 +175,7 @@ void Tupla::from_string(string s) {
     }else if(strings == 5){
         //sscanf(s.c_str(), "[%s,%s,%s,%s,%s]", &s1, &s2, &s3, &s4, &s5);
         trocear(elem,strings,s);
-        data = new vector<string>{elem[0],elem[1],elem[2],elem[3],elem[4]};ta
+        data = new vector<string>{elem[0],elem[1],elem[2],elem[3],elem[4]};
     }else if(strings == 6){
         //sscanf(s.c_str(), "[%s,%s,%s,%s,%s,%s]", &s1, &s2, &s3, &s4, &s5, &s6);
         trocear(elem,strings,s);

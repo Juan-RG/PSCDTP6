@@ -89,7 +89,7 @@ void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el ca
         cout << "funciona tuplaDelIterador = *itr  2 " << endl;
         //Buscamos en el almacen la tupla que queremos, hasta encontrarla o terminar la iteracion
         for (itr = almacen.begin(); itr!= almacen.end() || tupla.match(tuplaDelIterador); ++itr) {
-            tuplaDelIterador = *itr;
+            tuplaDelIterador = *itr;                                                                //FAIL: *ITR HAY QUE INICIALIZARLO EN TUPLA(T)
         }
         //Si no la encuentra se pondra en espera hasta nuevo aviso
         if(!tupla.match(tuplaDelIterador)){
