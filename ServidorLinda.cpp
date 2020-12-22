@@ -97,16 +97,18 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
             }
             mS.PN(tuplaTemp);    //Guardamos en la coleccion la tupla que nos han pasado(llamamos al monitor)
 		} else if(operacion == MENSAJE_RDN) {//lee tupla y la copia
+		    mS.RdN(tuplaTemp);
 		    tuplaTemp = tuplaTemp.to_string();		//Pasamos la tupla encontrada a string para enviarla
-		    mS.
+
 		    send_bytes = soc.Send(client_fd, tuplaTemp.to_string());    //Enviamos la tupla
 		    if(send_bytes == -1) {
 		        cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
 		        soc.Close(client_fd); // Cerramos los sockets.
 		        exit(1);
 		    }
-		} else if(operacion == MENSAJE_RN){
-		    mS.RN(tuplaTemp);
+		} else if(operacion == MENSAJE_RN){ //Busca tupla y la borra
+            mS.RdN(tuplaTemp);
+            tuplaTemp = tuplaTemp.to_string();		//Pasamos la tupla encontrada a string para enviarla
 
             send_bytes = soc.Send(client_fd, tuplaTemp.to_string());    //Enviamos la tupla encontrada
             if(send_bytes == -1) {

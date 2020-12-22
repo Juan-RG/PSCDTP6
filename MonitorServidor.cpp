@@ -84,16 +84,36 @@ void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el ca
     tupla = tuplaDelIterador;       //Pasamos por referencia la tupla para reenviarsela al lindaDriver
 }
 
-void MonitorServidor::RN(Tupla tupla) {                         //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
+void MonitorServidor::RN(Tupla &tupla) {                         //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
     unique_lock<mutex> lck(mtx);
-    const bool is_in = almacen.find(tupla) != almacen.end();            // Todo: if con find para detectar si la tupla esta si no comprobacion recorriendo el multiset con match
+    /*const bool is_in = almacen.find(tupla) != almacen.end();            // Todo: if con find para detectar si la tupla esta si no comprobacion recorriendo el multiset con match
     cout << "que me dices "<< is_in<<"\n";
     while (almacen.find(tupla) == almacen.end()){
         cout<< "esperando\n";
         enEspera.wait(lck);
     }
     cout<< "paso eliminando\n";
-    almacen.erase(tupla);
+    almacen.erase(tupla);*/
+
+    multiset <Tupla> :: iterator itr;
+    Tupla tuplaDelIterador(*itr);
+
+    while(!tupla.match(tuplaDelIterador)){
+        //tuplaDelIterador = *itr;
+        //Buscamos en el almacen la tupla que queremos, hasta encontrarla o terminar la iteracion
+        for (itr = almacen.begin(); itr!= almacen.end() || tupla.match(tuplaDelIterador); ++itr) {
+            tuplaDelIterador = *itr;
+        }
+        //Si no la encuentra se pondra en espera hasta nuevo aviso
+        if(!tupla.match(tuplaDelIterador)){
+            enEspera.wait(lck);
+        }
+    }
+
+    //Si llega hasta aqui es que la ha encontrado
+    tupla = tuplaDelIterador;       //Pasamos por referencia la tupla para reenviarsela al lindaDriver
+
+    almacen.erase(tuplaDelIterador);    //Una vez encontrada la borramos
 }
 
 void MonitorServidor::RdN_2(Tupla t1, Tupla t2) {  //TODO: Desarrollar
