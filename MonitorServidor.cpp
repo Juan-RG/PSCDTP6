@@ -303,77 +303,80 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
             tuplaTemp1.from_string(tmp.to_string());                                        // FIXME: Tiene que haber una forma mejor de hacerlo
             cout <<"valor tuplatemp1 " <<tuplaTemp1.to_string() <<"\n";
             for (itr2 = almacen.begin(); itr2 != almacen.end(); ++itr2) {
-                cout<<"itero\n";
-                Tupla tmp(*itr2);
-                tuplaTemp2.from_string(tmp.to_string());                                    // FIXME: Tiene que haber una forma mejor de hacerlo
-                cout <<"valor tuplatem2 " <<tuplaTemp2.to_string() <<"\n";
-                if (numComodinesComunes == 0) { // si no hay índices comunes
-                                                // ya se puede matchear sin más
-                    cout << "NUMCOMODINESCOMUNES == 0" << endl;
-                    cout << p1.match(tuplaTemp1) << endl;
-                    cout << p2.match(tuplaTemp2) << endl;
-                    if (p1.match(tuplaTemp1) && p2.match(tuplaTemp2)) {
-                        cout << "Matcheo!!!! parar = true" << endl;
-                        //cout << "itr era..." << &itr << endl;
-                        //cout << "itr2 era..." << &itr2 << endl;
-                       // while ()
-                        cout << "match Si";
-                        itr2 = almacen.end();
-                        itr2--;
-                        itr = almacen.end();
 
-                        itr--;itr2--;
-                        //cout << "ahora es..." << &itr << endl;
-                        //cout << "itr2 era..." << &itr2 << endl;
-                        //usleep(1000000);
-                        //std::chrono::milliseconds timespan(111605); // or whatever
-                        //std::this_thread::sleep_for(timespan);
-                        parar = true;
-                        encontrado = true;
-                    }
-                } else {
-                    //p1: [?y, cosa, ?y]
-                    //p2: [cosa, ?y, ?z]
-
-                    //tuplaTemp1: [cosita, cosa, cosin]
-                    //tuplaTemp2: [cosaza, cosita, cosin]
-
-                    //arrayCOmodinesCOmunes[0] = ?y
-
-                    cout << numComodinesComunes;
-                    cout << arrayComodinesComunes[0].numIndicesp1;
-                    cout << arrayComodinesComunes[0].numIndicesp2 << endl;
-                    sigueLocal = true;
-                    for (int i = 0;(i < numComodinesComunes) && sigueLocal; i++) {
-                        for (int j = 0;(j <arrayComodinesComunes[i].numIndicesp1)&& sigueLocal; j++) {
-                            for (int k = 0; (k < arrayComodinesComunes[i].numIndicesp2)&&sigueLocal; k++) {
-                                // sigueLocal será false si se encuentra algún par de posiciones con comodines comunes entre
-                                // las dos tuplas que sean diferentes en contenido
-
-                                cout << tuplaTemp2.get(arrayComodinesComunes[i].indicesp2[k]) << endl;
-                                cout << tuplaTemp1.get(arrayComodinesComunes[i].indicesp1[j]) << endl;
-                                cout << arrayComodinesComunes[i].valor << endl;
-                                sigueLocal = (tuplaTemp1.get(arrayComodinesComunes[i].indicesp1[j]) == tuplaTemp2.get(arrayComodinesComunes[i].indicesp2[k]));
-                                cout << sigueLocal << endl;
-
-                            }
-                        }
-                    }
-                    if (sigueLocal) { // si todos los pares de posiciones son iguales
-                        // las hemos encontrado
+                if (itr != itr2) { // si el objeto al que apuntan ambos iteradores es el mismo, se descarta
+                    Tupla tmp(*itr2);
+                    tuplaTemp2.from_string(tmp.to_string());                                    // FIXME: Tiene que haber una forma mejor de hacerlo
+                    if (numComodinesComunes == 0) { // si no hay índices comunes
+                        // ya se puede matchear sin más
+                        cout << "NUMCOMODINESCOMUNES == 0" << endl;
+                        cout << p1.match(tuplaTemp1) << endl;
+                        cout << p2.match(tuplaTemp2) << endl;
                         if (p1.match(tuplaTemp1) && p2.match(tuplaTemp2)) {
+                            cout << "Matcheo!!!! parar = true" << endl;
+                            //cout << "itr era..." << &itr << endl;
+                            //cout << "itr2 era..." << &itr2 << endl;
+                            // while ()
                             cout << "match Si";
                             itr2 = almacen.end();
                             itr2--;
                             itr = almacen.end();
 
                             itr--;itr2--;
+                            //cout << "ahora es..." << &itr << endl;
+                            //cout << "itr2 era..." << &itr2 << endl;
+                            //usleep(1000000);
+                            //std::chrono::milliseconds timespan(111605); // or whatever
+                            //std::this_thread::sleep_for(timespan);
+
                             parar = true;
                             encontrado = true;
                         }
-                        cout<<"??????????????????????????????????\n";
+                    } else {
+
+                        //p1: [?y, cosa, ?y]
+                        //p2: [cosa, ?y, ?z]
+
+                        //tuplaTemp1: [cosita, cosa, cosin]
+                        //tuplaTemp2: [cosaza, cosita, cosin]
+
+                        //arrayCOmodinesCOmunes[0] = ?y
+                        cout << numComodinesComunes;
+                        cout << arrayComodinesComunes[0].numIndicesp1;
+                        cout << arrayComodinesComunes[0].numIndicesp2 << endl;
+
+                        sigueLocal = true;
+                        for (int i = 0;(i < numComodinesComunes) && sigueLocal; i++) {
+                            for (int j = 0;(j <arrayComodinesComunes[i].numIndicesp1)&& sigueLocal; j++) {
+                                for (int k = 0; (k < arrayComodinesComunes[i].numIndicesp2)&&sigueLocal; k++) {
+                                    // sigueLocal será false si se encuentra algún par de posiciones con comodines comunes entre
+                                    // las dos tuplas que sean diferentes en contenido
+
+                                    cout << tuplaTemp2.get(arrayComodinesComunes[i].indicesp2[k]) << endl;
+                                    cout << tuplaTemp1.get(arrayComodinesComunes[i].indicesp1[j]) << endl;
+                                    cout << arrayComodinesComunes[i].valor << endl;
+
+                                    sigueLocal = (tuplaTemp1.get(arrayComodinesComunes[i].indicesp1[j]) == tuplaTemp2.get(arrayComodinesComunes[i].indicesp2[k]));
+                                    cout << sigueLocal << endl;
+                                }
+                            }
+                        }
+                        if (sigueLocal) { // si todos los pares de posiciones son iguales
+                            // las hemos encontrado
+                            if (p1.match(tuplaTemp1) && p2.match(tuplaTemp2)) {
+                                cout << "compruebo si matchean...:" << tuplaTemp1.to_string() << " y " << tuplaTemp2.to_string() << endl;
+
+                                cout << "match Si" << endl;
+                                itr2 = almacen.end();
+                                itr = almacen.end();
+                                itr--;itr2--;
+                                parar = true;
+                                encontrado = true;
+                            }
+                        }
                     }
                 }
+
             }
 
 
