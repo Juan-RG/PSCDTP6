@@ -45,7 +45,7 @@ void trocea_3(string s, string &operacion, string &tupla) {
 	token = strtok(nullptr, "\n");
 	tupla = token;
 }
-/*void prueba(MonitorServidor& mS){
+void prueba(MonitorServidor& mS){
     Tupla tprueba("prueba1","prueba");
 
     sleep(3);
@@ -56,7 +56,7 @@ void prueba1(MonitorServidor& mS){
     //sleep(2);
     mS.RN(tprueba);
     cout<<"salgo dormido\n";
-}*/
+}
 //-------------------------------------------------------------
 void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 	// Buffer para recibir el mensaje
@@ -155,11 +155,24 @@ int main(int argc, char *argv[]) {
 
     multiset<Tupla> almacenPrueba;
     MonitorServidor mS1(&almacenPrueba);
+
+    thread p3(&prueba, ref(mS1));
+    thread p4(&prueba, ref(mS1));
+    thread p(&prueba1, ref(mS1));
+    thread p1(&prueba1, ref(mS1));
+    thread p2(&prueba1, ref(mS1));
+
+    p1.join();
+    p2.join();
+    p.join();
+    p3.join();
+    p4.join();
+   /*
     Tupla prueba("prueba1","prueba");
     mS1.PN(match);
     mS1.PN(matchG);
     mS1.RdN(prueba);
-
+*/
   /*
     cout << "primera prueba "<< tprueba.match(match)<<"\n";
     cout << "2 prueba "<< match.match(tprueba)<<"\n";

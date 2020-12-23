@@ -81,7 +81,25 @@ void MonitorServidor::RN(Tupla &tupla) {                         //TODO: Tenemos
     }
     cout<< "paso eliminando\n";
     almacen.erase(tupla);*/
-
+    Tupla temporal("");
+    multiset <Tupla> :: iterator itr;
+    bool bandera = false;
+    while (!bandera){
+        for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
+            Tupla tmp(*itr);
+            temporal.from_string(tmp.to_string());
+            if (tupla.match(temporal)) {
+               bandera = true;
+            }
+        }
+        if (bandera == false){
+            cout << "bloqueado\n";
+            enEspera.wait(lck);
+        }
+    }
+    almacen.erase(temporal);
+    cout<<"prueba\n";
+/*
     multiset <Tupla> :: iterator itr;
     Tupla tuplaDelIterador(*itr);
 
@@ -101,6 +119,7 @@ void MonitorServidor::RN(Tupla &tupla) {                         //TODO: Tenemos
     tupla = tuplaDelIterador;       //Pasamos por referencia la tupla para reenviarsela al lindaDriver
 
     almacen.erase(tuplaDelIterador);    //Una vez encontrada la borramos
+**/
 }
 
 void MonitorServidor::RdN_2(Tupla t1, Tupla t2) {  //TODO: Desarrollar

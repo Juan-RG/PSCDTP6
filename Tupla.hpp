@@ -62,7 +62,7 @@ public:
 	//Post: ¿Se emparejan "this" y "p"?
 	bool match(Tupla p);
     void trocear(string elem[],int strings, string s);
-    bool operator<(const Tupla b) const;
+    bool operator<=(const Tupla b) const;
 
 private:
 	//la tupla se almacenará como un vector de strings. Dado que antes
