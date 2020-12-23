@@ -69,7 +69,7 @@ LindaDriver::LindaDriver(string ipServerRegistro, int puertoServerRegistro, stri
         cerr << "Error al enviar datos: " << strerror(errno) << endl;
         // Cerramos el socket
         chan.Close(socket_fd);
-        exit(1);
+        exit(1);                                                                                                        // FIXME: Terminar el hilo, no el proceso
     }
     chan.Close(socket_fd); // y cierra el Socket
 
@@ -251,192 +251,76 @@ void LindaDriver::RN(const Tupla p, Tupla& t) {
     t.from_string(buffer);
 }
 
-//Pre:  "p1" y "t1" tienen el mismo tamaño
+//Pre:  "p1" y "t1" tienen el mismo tamaño                                                                              // TODO: cambiar pres y post a que las dos tengan = tamaño tb.
 //      "p2" y "t2" tienen el mismo tamaño
 //Post: Remove Notes, siendo "p1" y "p2" los patrones y "t1" y "t2" las tuplas
 void LindaDriver::RN_2(const Tupla p1, const Tupla p2, Tupla& t1, Tupla& t2) {
-    // Tuplas a sobreescribir con el resultado, de momento son copias de p1 y p2
-    Tupla tuplaTemp1(p1);
-    Tupla tuplaTemp2(p2);
-    bool parar = false;
-    int lengthArrayComodines;
-    //[?x,?Y]
-    struct comodines {
-        string valor;
-        int numIndices;
-        int indices[6]; // tamaño máximo de una tupla
-    };
+    string mensaje;
+    int read_bytes;   // num de bytes recibidos en un mensaje
+    int send_bytes;   // num de bytes enviados en un mensaje
+    int socket_fd;
+    string buffer;
+    Socket chanServer1(this->ip_server_1, stoi(this->puerto));
+    Socket chanServer2(this->ip_server_2, stoi(this->puerto));
+    Socket chanServer3(this->ip_server_3, stoi(this->puerto));
+    mensaje = MENSAJE_RN_2 + p1.to_string() + "," + p2.to_string();
 
-    struct comodinesComunes {
-        string valor;
-        int numIndicesp1, numIndicesp2;
-        // acotados a los tamaños máximos de una tupla
-        int indicesp1[6];
-        int indicesp2[6];
-    };
+    if (p1.size() == p2.size()) { // Si las tuplas son de diferente tamaño, no las vamos a enviar (requisito)
+        if (p1.size() < 4) { // tam. 1 a 3, va al servidor 1
+            conectar(chanServer1, socket_fd);
 
-    // acotados a los tamaños de cada una de las tuplas
-    //?x -> arrayComodines[0] y los valores
-    comodines arrayComodinesp1[p1.size()];
-    for (int i = 0; i < p1.size(); ++i) {
-        arrayComodinesp1[i].numIndices = 0;
-    }
-    //cout<< "inicializo "<< arrayComodinesp1->numIndices << " a s "<< arrayComodinesp1->valor << " asd "<< arrayComodinesp1->indices[1]<<"\n";
-    comodines arrayComodinesp2[p2.size()];
-    for (int i = 0; i < p2.size(); ++i) {
-        arrayComodinesp2[i].numIndices = 0;
-    }
-    comodinesComunes arrayComodinesComunes[p1.size()]; // max: el tamaño
-    // de la menor
-    // o de cualquiera
-    // de las dos
-
-    // Se guardan los comodines de la tupla p1 junto a los índices donde aparecen
-    int numComodinesp1 = 0;
-    bool estaba = false;
-    for(int i = 0; i < p1.size(); i++) {
-        if( (p1.get(i))[0] == '?') { // TODO: Sustituir por una regex
-            // comprueba si ya estaba el comodín en la lista
-            for (int j = 0; j < p1.size(); j++) {
-                // si está, se añade otro índice
-                if (arrayComodinesp1[j].valor == p1.get(i)) {
-                    arrayComodinesp1[j].indices[arrayComodinesp1[j].numIndices] = i;
-                    arrayComodinesp1[j].numIndices++;
-                    estaba = true;
-                }
+            // manda el código de operación junto a la tupla convertida a string
+            send_bytes = chanServer1.Send(socket_fd, mensaje);
+            if(send_bytes == -1) {
+                cerr << "Error al enviar datos: " << strerror(errno) << endl;
+                // Cerramos el socket
+                chanServer1.Close(socket_fd);
+                exit(1);
             }
-            // si no estaba, se añade otra entrada en la lista
-            if (!estaba) {
-                cout << "paso 1\n";
-                arrayComodinesp1[numComodinesp1].valor = p1.get(i);
 
-                cout << "paso 2\n";
-                cout << "numero "<< arrayComodinesp1[numComodinesp1].numIndices<< "\n";
-                arrayComodinesp1[numComodinesp1].indices[arrayComodinesp1[numComodinesp1].numIndices] = i;
-                arrayComodinesp1[numComodinesp1].numIndices++;
-                numComodinesp1++;
-            } else {
-                // se resetea estaba para la siguiente iteración
-                estaba = false;
+            // Espera a obtener la tupla resultado
+            read_bytes = chanServer1.Recv(socket_fd, buffer, MESSAGE_SIZE);
+            chanServer1.Close(socket_fd); // y cierra el socket
+        } else if (p1.size() < 6) { // tam. 4 a 5, va al servidor 2
+            conectar(chanServer2, socket_fd);
+
+            // manda el código de operación junto a la tupla convertida a string
+            send_bytes = chanServer2.Send(socket_fd, mensaje);
+            if(send_bytes == -1) {
+                cerr << "Error al enviar datos: " << strerror(errno) << endl;
+                // Cerramos el socket
+                chanServer2.Close(socket_fd);
+                exit(1);
             }
+
+            // Espera a obtener la tupla resultado
+            read_bytes = chanServer2.Recv(socket_fd, buffer, MESSAGE_SIZE);
+            chanServer2.Close(socket_fd); // y cierra el socket
+        } else { // tam. 6, va al servidor 3
+            conectar(chanServer3, socket_fd);
+
+            // manda el código de operación junto a la tupla convertida a string
+            send_bytes = chanServer3.Send(socket_fd, mensaje);
+            if(send_bytes == -1) {
+                cerr << "Error al enviar datos: " << strerror(errno) << endl;
+                // Cerramos el socket
+                chanServer3.Close(socket_fd);
+                exit(1);
+            }
+
+            // Espera a obtener la tupla resultado
+            read_bytes = chanServer3.Recv(socket_fd, buffer, MESSAGE_SIZE);
+            chanServer3.Close(socket_fd); // y cierra el socket
         }
+        // escribe los datos de la tupla obtenida
+
+        stringstream s_stream(buffer); //create string stream from the string
+        string substr;
+        getline(s_stream, substr, ','); //get first string delimited by comma
+        t1.from_string(substr);
+        getline(s_stream, substr, ','); //get first string delimited by comma
+        t2.from_string(substr);
     }
-    cout << "asdaasd\n";
-    for (int i = 0; i < p1.size(); ++i) {
-        cout <<" aa " <<arrayComodinesp1[i].valor << "\n";
-        cout <<"sa "<< arrayComodinesp1[i].numIndices<< "\n";
-        for (int j = 0; j < 6; ++j) {
-            cout <<"valores  " <<arrayComodinesp1[i].indices[j] << "\n";
-        }
-
-    }
-    cout << "asdaaa 11\n";
-    for (int i = 0; i < arrayComodinesp1->numIndices; ++i) {
-
-        cout << "valor en i "<< arrayComodinesp1->indices[i]<< " sss  "<< arrayComodinesp1->valor << "\n";
-    }
-
-    // Se guardan los comodines de la tupla p2 junto a los índices donde aparecen
-    int numComodinesp2 = 0;
-    estaba = false;
-    for(int i = 0; i < p2.size(); i++) {
-        if( (p2.get(i))[0] == '?') { // TODO: Sustituir por una regex
-            // comprueba si ya estaba el comodín en la lista
-            for (int j = 0; j < p2.size(); j++) {
-                // si está, se añade otro índice
-                if (arrayComodinesp2[j].valor == p2.get(i)) {
-                    arrayComodinesp2[j].indices[arrayComodinesp2[j].numIndices] = i;
-                    arrayComodinesp2[j].numIndices++;
-                    estaba = true;
-                }
-            }
-            // si no estaba, se añade otra entrada en la lista
-            if (!estaba) {
-                arrayComodinesp2[numComodinesp2].valor = p2.get(i);
-                arrayComodinesp2[numComodinesp2].indices[arrayComodinesp2[numComodinesp2].numIndices] = i;
-                arrayComodinesp2[numComodinesp2].numIndices++;
-                numComodinesp2++;
-            } else {
-                // se resetea estaba para la siguiente iteración
-                estaba = false;
-            }
-        }
-    }
-
-
-    cout << "segundoaaa  11\n";
-    // Se juntan los comodines de ambas en el vector de estructuras de
-    // comodines comunes
-    int numComodinesComunes = 0;
-    for (int i = 0; i < p1.size(); i++) {
-        for (int j = 0; j < p2.size(); j++) {
-            // si dos coinciden , se añade un nuevo comodín común
-            // se sabe que en ninguno de los dos hay comodines repetidos
-            cout << "paso 1\n";
-            if (arrayComodinesp1[i].valor == arrayComodinesp2[j].valor) {
-                cout << "paso 2\n";
-                arrayComodinesComunes[numComodinesComunes].valor = arrayComodinesp1[i].valor;
-                cout << "paso 3\n";
-                arrayComodinesComunes[numComodinesComunes].numIndicesp1 = arrayComodinesp1[i].numIndices;
-                cout << "paso 4\n";
-                // copia el vector de indices de comodinesp1 en el de comunes para p1
-                std::copy(arrayComodinesp1[i].indices, arrayComodinesp1[i].indices + 6, arrayComodinesComunes[numComodinesComunes].indicesp1);
-                cout << "paso 5\n";
-                // hace lo mismo para p2
-                arrayComodinesComunes[numComodinesComunes].numIndicesp2 = arrayComodinesp2[i].numIndices;
-                cout << "paso 6\n";
-                // copia el vector de indices de comodinesp2 en el de comunes para p2
-                std::copy(arrayComodinesp2[i].indices, arrayComodinesp2[i].indices + 6, arrayComodinesComunes[numComodinesComunes].indicesp2);
-
-                numComodinesComunes++;
-            }
-        }
-    }
-
-    //------------------------------
-
-    bool sigueLocal = false;
-    while (!parar) {
-        RDN(p1, tuplaTemp1);
-
-        for (int i = 0; i < NUM_MAX_INTENTOS; i++) {
-            RDN(p2, tuplaTemp2);
-
-            // se comprueba si en los índices con los mismos comodines (si hay),
-            // las dos tuplas obtenidas tienen los mismos valores
-
-            if (numComodinesComunes == 0) { // si no hay índices comunes
-                                            // ya se puede parar
-                parar = true;
-            } else {
-                for (int i = 0; (i < numComodinesComunes) && (sigueLocal); i++) {
-                    for (int j = 0; (j < arrayComodinesComunes[i].numIndicesp1) && (sigueLocal); j++) {
-                        for (int k = 0; (k < arrayComodinesComunes[i].numIndicesp2) && (sigueLocal); k++) {
-                            // sigueLocal será false si se encuentra algún par de posiciones con comodines comunes entre
-                            // las dos tuplas que sean diferentes en contenido
-                            sigueLocal = (tuplaTemp1.get(arrayComodinesComunes[i].indicesp1[j]) != tuplaTemp2.get(arrayComodinesComunes[i].indicesp2[k]));
-                        }
-                    }
-                }
-
-                if (sigueLocal) { // si todos los pares de posiciones son iguales
-                                  // las hemos encontrado
-                    parar = true;
-                }
-            }
-        }
-    }
-
-    // devolvemos las tuplas, mandando borrarlas antes
-
-    // posible bloqueo si alguien se colara entre medio y las borrara?
-    // ...podría pasar igualmente si dos hicieran un RN sobre la misma, se
-    // bloquearía uno de ellos también
-    RN(tuplaTemp1, t1);                         // <--------------- HE PUESTO T1 Y T2 COMO RESULTADOS, ASUMO QUE IRA BIEN..
-    RN(tuplaTemp2, t2);
-
-    t1 = tuplaTemp1;
-    t2 = tuplaTemp2;
 }
 
 //Pre:  "p" y "t" tienen el mismo tamaño
@@ -503,152 +387,76 @@ void LindaDriver::RDN(const Tupla p, Tupla& t) {
     t.from_string(buffer);
 }
 
-//Pre:  "p1" y "t1" tienen el mismo tamaño
-//      "p2" y "t2" tienen el mismo tamaño
-//Post: ReaD Notes, siendo "p1" y "p2" los patrones y "t1" y "t2" las tuplas
+// Pre:  "p1" y "t1" tienen el mismo tamaño
+//       "p2" y "t2" tienen el mismo tamaño
+// Post: ReaD Notes, siendo "p1" y "p2" los patrones y "t1" y "t2" las tuplas
 void LindaDriver::RDN_2(const Tupla p1, const Tupla p2, Tupla& t1, Tupla& t2) { // Exactamente igual que RN_2 pero sin borrarlas al final
-    // Tuplas a sobreescribir con el resultado, de momento son copias de p1 y p2
-    Tupla tuplaTemp1(p1);
-    Tupla tuplaTemp2(p2);
-    bool parar = false;
-    int lengthArrayComodines;
+    string mensaje;
+    int read_bytes;   // num de bytes recibidos en un mensaje
+    int send_bytes;   // num de bytes enviados en un mensaje
+    int socket_fd;
+    string buffer;
+    Socket chanServer1(this->ip_server_1, stoi(this->puerto));
+    Socket chanServer2(this->ip_server_2, stoi(this->puerto));
+    Socket chanServer3(this->ip_server_3, stoi(this->puerto));
+    mensaje = MENSAJE_RDN_2 + p1.to_string() + "," + p2.to_string();
 
-    struct comodines {
-        string valor;
-        int numIndices;
-        int indices[6]; // tamaño máximo de una tupla
-    };
+    if (p1.size() == p2.size()) { // Si las tuplas son de diferente tamaño, no las vamos a enviar (requisito)
+        if (p1.size() < 4) { // tam. 1 a 3, va al servidor 1
+            conectar(chanServer1, socket_fd);
 
-    struct comodinesComunes {
-        string valor;
-        int numIndicesp1, numIndicesp2;
-        // acotados a los tamaños máximos de una tupla
-        int indicesp1[6];
-        int indicesp2[6];
-    };
-
-    // acotados a los tamaños de cada una de las tuplas
-    comodines arrayComodinesp1[p1.size()];
-    comodines arrayComodinesp2[p2.size()];
-    comodinesComunes arrayComodinesComunes[p1.size()]; // max: el tamaño
-                                                              // de la menor
-                                                              // o de cualquiera
-                                                              // de las dos
-
-
-    // Se guardan los comodines de la tupla p1 junto a los índices donde aparecen
-    int numComodinesp1 = 0;
-    bool estaba = false;
-    for(int i = 0; i < p1.size(); i++) {
-        if( (p1.get(i))[0] == '?') { // TODO: Sustituir por una regex
-	        // comprueba si ya estaba el comodín en la lista
-	        for (int j = 0; j < p1.size(); j++) {
-	            // si está, se añade otro índice
-	            if (arrayComodinesp1[j].valor == p1.get(i)) {
-	                arrayComodinesp1[j].indices[arrayComodinesp1[j].numIndices] = i;
-                    arrayComodinesp1[j].numIndices++;
-                    estaba = true;
-	            }
-	        }
-	        // si no estaba, se añade otra entrada en la lista
-	        if (!estaba) {
-	            arrayComodinesp1[numComodinesp1].valor == p1.get(i);
-	            arrayComodinesp1[numComodinesp1].indices[arrayComodinesp1[numComodinesp1].numIndices] == i;
-	            arrayComodinesp1[numComodinesp1].numIndices++;
-	            numComodinesp1++;
-	        } else {
-	            // se resetea estaba para la siguiente iteración
-	            estaba = false;
-	        }
-        }
-    }
-
-
-    // Se guardan los comodines de la tupla p2 junto a los índices donde aparecen
-    int numComodinesp2 = 0;
-    estaba = false;
-    for(int i = 0; i < p2.size(); i++) {
-        if( (p2.get(i))[0] == '?') { // TODO: Sustituir por una regex
-	        // comprueba si ya estaba el comodín en la lista
-	        for (int j = 0; j < p2.size(); j++) {
-	            // si está, se añade otro índice
-	            if (arrayComodinesp2[j].valor == p2.get(i)) {
-	                arrayComodinesp2[j].indices[arrayComodinesp2[j].numIndices] = i;
-                    arrayComodinesp2[j].numIndices++;
-                    estaba = true;
-	            }
-	        }
-	        // si no estaba, se añade otra entrada en la lista
-	        if (!estaba) {
-	            arrayComodinesp2[numComodinesp2].valor == p2.get(i);
-	            arrayComodinesp2[numComodinesp2].indices[arrayComodinesp2[numComodinesp2].numIndices] == i;
-	            arrayComodinesp2[numComodinesp2].numIndices++;
-	            numComodinesp2++;
-	        } else {
-	            // se resetea estaba para la siguiente iteración
-	            estaba = false;
-	        }
-        }
-    }
-
-    // Se juntan los comodines de ambas en el vector de estructuras de
-    // comodines comunes
-    int numComodinesComunes;
-    for (int i = 0; i < p1.size(); i++) {
-        for (int j = 0; j < p2.size(); j++) {
-            // si dos coinciden , se añade un nuevo comodín común
-            // se sabe que en ninguno de los dos hay comodines repetidos
-            if (arrayComodinesp1[i].valor == arrayComodinesp2[j].valor) {
-                arrayComodinesComunes[numComodinesComunes].valor = arrayComodinesp1[i].valor;
-                arrayComodinesComunes[numComodinesComunes].numIndicesp1 = arrayComodinesp1[i].numIndices;
-                // copia el vector de indices de comodinesp1 en el de comunes para p1
-                std::copy(arrayComodinesp1[i].indices, arrayComodinesp1[i].indices + 6, arrayComodinesComunes[numComodinesComunes].indicesp1);
-
-                // hace lo mismo para p2
-                arrayComodinesComunes[numComodinesComunes].numIndicesp2 = arrayComodinesp2[i].numIndices;
-                // copia el vector de indices de comodinesp2 en el de comunes para p2
-                std::copy(arrayComodinesp2[i].indices, arrayComodinesp2[i].indices + 6, arrayComodinesComunes[numComodinesComunes].indicesp2);
-
-                numComodinesComunes++;
+            // manda el código de operación junto a la tupla convertida a string
+            send_bytes = chanServer1.Send(socket_fd, mensaje);
+            if(send_bytes == -1) {
+                cerr << "Error al enviar datos: " << strerror(errno) << endl;
+                // Cerramos el socket
+                chanServer1.Close(socket_fd);
+                exit(1);
             }
-        }
-    }
 
-    bool sigueLocal = false;
-    while (!parar) {
-        RDN(p1, tuplaTemp1);
+            // Espera a obtener la tupla resultado
+            read_bytes = chanServer1.Recv(socket_fd, buffer, MESSAGE_SIZE);
+            chanServer1.Close(socket_fd); // y cierra el socket
+        } else if (p1.size() < 6) { // tam. 4 a 5, va al servidor 2
+            conectar(chanServer2, socket_fd);
 
-        for (int i = 0; i < NUM_MAX_INTENTOS; i++) {
-            RDN(p2, tuplaTemp2);
-
-            // se comprueba si en los índices con los mismos comodines (si hay),
-            // las dos tuplas obtenidas tienen los mismos valores
-
-            if (numComodinesComunes == 0) { // si no hay índices comunes
-                                            // ya se puede parar
-                parar = true;
-            } else {
-                for (int i = 0; (i < numComodinesComunes) && (sigueLocal); i++) {
-                    for (int j = 0; (j < arrayComodinesComunes[i].numIndicesp1) && (sigueLocal); j++) {
-                        for (int k = 0; (k < arrayComodinesComunes[i].numIndicesp2) && (sigueLocal); k++) {
-                            // sigueLocal será false si se encuentra algún par de posiciones con comodines comunes entre
-                            // las dos tuplas que sean diferentes en contenido
-                            sigueLocal = (tuplaTemp1.get(arrayComodinesComunes[i].indicesp1[j]) != tuplaTemp2.get(arrayComodinesComunes[i].indicesp2[k]));
-                        }
-                    }
-                }
-
-                if (sigueLocal) { // si todos los pares de posiciones son iguales
-                                  // las hemos encontrado
-                    parar = true;
-                }
+            // manda el código de operación junto a la tupla convertida a string
+            send_bytes = chanServer2.Send(socket_fd, mensaje);
+            if(send_bytes == -1) {
+                cerr << "Error al enviar datos: " << strerror(errno) << endl;
+                // Cerramos el socket
+                chanServer2.Close(socket_fd);
+                exit(1);
             }
-        }
-    }
 
-    // devolvemos las tuplas
-    t1 = tuplaTemp1;
-    t2 = tuplaTemp2;
+            // Espera a obtener la tupla resultado
+            read_bytes = chanServer2.Recv(socket_fd, buffer, MESSAGE_SIZE);
+            chanServer2.Close(socket_fd); // y cierra el socket
+        } else { // tam. 6, va al servidor 3
+            conectar(chanServer3, socket_fd);
+
+            // manda el código de operación junto a la tupla convertida a string
+            send_bytes = chanServer3.Send(socket_fd, mensaje);
+            if(send_bytes == -1) {
+                cerr << "Error al enviar datos: " << strerror(errno) << endl;
+                // Cerramos el socket
+                chanServer3.Close(socket_fd);
+                exit(1);
+            }
+
+            // Espera a obtener la tupla resultado
+            read_bytes = chanServer3.Recv(socket_fd, buffer, MESSAGE_SIZE);
+            chanServer3.Close(socket_fd); // y cierra el socket
+        }
+        // escribe los datos de la tupla obtenida
+
+        stringstream s_stream(buffer); //create string stream from the string
+        string substr;
+        getline(s_stream, substr, ','); //get first string delimited by comma
+        t1.from_string(substr);
+        getline(s_stream, substr, ','); //get first string delimited by comma
+        t2.from_string(substr);
+    }
 }
 
 
