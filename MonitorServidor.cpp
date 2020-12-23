@@ -143,6 +143,8 @@ void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
     //Tupla temporal("");
     //Tupla temporal2("");
     multiset <Tupla> :: iterator itr;
+    //-----------------------------------------------------------------------------------------------------
+    // Tuplas a sobreescribir con el resultado, de momento son copias de p1 y p2
 
 
 }
