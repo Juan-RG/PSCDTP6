@@ -250,17 +250,18 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
             // se sabe que en ninguno de los dos hay comodines repetidos
             //cout << "paso 1\n";
             if (arrayComodinesp1[i].valor == arrayComodinesp2[j].valor) {
-                //cout << "paso 2\n";
+                cout << "Comodin Rep" << arrayComodinesp1[i].valor;
+                cout << "paso 2\n";
                 arrayComodinesComunes[numComodinesComunes].valor = arrayComodinesp1[i].valor;
-                //cout << "paso 3\n";
+                cout << "paso 3\n";
                 arrayComodinesComunes[numComodinesComunes].numIndicesp1 = arrayComodinesp1[i].numIndices;
-                //cout << "paso 4\n";
+                cout << "paso 4\n";
                 // copia el vector de indices de comodinesp1 en el de comunes para p1
                 std::copy(arrayComodinesp1[i].indices, arrayComodinesp1[i].indices + 6, arrayComodinesComunes[numComodinesComunes].indicesp1);
-                //cout << "paso 5\n";
+                cout << "paso 5\n";
                 // hace lo mismo para p2
                 arrayComodinesComunes[numComodinesComunes].numIndicesp2 = arrayComodinesp2[j].numIndices;
-                //cout << "paso 6\n";
+                cout << "paso 6\n";
                 // copia el vector de indices de comodinesp2 en el de comunes para p2
                 std::copy(arrayComodinesp2[j].indices, arrayComodinesp2[j].indices + 6, arrayComodinesComunes[numComodinesComunes].indicesp2);
 
@@ -291,6 +292,7 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
                         //cout << "itr era..." << &itr << endl;
                         //cout << "itr2 era..." << &itr2 << endl;
                        // while ()
+                        cout << "match Si";
                         itr2 = almacen.end();
                         itr = almacen.end();
                         itr--;itr2--;
@@ -312,20 +314,28 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
                     //tuplaTemp2: [cosaza, cosita, cosin]
 
                     //arrayCOmodinesCOmunes[0] = ?y
-
-                    for (int i = 0; (i < numComodinesComunes) && (sigueLocal); i++) {
-                        for (int j = 0; (j < arrayComodinesComunes[i].numIndicesp1) && (sigueLocal); j++) {
-                            for (int k = 0; (k < arrayComodinesComunes[i].numIndicesp2) && (sigueLocal); k++) {
+                    cout << numComodinesComunes;
+                    cout << arrayComodinesComunes[0].numIndicesp1;
+                    cout << arrayComodinesComunes[0].numIndicesp2 << endl;
+                    sigueLocal = true;
+                    for (int i = 0;(i < numComodinesComunes) && sigueLocal; i++) {
+                        for (int j = 0;(j <arrayComodinesComunes[i].numIndicesp1)&& sigueLocal; j++) {
+                            for (int k = 0; (k < arrayComodinesComunes[i].numIndicesp2)&&sigueLocal; k++) {
                                 // sigueLocal será false si se encuentra algún par de posiciones con comodines comunes entre
                                 // las dos tuplas que sean diferentes en contenido
+
+                                cout << tuplaTemp2.get(arrayComodinesComunes[i].indicesp2[k]) << endl;
+                                cout << tuplaTemp1.get(arrayComodinesComunes[i].indicesp1[j]) << endl;
+                                cout << arrayComodinesComunes[i].valor << endl;
                                 sigueLocal = (tuplaTemp1.get(arrayComodinesComunes[i].indicesp1[j]) == tuplaTemp2.get(arrayComodinesComunes[i].indicesp2[k]));
+                                cout << sigueLocal << endl;
                             }
                         }
                     }
-
                     if (sigueLocal) { // si todos los pares de posiciones son iguales
                         // las hemos encontrado
-                        if (tuplaTemp1.match(p1) && tuplaTemp2.match(p2)) {
+                        if (p1.match(tuplaTemp1) && p2.match(tuplaTemp2)) {
+                            cout << "match Si";
                             itr2 = almacen.end();
                             itr = almacen.end();
                             itr--;itr2--;
