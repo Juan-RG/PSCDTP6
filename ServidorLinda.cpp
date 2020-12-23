@@ -203,18 +203,16 @@ int main(int argc, char *argv[]) {
 
     multiset<Tupla> almacenPrueba;
     MonitorServidor mS1(&almacenPrueba);
+    mS1.PN(match);
+    mS1.PN(match);
+    mS1.PN(match);
+    mS1.PN(match);
+    mS1.PN(match);mS1.PN(match);
+    mS1.PN(match);
 
-    thread p3(&prueba, ref(mS1));
-    thread p4(&prueba, ref(mS1));
-    thread p(&prueba1, ref(mS1));
-    thread p1(&prueba1, ref(mS1));
-    thread p2(&prueba1, ref(mS1));
 
-    p1.join();
-    p2.join();
-    p.join();
-    p3.join();
-    p4.join();
+    mS1.RN_2(match,matchG);
+
    /*
     Tupla prueba("prueba1","prueba");
     mS1.PN(match);

@@ -22,6 +22,14 @@ void MonitorServidor::PN(Tupla tupla) {
     unique_lock<mutex> lck(mtx);
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
+
+    multiset <Tupla> :: iterator itr;
+    for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
+        Tupla tmp(*itr);
+        cout << tmp.to_string() <<"\n";
+
+    }
+    cout<<"asda\n";
 }
 
 void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
@@ -131,10 +139,121 @@ void MonitorServidor::RdN_2(Tupla &t1, Tupla &t2) {  //TODO: Desarrollar
     multiset <Tupla> :: iterator itr;
 
 }
-void MonitorServidor::RN_2(Tupla &t1, Tupla &t2) {  //TODO: Desarrollar
-    Tupla temporal("");
-    Tupla temporal2("");
+void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
+    //Tupla temporal("");
+    //Tupla temporal2("");
     multiset <Tupla> :: iterator itr;
+    //-----------------------------------------------------------------------------------------------------
+    // Tuplas a sobreescribir con el resultado, de momento son copias de p1 y p2
+    Tupla tuplaTemp1(p1);
+    Tupla tuplaTemp2(p2);
+    bool parar = false;
+    int lengthArrayComodines;
+
+    struct comodines {
+        string valor;
+        int numIndices;
+        int indices[6]; // tamaño máximo de una tupla
+    };
+
+    struct comodinesComunes {
+        string valor;
+        int numIndicesp1, numIndicesp2;
+        // acotados a los tamaños máximos de una tupla
+        int indicesp1[6];
+        int indicesp2[6];
+    };
+
+    // acotados a los tamaños de cada una de las tuplas
+    cout<< "aa "<< p1.size()<<" asd "<< p2.size()<< "\n";
+    comodines arrayComodinesp1[p1.size()];
+    comodines arrayComodinesp2[p2.size()];
+    comodinesComunes arrayComodinesComunes[p1.size()]; // max: el tamaño
+    // de la menor
+    // o de cualquiera
+    // de las dos
+
+    cout<< "ppppp" <<"\n";
+    // Se guardan los comodines de la tupla p1 junto a los índices donde aparecen
+    int numComodinesp1 = 0;
+    bool estaba = false;
+    for(int i = 0; i < p1.size(); i++) {
+        if( (p1.get(i))[0] == '?') { // TODO: Sustituir por una regex
+            cout<< "ppppp" <<"\n";
+            // comprueba si ya estaba el comodín en la lista
+            for (int j = 0; j < p1.size(); j++) {
+                // si está, se añade otro índice
+                if (arrayComodinesp1[j].valor == p1.get(i)) {
+                    arrayComodinesp1[j].indices[arrayComodinesp1[j].numIndices] = i;
+                    arrayComodinesp1[j].numIndices++;
+                    estaba = true;
+                }
+            }
+            // si no estaba, se añade otra entrada en la lista
+            if (!estaba) {
+                arrayComodinesp1[numComodinesp1].valor == p1.get(i);
+                arrayComodinesp1[numComodinesp1].indices[arrayComodinesp1[numComodinesp1].numIndices] == i;
+                arrayComodinesp1[numComodinesp1].numIndices++;
+                numComodinesp1++;
+            } else {
+                // se resetea estaba para la siguiente iteración
+                estaba = false;
+            }
+        }
+    }
+
+
+    // Se guardan los comodines de la tupla p2 junto a los índices donde aparecen
+    int numComodinesp2 = 0;
+    estaba = false;
+    for(int i = 0; i < p2.size(); i++) {
+        if( (p2.get(i))[0] == '?') { // TODO: Sustituir por una regex
+            // comprueba si ya estaba el comodín en la lista
+            for (int j = 0; j < p2.size(); j++) {
+                // si está, se añade otro índice
+                if (arrayComodinesp2[j].valor == p2.get(i)) {
+                    arrayComodinesp2[j].indices[arrayComodinesp2[j].numIndices] = i;
+                    arrayComodinesp2[j].numIndices++;
+                    estaba = true;
+                }
+            }
+            // si no estaba, se añade otra entrada en la lista
+            if (!estaba) {
+                arrayComodinesp2[numComodinesp2].valor == p2.get(i);
+                arrayComodinesp2[numComodinesp2].indices[arrayComodinesp2[numComodinesp2].numIndices] == i;
+                arrayComodinesp2[numComodinesp2].numIndices++;
+                numComodinesp2++;
+            } else {
+                // se resetea estaba para la siguiente iteración
+                estaba = false;
+            }
+        }
+    }
+
+    // Se juntan los comodines de ambas en el vector de estructuras de
+    // comodines comunes
+    int numComodinesComunes;
+    for (int i = 0; i < p1.size(); i++) {
+        for (int j = 0; j < p2.size(); j++) {
+            // si dos coinciden , se añade un nuevo comodín común
+            // se sabe que en ninguno de los dos hay comodines repetidos
+            if (arrayComodinesp1[i].valor == arrayComodinesp2[j].valor) {
+                arrayComodinesComunes[numComodinesComunes].valor = arrayComodinesp1[i].valor;
+                arrayComodinesComunes[numComodinesComunes].numIndicesp1 = arrayComodinesp1[i].numIndices;
+                // copia el vector de indices de comodinesp1 en el de comunes para p1
+                std::copy(arrayComodinesp1[i].indices, arrayComodinesp1[i].indices + 6, arrayComodinesComunes[numComodinesComunes].indicesp1);
+
+                // hace lo mismo para p2
+                arrayComodinesComunes[numComodinesComunes].numIndicesp2 = arrayComodinesp2[i].numIndices;
+                // copia el vector de indices de comodinesp2 en el de comunes para p2
+                std::copy(arrayComodinesp2[i].indices, arrayComodinesp2[i].indices + 6, arrayComodinesComunes[numComodinesComunes].indicesp2);
+
+                numComodinesComunes++;
+            }
+        }
+    }
+
+
 }
 
 
