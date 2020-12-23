@@ -389,7 +389,6 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
         cout << "NO ENCONTRADO!" << endl;
     }
     // devolvemos las tuplas
-<<<<<<< HEAD
     cout<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
     cout << tuplaTemp1.to_string()<< "\n";
     cout << tuplaTemp2.to_string()<< "\n";
@@ -397,8 +396,7 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
     p2.from_string(tuplaTemp2.to_string());
 
     cout<<"final\n";
-=======
->>>>>>> 239d36c453aac3eb80f5f315d1dfee3325d9f835
+
 
 }
 
