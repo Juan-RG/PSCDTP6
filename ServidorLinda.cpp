@@ -134,7 +134,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
             }
             tuplaTemp2.from_string(tupla);
 
-            mS.RdN_2(tuplaTemp, tupleTemp2);
+            mS.RdN_2(tuplaTemp, tuplaTemp2);
             tuplaTemp = tuplaTemp.to_string();
             send_bytes = soc.Send(client_fd, tuplaTemp.to_string());    //Enviamos la tupla.
             if(send_bytes == -1) {
@@ -167,7 +167,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
             }
             tuplaTemp2.from_string(tupla);
 
-            mS.RN_2(tuplaTemp, tupleTemp2);
+            mS.RN_2(tuplaTemp, tuplaTemp2);
             tuplaTemp = tuplaTemp.to_string();
             send_bytes = soc.Send(client_fd, tuplaTemp.to_string());    //Enviamos la tupla.
             if(send_bytes == -1) {
