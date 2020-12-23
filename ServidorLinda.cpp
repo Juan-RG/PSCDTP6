@@ -121,7 +121,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 		}
 
         trocea(buffer, operacion, tupla);			//Separamos la orden de la tupla (son strings)
-
+        string tuplaString;
 		if(operacion == MENSAJE_PN) {//postnote, mete algo en memoria
             tuplaTemp.from_string(tupla);	//pasamos la tupla tipo string a tipo "tupla"
 
@@ -234,7 +234,9 @@ int main(int argc, char *argv[]) {
     cout<<"asdasdada\n";
     mS1.PN(t2);
     cout<<"asdasdasdadasdadwwwwwwwwwwwwww\n";
+    mS1.mostrar();
     mS1.borrar(t1);
+    mS1.mostrar();
     cout<< "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11\n";
 //muestra "mi casa" por stdout
     cout << t1.get(2) << endl;
@@ -407,7 +409,9 @@ int main(int argc, char *argv[]) {
     //mS1.RdN(tprueba2);
     cout << "leída tupla inexistente" << endl;
     // Puerto donde escucha el proceso servidor
-     */ int SERVER_PORT = atoi(argv[1]);
+     */
+    //int SERVER_PORT = atoi(argv[1]);
+    int SERVER_PORT = 22;
     thread cliente[N];
     int client_fd[N];
 

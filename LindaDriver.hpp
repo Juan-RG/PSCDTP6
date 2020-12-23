@@ -74,6 +74,7 @@ private:
 	string puerto_server_2;
 	string ip_server_3;
 	string puerto_server_3;
+	string puerto;
 	//string puerto;
 	//string tipo_cliente; // PUBLICADOR | BUSCADOR, de momento no se lo guarda
 };

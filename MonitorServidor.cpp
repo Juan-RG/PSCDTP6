@@ -19,18 +19,16 @@ MonitorServidor::MonitorServidor(multiset<Tupla> *almacen){
 MonitorServidor::~MonitorServidor(){}
 void MonitorServidor::borrar(Tupla &tupla){
     multiset <Tupla> :: iterator itr;
-    Tupla tuplaTemp1("");
-    almacen.erase(tupla);
-    for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
-        Tupla tmp(*itr);
-        tuplaTemp1.from_string(tmp.to_string());
-        cout << tuplaTemp1.to_string() <<"paso\n";
-    }
+    almacen.erase(almacen.equal_range(tupla).first);
+
 }
 void MonitorServidor::PN(Tupla tupla) {
     unique_lock<mutex> lck(mtx);
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
+
+}
+void MonitorServidor::mostrar() {
     multiset <Tupla> :: iterator itr;
     Tupla tuplaTemp1("");
     for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
@@ -39,7 +37,6 @@ void MonitorServidor::PN(Tupla tupla) {
         cout << tuplaTemp1.to_string() <<"paso\n";
     }
 }
-
 void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
 	unique_lock<mutex> lck(mtx);
     /**/const bool is_in = almacen.find(tupla) != almacen.end();            // Todo: if con find para detectar si la tupla esta si no comprobacion recorriendo el multiset con match

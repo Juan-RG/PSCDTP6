@@ -35,6 +35,7 @@ class MonitorServidor {
         void PN (Tupla tupla);
         void RdN(Tupla &tupla);
         void borrar(Tupla &tupla);
+        void mostrar();
         void RN (Tupla &tupla);
         void RdN_2(Tupla &t1, Tupla &t2);
         void RN_2(Tupla &t1, Tupla &t2);
