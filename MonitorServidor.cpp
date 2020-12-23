@@ -125,7 +125,9 @@ void MonitorServidor::RN(Tupla &tupla) {                         //TODO: Tenemos
 **/
 }
 
-void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
+void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {                                                                     // TODO: Desarrollar
+    unique_lock<mutex> lck(mtx);
+
     multiset <Tupla>::iterator itr;
     multiset <Tupla>::iterator itr2;
     bool encontrado = false;
@@ -274,7 +276,7 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
 
         //multiset<Tupla> almacen2 = almacen
         bool sigueLocal = true;
-        while (!parar) {
+        while (!encontrado) {
             for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
                 Tupla tmp(*itr);
                 tuplaTemp1.from_string(tmp.to_string());                                        // FIXME: Tiene que haber una forma mejor de hacerlo
@@ -291,7 +293,7 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
                                     cout << p1.match(tuplaTemp1) << endl;
                                     cout << p2.match(tuplaTemp2) << endl;
                                     if (p1.match(tuplaTemp1) && p2.match(tuplaTemp2)) {
-                                        cout << "Matcheo!!!! parar = true" << endl;
+                                        cout << "Matcheo!!!! encontrado = true" << endl;
                                         //cout << "itr era..." << &itr << endl;
                                         //cout << "itr2 era..." << &itr2 << endl;
                                         // while ()
@@ -305,7 +307,7 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
                                         //std::chrono::milliseconds timespan(111605); // or whatever
                                         //std::this_thread::sleep_for(timespan);
 
-                                        parar = true;
+                                        //parar = true;
                                         encontrado = true;
                                     }
                                 } else {
@@ -346,7 +348,7 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
                                             itr2 = almacen.end();
                                             itr = almacen.end();
                                             itr--;itr2--;
-                                            parar = true;
+                                            //parar = true;
                                             encontrado = true;
                                         }
                                     }
@@ -361,11 +363,12 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
                     cout << "p1.size() != tuplaTemp1.size()!!!" << endl;
                 }
             }
-            // No se ha encontrado
-            parar = true;
+            // No se ha encontrado, dormimos
+            if (!encontrado) {
+                enEspera.wait(lck);
+            }
+            //parar = true;
         }
-
-
         if (encontrado) {
             cout << "ENCONTRADO!" << endl;
             p1.from_string(tuplaTemp1.to_string());                                                                         // FIXME: Esto es horrendo

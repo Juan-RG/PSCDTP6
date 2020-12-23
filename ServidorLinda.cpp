@@ -86,8 +86,8 @@ void prueba1(MonitorServidor& mS){
 
 void prueba2(MonitorServidor& mS) {
     cout << "entro RDN2" << endl;
-    Tupla tprueba1("prueba2","?Y","?Z");
-    Tupla tprueba2("prueba1","prueba2", "?Z");
+    Tupla tprueba1("?X","?Y");
+    Tupla tprueba2("prueba1","?X");
     //sleep(2);
     mS.RdN_2(tprueba1, tprueba2);
     cout<<"RDN2!\n";
