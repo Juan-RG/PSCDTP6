@@ -72,7 +72,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 	//set <Tupla> :: iterator iter;			//para saber donde buscar en la lista
 	//set <Tupla> :: iterator iter_fin;		//para conparar si estamos en la posicion final
 	Tupla tuplaTemp("");                    //Para buscar la tupla en la memoria
-
+    Tupla tuplaTemp2("");                   //Para buscar la tupla en la memoria para operaciones "2".
     bool out = false; // Inicialmente no salir del bucle
 
 	while(!out) {
@@ -117,18 +117,66 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
                 exit(1);
             }
 		} else if(operacion == MENSAJE_RDN_2){
+            //Recibimos el segundo mensaje del cliente para operación 2.
+		    rcv_bytes = soc.Recv(client_fd,buffer,length);
+            cout << "paso \n";
+            if (rcv_bytes == -1) {
+                cerr << "Error al recibir datos: " + string(strerror(errno)) + "\n";
+                soc.Close(client_fd); // Cerramos los sockets.
+                exit(1);
+            }
 
+            trocea_3(buffer, operacion, tupla);     //Troceamos la segunda tupla.
+            if(operacion != MENSAJE_RDN_2) {
+                cerr << "Error al enviar doble tupla, cerrando servidor...\n";
+                soc.Close(client_fd); // Cerramos los sockets.
+                exit(1);
+            }
+            tuplaTemp2.from_string(tupla);
 
-            send_bytes = soc.Send(client_fd, tuplaTemp.to_string());    //Enviamos la tupla
+            mS.RdN_2(tuplaTemp, tuplaTemp2);
+            tuplaTemp = tuplaTemp.to_string();
+            send_bytes = soc.Send(client_fd, tuplaTemp.to_string());    //Enviamos la tupla.
+            if(send_bytes == -1) {
+                cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
+                soc.Close(client_fd); // Cerramos los sockets.
+                exit(1);
+            }
+            tuplaTemp2 = tuplaTemp2.to_string();
+            send_bytes = soc.Send(client_fd, tuplaTemp2.to_string());   //Enviamos la segunda tupla.
             if(send_bytes == -1) {
                 cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                 soc.Close(client_fd); // Cerramos los sockets.
                 exit(1);
             }
         } else if(operacion == MENSAJE_RN_2){
+            //Recibimos el segundo mensaje del cliente para operación 2.
+            rcv_bytes = soc.Recv(client_fd,buffer,length);
+            cout << "paso \n";
+            if (rcv_bytes == -1) {
+                cerr << "Error al recibir datos: " + string(strerror(errno)) + "\n";
+                soc.Close(client_fd); // Cerramos los sockets.
+                exit(1);
+            }
 
+            trocea_3(buffer, operacion, tupla);     //Troceamos la segunda tupla.
+            if(operacion != MENSAJE_RN_2) {
+                cerr << "Error al enviar doble tupla, cerrando servidor...\n";
+                soc.Close(client_fd); // Cerramos los sockets.
+                exit(1);
+            }
+            tuplaTemp2.from_string(tupla);
 
-            send_bytes = soc.Send(client_fd, tuplaTemp.to_string());    //Enviamos la tupla
+            mS.RN_2(tuplaTemp, tuplaTemp2);
+            tuplaTemp = tuplaTemp.to_string();
+            send_bytes = soc.Send(client_fd, tuplaTemp.to_string());    //Enviamos la tupla.
+            if(send_bytes == -1) {
+                cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
+                soc.Close(client_fd); // Cerramos los sockets.
+                exit(1);
+            }
+            tuplaTemp2 = tuplaTemp2.to_string();
+            send_bytes = soc.Send(client_fd, tuplaTemp2.to_string());   //Enviamos la segunda tupla.
             if(send_bytes == -1) {
                 cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                 soc.Close(client_fd); // Cerramos los sockets.

@@ -125,11 +125,16 @@ void MonitorServidor::RN(Tupla &tupla) {                         //TODO: Tenemos
 **/
 }
 
-void MonitorServidor::RdN_2(Tupla t1, Tupla t2) {  //TODO: Desarrollar
+void MonitorServidor::RdN_2(Tupla &t1, Tupla &t2) {  //TODO: Desarrollar
+    Tupla temporal("");
+    Tupla temporal2("");
+    multiset <Tupla> :: iterator itr;
 
 }
-void MonitorServidor::RN_2(Tupla t1, Tupla t2) {  //TODO: Desarrollar
-
+void MonitorServidor::RN_2(Tupla &t1, Tupla &t2) {  //TODO: Desarrollar
+    Tupla temporal("");
+    Tupla temporal2("");
+    multiset <Tupla> :: iterator itr;
 }
 
 
