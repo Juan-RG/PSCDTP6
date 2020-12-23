@@ -7,7 +7,7 @@
 
 #include "MonitorServidor.hpp"
 #include <iostream>
-
+#include <unistd.h>                                         //////// <------------------------------------------------- QUITAME PLs
 #include "Tupla.hpp"
 
 //------------------------- constructor
@@ -168,6 +168,7 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
     // o de cualquiera
     // de las dos
 
+
     // Se guardan los comodines de la tupla p1 junto a los índices donde aparecen
     int numComodinesp1 = 0;
     bool estaba = false;
@@ -199,6 +200,7 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
         }
     }
     cout<<"1 comodines\n";
+
     //cout << "asdaasd\n";
     for (int i = 0; i < p1.size(); ++i) {
         //cout <<" aa " <<arrayComodinesp1[i].valor << "\n";
@@ -208,6 +210,7 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
         }
 
     }
+
     ////cout << "asdaaa 11\n";
     //for (int i = 0; i < arrayComodinesp1->numIndices; ++i) {
 
@@ -240,7 +243,9 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
             }
         }
     }
+
     cout<<"2 comodines\n";
+
 
     //cout << "segundoaaa  11\n";
     // Se juntan los comodines de ambas en el vector de estructuras de
@@ -252,17 +257,18 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
             // se sabe que en ninguno de los dos hay comodines repetidos
             //cout << "paso 1\n";
             if (arrayComodinesp1[i].valor == arrayComodinesp2[j].valor) {
-                //cout << "paso 2\n";
+                cout << "Comodin Rep" << arrayComodinesp1[i].valor;
+                cout << "paso 2\n";
                 arrayComodinesComunes[numComodinesComunes].valor = arrayComodinesp1[i].valor;
-                //cout << "paso 3\n";
+                cout << "paso 3\n";
                 arrayComodinesComunes[numComodinesComunes].numIndicesp1 = arrayComodinesp1[i].numIndices;
-                //cout << "paso 4\n";
+                cout << "paso 4\n";
                 // copia el vector de indices de comodinesp1 en el de comunes para p1
                 std::copy(arrayComodinesp1[i].indices, arrayComodinesp1[i].indices + 6, arrayComodinesComunes[numComodinesComunes].indicesp1);
-                //cout << "paso 5\n";
+                cout << "paso 5\n";
                 // hace lo mismo para p2
                 arrayComodinesComunes[numComodinesComunes].numIndicesp2 = arrayComodinesp2[j].numIndices;
-                //cout << "paso 6\n";
+                cout << "paso 6\n";
                 // copia el vector de indices de comodinesp2 en el de comunes para p2
                 std::copy(arrayComodinesp2[j].indices, arrayComodinesp2[j].indices + 6, arrayComodinesComunes[numComodinesComunes].indicesp2);
 
@@ -272,9 +278,13 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
     }
     cout<<"comodines conjuntos\n";
 
+
     multiset <Tupla>::iterator itr;
     multiset <Tupla>::iterator itr2;
     cout << "empezamos\n";
+
+    bool encontrado = false;
+
     bool sigueLocal = true;
 
 
@@ -298,13 +308,28 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
                 tuplaTemp2.from_string(tmp.to_string());                                    // FIXME: Tiene que haber una forma mejor de hacerlo
                 cout <<"valor tuplatem2 " <<tuplaTemp2.to_string() <<"\n";
                 if (numComodinesComunes == 0) { // si no hay índices comunes
+                                                // ya se puede matchear sin más
+                    cout << "NUMCOMODINESCOMUNES == 0" << endl;
+                    cout << p1.match(tuplaTemp1) << endl;
+                    cout << p2.match(tuplaTemp2) << endl;
                     if (p1.match(tuplaTemp1) && p2.match(tuplaTemp2)) {
-                        cout << "if 2\n";
+                        cout << "Matcheo!!!! parar = true" << endl;
+                        //cout << "itr era..." << &itr << endl;
+                        //cout << "itr2 era..." << &itr2 << endl;
+                       // while ()
+                        cout << "match Si";
                         itr2 = almacen.end();
                         itr2--;
                         itr = almacen.end();
-                        itr--;
+
+                        itr--;itr2--;
+                        //cout << "ahora es..." << &itr << endl;
+                        //cout << "itr2 era..." << &itr2 << endl;
+                        //usleep(1000000);
+                        //std::chrono::milliseconds timespan(111605); // or whatever
+                        //std::this_thread::sleep_for(timespan);
                         parar = true;
+                        encontrado = true;
                     }
                 } else {
                     //p1: [?y, cosa, ?y]
@@ -314,27 +339,37 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
                     //tuplaTemp2: [cosaza, cosita, cosin]
 
                     //arrayCOmodinesCOmunes[0] = ?y
-                    for (int i = 0; (i < numComodinesComunes) && (sigueLocal); i++) {
-                        for (int j = 0; (j < arrayComodinesComunes[i].numIndicesp1) && (sigueLocal); j++) {
-                            for (int k = 0; (k < arrayComodinesComunes[i].numIndicesp2) && (sigueLocal); k++) {
+
+                    cout << numComodinesComunes;
+                    cout << arrayComodinesComunes[0].numIndicesp1;
+                    cout << arrayComodinesComunes[0].numIndicesp2 << endl;
+                    sigueLocal = true;
+                    for (int i = 0;(i < numComodinesComunes) && sigueLocal; i++) {
+                        for (int j = 0;(j <arrayComodinesComunes[i].numIndicesp1)&& sigueLocal; j++) {
+                            for (int k = 0; (k < arrayComodinesComunes[i].numIndicesp2)&&sigueLocal; k++) {
                                 // sigueLocal será false si se encuentra algún par de posiciones con comodines comunes entre
                                 // las dos tuplas que sean diferentes en contenido
-                                cout <<"v TUplas" <<tuplaTemp1.to_string() << " " <<tuplaTemp2.to_string()<<"\n";
+
+                                cout << tuplaTemp2.get(arrayComodinesComunes[i].indicesp2[k]) << endl;
+                                cout << tuplaTemp1.get(arrayComodinesComunes[i].indicesp1[j]) << endl;
+                                cout << arrayComodinesComunes[i].valor << endl;
                                 sigueLocal = (tuplaTemp1.get(arrayComodinesComunes[i].indicesp1[j]) == tuplaTemp2.get(arrayComodinesComunes[i].indicesp2[k]));
-                                cout << "sigue local "<< sigueLocal<<"\n";
+                                cout << sigueLocal << endl;
+
                             }
                         }
                     }
-
                     if (sigueLocal) { // si todos los pares de posiciones son iguales
                         // las hemos encontrado
-                        if (tuplaTemp1.match(p1) && tuplaTemp2.match(p2)) {
+                        if (p1.match(tuplaTemp1) && p2.match(tuplaTemp2)) {
+                            cout << "match Si";
                             itr2 = almacen.end();
                             itr2--;
                             itr = almacen.end();
-                            itr--;
+
+                            itr--;itr2--;
                             parar = true;
-                            cout<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+                            encontrado = true;
                         }
                         cout<<"??????????????????????????????????\n";
                     }
@@ -346,8 +381,15 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
         // No se ha encontrado
         parar = true;
     }
-
+    if (encontrado) {
+        cout << "ENCONTRADO!" << endl;
+        p1.from_string(tuplaTemp1.to_string());                                                                             // FIXME: Esto es horrendo
+        p2.from_string(tuplaTemp2.to_string());
+    } else {
+        cout << "NO ENCONTRADO!" << endl;
+    }
     // devolvemos las tuplas
+<<<<<<< HEAD
     cout<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
     cout << tuplaTemp1.to_string()<< "\n";
     cout << tuplaTemp2.to_string()<< "\n";
@@ -355,6 +397,8 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
     p2.from_string(tuplaTemp2.to_string());
 
     cout<<"final\n";
+=======
+>>>>>>> 239d36c453aac3eb80f5f315d1dfee3325d9f835
 
 }
 

@@ -47,8 +47,9 @@ void trocea_3(string s, string &operacion, string &tupla) {
 }
 void prueba(MonitorServidor& mS){
     Tupla tprueba("prueba1","prueba2");
-
+    Tupla tprueba2("prueba1","prueba1");
     mS.PN(tprueba);
+    mS.PN(tprueba2);
 }
 void prueba1(MonitorServidor& mS){
     Tupla tprueba("?X","prueba2");
@@ -57,10 +58,15 @@ void prueba1(MonitorServidor& mS){
     cout<<"salgo dormido\n";
 }
 
+// [prueba1, prueba2] [prueba1, prueba1]
+
+// [aqui, prueba2] [prueba1, aqui]          ---> [prueba1, prueba2] [prueba1, prueba1]
+
+
 void prueba2(MonitorServidor& mS){
     cout << "entro RDN2" << endl;
-    Tupla tprueba1("prueba1","prueba2");
-    Tupla tprueba2("prueba1","prueba2");
+    Tupla tprueba1("?X","prueba2");
+    Tupla tprueba2("prueba1","?X");
     //sleep(2);
     mS.RdN_2(tprueba1, tprueba2);
     cout<<"RDN2!\n";
@@ -241,9 +247,11 @@ int main(int argc, char *argv[]) {
 
 
 
+
     //thread p6(&prueba2, ref(mS1));
 
     //p6.join();
+
 
    /*
     Tupla prueba("prueba1","prueba");
