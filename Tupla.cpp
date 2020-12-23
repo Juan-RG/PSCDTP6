@@ -131,7 +131,7 @@ void Tupla::from_string(string s) {
     assert(s.length()>2 && s[0]=='[' && s[s.length()-1]==']');
     int strings = 1;
     string elem[6];
-    cout << "string entrante "<< s << "\n";
+    //cout << "string entrante "<< s << "\n";
     for(int i = 0; i<s.length();i++){                                                       //controlar en un futuro que si tupla.size() de 2 y el string sea de 4
                                                                                             //controlar o error o new de tupla. con el nuevo tamaño
         if(s[i]==','){
@@ -144,7 +144,7 @@ void Tupla::from_string(string s) {
     //       por defecto que luego se modificaría)
     delete data;
     data = new vector<string>(strings,"");
-    cout << "Ahora data es de tamaño " << data->size() << endl;
+    //cout << "Ahora data es de tamaño " << data->size() << endl;
 
     //if(strings != this->size()){}
     //data = new vector<string>(strings,"");
@@ -193,7 +193,7 @@ bool Tupla::match(Tupla p) {
     if (p.size() != data->size()) { // si las tuplas tienen dif tamaño
         return false;
     }
-    cout<<"paso\n";
+    //cout<<"paso\n";
     bool rep = false;
     int w = 0;
     string palabra = " ";
@@ -220,7 +220,7 @@ bool Tupla::match(Tupla p) {
                 if(data->at(i) == Comodin[j].valor){
 		            if(p.get(i) != Comodin[j].palabra){
                         //std::cout << "retorno" << std::endl;
-                        cout<<"aqui\n";
+                        //cout<<"aqui\n";
 			            return false;
                     }
 		            //cout<<"paso aa \n";
