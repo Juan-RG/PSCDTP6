@@ -52,7 +52,7 @@ void prueba(MonitorServidor& mS){
     mS.PN(tprueba);
 }
 void prueba1(MonitorServidor& mS){
-    Tupla tprueba("prueba1","prueba");
+    Tupla tprueba("?X","prueba");
     //sleep(2);
     mS.RN(tprueba);
     cout<<"salgo dormido\n";

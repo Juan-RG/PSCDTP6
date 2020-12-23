@@ -97,6 +97,9 @@ void MonitorServidor::RN(Tupla &tupla) {                         //TODO: Tenemos
             enEspera.wait(lck);
         }
     }
+    cout << "entrada "<<tupla.to_string()<<"\n";
+    tupla.from_string(temporal.to_string());
+    cout << "salida "<<tupla.to_string()<<"\n";
     almacen.erase(temporal);
     cout<<"prueba\n";
 /*
