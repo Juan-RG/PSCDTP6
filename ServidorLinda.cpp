@@ -228,18 +228,21 @@ int main(int argc, char *argv[]) {
 
     //cout << "entro RDN2" << endl;
 
-    Tupla tprueba2("prueba1","prueba2");
-    Tupla tprueba4("prueba1","prueba1");
+    Tupla t("prueba1","prueba2");
+    Tupla t1("prueba1","prueba1");
+    Tupla t2("prueba1","aaaaaaa");
     //sleep(2);
-    mS1.PN(tprueba2);
-    mS1.PN(tprueba4);
+    mS1.PN(t);
+    mS1.PN(t1);
+    mS1.PN(t2);
     cout<<"paso1\n";
     //mS1.RN_2(tprueba1,tprueba2);
     Tupla tprueba1("?X","prueba2");
-    Tupla tprueba3("?P","?Y");
+    Tupla tprueba3("?X","?Y");
     mS1.RdN_2(tprueba1, tprueba3);
     cout <<" " << tprueba1.to_string() <<" "<< tprueba3.to_string() <<"\n";
     cout<<"paso1\n";
+    mS1.PN(t);
     //thread p(&prueba1, ref(mS1));
     //thread p1(&prueba1, ref(mS1));
     //thread p2(&prueba1, ref(mS1));

@@ -22,8 +22,13 @@ void MonitorServidor::PN(Tupla tupla) {
     unique_lock<mutex> lck(mtx);
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
-
-
+    multiset <Tupla> :: iterator itr;
+    Tupla tuplaTemp1("");
+    for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
+        Tupla tmp(*itr);
+        tuplaTemp1.from_string(tmp.to_string());
+        cout << tuplaTemp1.to_string() <<"paso\n";
+    }
 }
 
 void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
@@ -352,21 +357,14 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
                                     // sigueLocal será false si se encuentra algún par de posiciones con comodines comunes entre
                                     // las dos tuplas que sean diferentes en contenido
 
-                                    cout << tuplaTemp2.get(arrayComodinesComunes[i].indicesp2[k]) << endl;
-                                    cout << tuplaTemp1.get(arrayComodinesComunes[i].indicesp1[j]) << endl;
-                                    cout << arrayComodinesComunes[i].valor << endl;
 
                                     sigueLocal = (tuplaTemp1.get(arrayComodinesComunes[i].indicesp1[j]) == tuplaTemp2.get(arrayComodinesComunes[i].indicesp2[k]));
-                                    cout << sigueLocal << endl;
                                 }
                             }
                         }
                         if (sigueLocal) { // si todos los pares de posiciones son iguales
                             // las hemos encontrado
                             if (p1.match(tuplaTemp1) && p2.match(tuplaTemp2)) {
-                                cout << "compruebo si matchean...:" << tuplaTemp1.to_string() << " y " << tuplaTemp2.to_string() << endl;
-
-                                cout << "match Si" << endl;
                                 itr2 = almacen.end();
                                 itr = almacen.end();
                                 itr--;itr2--;
@@ -392,13 +390,8 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
         cout << "NO ENCONTRADO!" << endl;
     }
     // devolvemos las tuplas
-    cout<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
-    cout << tuplaTemp1.to_string()<< "\n";
-    cout << tuplaTemp2.to_string()<< "\n";
     p1.from_string(tuplaTemp1.to_string());
     p2.from_string(tuplaTemp2.to_string());
-
-    cout<<"final\n";
 
 
 }
