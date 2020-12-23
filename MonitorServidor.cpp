@@ -22,47 +22,10 @@ void MonitorServidor::PN(Tupla tupla) {
     unique_lock<mutex> lck(mtx);
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
-
-   /* for (set<Tupla>::iterator i = almacen.begin(); i != almacen.end(); i++) {
-        Tupla t(*i);
-        cout << t.to_string()<<"\n";
-    }
-
-    const bool is_in = almacen.find(tupla) != almacen.end();
-    set<Tupla>::iterator y = almacen.find(tupla);
-    if(is_in){   //control si ya existe el que vamos a guardar
-        cout << "entro repe!!!!!!!!!!!!!!!!!!!!!!!\n";
-        Tupla t(*y);
-        cout<< " t "<< t.to_string() + "\n";
-        string value = t.get(0);
-        cout<< "asdasdasda\n";
-        set<Tupla>::iterator final = almacen.end();
-        cout<< "asdasdasda\n";
-        final--;
-        Tupla tfinal(*final);
-        cout << "paso\n";
-        cout << tupla.to_string()<<" t final\n";
-        cout << "paso\n";
-        cout << value << "  aa" << tfinal.get(0)<< "\n";
-
-    }else{
-        almacen.insert(tupla);
-        enEspera.notify_all();
-        cout<<"entro\n";
-        cout<< almacen.size()<<"\n";
-        for (set<Tupla>::iterator i = almacen.begin(); i != almacen.end(); i++) {
-            Tupla t(*i);
-            cout << t.to_string()<<"\n";
-
-        }
-        cout<<"fin entro\n";
-    }
-    */
 }
 
 void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
 	unique_lock<mutex> lck(mtx);
-
     /*while (almacen.find(tupla) == almacen.end()){
         enEspera.wait(lck);
     }*/
@@ -70,7 +33,7 @@ void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el ca
     multiset <Tupla> :: iterator itr;
     //Tupla(tuplaDelIterador);
     Tupla tuplaDelIterador("");
-    cout << "hola" << endl;
+    cout << "hola 1" << endl;
     //itr = almacen.begin();  //Inicializamos el iterador a la primera posicion del almacen (multiset)
     /*if (tupla.match(*itr)) {
         cout << "tupla encontrada";
@@ -85,20 +48,27 @@ void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el ca
     //tuplaDelIterador = *itr;
     cout << "funciona tuplaDelIterador = *itr " << endl;
     while(!tupla.match(tuplaDelIterador)){
-        tuplaDelIterador = *itr;
+        //Tupla temp(*itr);
+        //tuplaDelIterador.from_string(temp.to_string());
+        //tuplaDelIterador = *itr;
+        cout<< "esto que da como resultado " <<tuplaDelIterador.to_string()<<"\n";
         cout << "funciona tuplaDelIterador = *itr  2 " << endl;
         //Buscamos en el almacen la tupla que queremos, hasta encontrarla o terminar la iteracion
         for (itr = almacen.begin(); itr!= almacen.end() || tupla.match(tuplaDelIterador); ++itr) {
-            tuplaDelIterador = *itr;                                                                //FAIL: *ITR HAY QUE INICIALIZARLO EN TUPLA(T)
+            Tupla temp(*itr);
+            tuplaDelIterador.from_string(temp.to_string());                                                               //FAIL: *ITR HAY QUE INICIALIZARLO EN TUPLA(T)
+            cout <<"paso iteracion \n";
         }
         //Si no la encuentra se pondra en espera hasta nuevo aviso
         if(!tupla.match(tuplaDelIterador)){
+            cout<<"me bloqueo\n";
             enEspera.wait(lck);
         }
     }
 
     //Si llega hasta aqui es que la ha encontrado
-    tupla = tuplaDelIterador;       //Pasamos por referencia la tupla para reenviarsela al lindaDriver
+    //tupla = tuplaDelIterador;       //Pasamos por referencia la tupla para reenviarsela al lindaDriver
+    tupla.from_string(tuplaDelIterador.to_string());
 }
 
 void MonitorServidor::RN(Tupla &tupla) {                         //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z

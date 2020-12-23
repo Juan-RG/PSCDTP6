@@ -122,12 +122,15 @@ void Tupla::trocear(string elem[],int strings, string s) {
     }
     getline(s_stream, substr, ']');
     elem[i]=substr;
+    for (int j = 0; j < elem->size() ; ++j) {
+    }
 }
 
 void Tupla::from_string(string s) {
     assert(s.length()>2 && s[0]=='[' && s[s.length()-1]==']');
     int strings = 1;
     string elem[6];
+    cout << "string entrante "<< s << "\n";
     for(int i = 0; i<s.length();i++){                                                       //controlar en un futuro que si tupla.size() de 2 y el string sea de 4
                                                                                             //controlar o error o new de tupla. con el nuevo tamaño
         if(s[i]==','){
@@ -189,6 +192,7 @@ bool Tupla::match(Tupla p) {
     if (p.size() != data->size()) { // si las tuplas tienen dif tamaño
         return false;
     }
+    cout<<"paso\n";
     bool rep = false;
     int w = 0;
     string palabra = " ";
@@ -215,6 +219,7 @@ bool Tupla::match(Tupla p) {
                 if(data->at(i) == Comodin[j].valor){
 		            if(p.get(i) != Comodin[j].palabra){
                         //std::cout << "retorno" << std::endl;
+                        cout<<"aqui\n";
 			            return false;
                     }
 		            //cout<<"paso aa \n";

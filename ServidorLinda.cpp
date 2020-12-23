@@ -140,10 +140,27 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 
 int main(int argc, char *argv[]) {
 
-    /*
+
     Tupla match("prueba1","prueba");
     Tupla matchG("?Z","prueba");
+    cout << matchG.match(match)<< "\n";
 
+    string operacion,tupla;
+    string buffer = "PN,[2,hola,adios,oaooaoa,asdasda,asdasda]";
+    trocea_3(buffer, operacion, tupla);
+    cout << "buffer: '"<<  buffer << "' operacion '" << operacion << "' tupla '" << tupla << "'" << endl;
+    Tupla t1(4); // TODO: Ver si se puede meter el constructor en from_string, tal que no haya que decir el tamaño de la tupla antes de meterle el string
+    t1.from_string(tupla);
+    cout << "n tupla " << t1.to_string()<<"\n";
+
+    multiset<Tupla> almacenPrueba;
+    MonitorServidor mS1(&almacenPrueba);
+    Tupla prueba("prueba1","prueba");
+    mS1.PN(match);
+    mS1.PN(matchG);
+    mS1.RdN(prueba);
+
+  /*
     cout << "primera prueba "<< tprueba.match(match)<<"\n";
     cout << "2 prueba "<< match.match(tprueba)<<"\n";
     cout << "3 prueba "<< tprueba.match(matchG)<<"\n";
