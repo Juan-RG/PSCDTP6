@@ -46,17 +46,26 @@ void trocea_3(string s, string &operacion, string &tupla) {
 	tupla = token;
 }
 void prueba(MonitorServidor& mS){
-    Tupla tprueba("prueba1","prueba");
+    Tupla tprueba("prueba1","prueba2");
 
-    sleep(3);
     mS.PN(tprueba);
 }
 void prueba1(MonitorServidor& mS){
-    Tupla tprueba("?X","prueba");
+    Tupla tprueba("?X","prueba2");
     //sleep(2);
     mS.RN(tprueba);
     cout<<"salgo dormido\n";
 }
+
+void prueba2(MonitorServidor& mS){
+    cout << "entro RDN2" << endl;
+    Tupla tprueba1("prueba1","prueba2");
+    Tupla tprueba2("prueba1","prueba2");
+    //sleep(2);
+    mS.RdN_2(tprueba1, tprueba2);
+    cout<<"RDN2!\n";
+}
+
 //-------------------------------------------------------------
 void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 	// Buffer para recibir el mensaje
@@ -190,7 +199,7 @@ int main(int argc, char *argv[]) {
 
 
     Tupla match("prueba1","prueba");
-    Tupla matchG("?Z","?Y","?Y");
+    Tupla matchG("?Z","prueba");
     cout << matchG.match(match)<< "\n";
 
     string operacion,tupla;
@@ -199,19 +208,31 @@ int main(int argc, char *argv[]) {
     cout << "buffer: '"<<  buffer << "' operacion '" << operacion << "' tupla '" << tupla << "'" << endl;
     Tupla t1(4); // TODO: Ver si se puede meter el constructor en from_string, tal que no haya que decir el tamaño de la tupla antes de meterle el string
     t1.from_string(tupla);
-    cout << "n tupla " << t1.to_string()<<"\n";
+    //cout << "n tupla " << t1.to_string()<<"\n";
 
     multiset<Tupla> almacenPrueba;
     MonitorServidor mS1(&almacenPrueba);
-    mS1.PN(match);
-    mS1.PN(match);
-    mS1.PN(match);
-    mS1.PN(match);
-    mS1.PN(match);mS1.PN(match);
-    mS1.PN(match);
 
 
-    mS1.RN_2(matchG,matchG);
+    //thread p(&prueba1, ref(mS1));
+    //thread p1(&prueba1, ref(mS1));
+    //thread p2(&prueba1, ref(mS1));
+    thread p3(&prueba, ref(mS1));
+    thread p4(&prueba, ref(mS1));
+    //thread p5(&prueba, ref(mS1));
+
+    //p.join();
+    //p1.join();
+    //p2.join();
+    p3.join();
+    p4.join();
+    //p5.join();
+
+
+
+    thread p6(&prueba2, ref(mS1));
+
+    p6.join();
 
    /*
     Tupla prueba("prueba1","prueba");
