@@ -190,7 +190,7 @@ int main(int argc, char *argv[]) {
 
 
     Tupla match("prueba1","prueba");
-    Tupla matchG("?Z","prueba");
+    Tupla matchG("?Z","?Y","?Y");
     cout << matchG.match(match)<< "\n";
 
     string operacion,tupla;
@@ -211,7 +211,7 @@ int main(int argc, char *argv[]) {
     mS1.PN(match);
 
 
-    mS1.RN_2(match,matchG);
+    mS1.RN_2(matchG,matchG);
 
    /*
     Tupla prueba("prueba1","prueba");
