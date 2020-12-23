@@ -30,16 +30,12 @@ static const string MENSAJE_RN = "RN,";
 static const string MENSAJE_RDN = "RDN,";
 //static const string MENSAJE_RDN_2 = "RDN_2,";
 static const string MENSAJE_DESCONEXION = "DESCONEXION";
+static const string MENSAJE_RDN_2 = "RDN2,,";
+static const string MENSAJE_RN_2 = "RN2,";
 
 class LindaDriver {
 public:
 	//constructores -----------------------------
-/*<<<<<<< HEAD
-	LindaDriver(string ipServerRegistro, int puertoServerRegistro,string tipo);
-=======
-
->>>>>>> 63b10faad2fba1977004c0adf34ceed29a0fbc27
- */
     LindaDriver(string ipServerRegistro, int puertoServerRegistro, string tipoCliente);
 	//destructor -----------------------------
 	~LindaDriver();
@@ -78,7 +74,7 @@ private:
 	string puerto_server_2;
 	string ip_server_3;
 	string puerto_server_3;
-	string puerto;
+	//string puerto;
 	//string tipo_cliente; // PUBLICADOR | BUSCADOR, de momento no se lo guarda
 };
 #endif
