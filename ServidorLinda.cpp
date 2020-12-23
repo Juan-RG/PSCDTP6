@@ -196,43 +196,54 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 }
 
 int main(int argc, char *argv[]) {
-
-
-    Tupla match("prueba1","prueba");
+    /*
+    //Tupla match("prueba1","prueba");
     Tupla matchG("?Z","prueba");
-    cout << matchG.match(match)<< "\n";
-
+    //cout << matchG.match(match)<< "\n";
     string operacion,tupla;
     string buffer = "PN,[2,hola,adios,oaooaoa,asdasda,asdasda]";
     trocea_3(buffer, operacion, tupla);
-    cout << "buffer: '"<<  buffer << "' operacion '" << operacion << "' tupla '" << tupla << "'" << endl;
+    //cout << "buffer: '"<<  buffer << "' operacion '" << operacion << "' tupla '" << tupla << "'" << endl;
     Tupla t1(4); // TODO: Ver si se puede meter el constructor en from_string, tal que no haya que decir el tamaño de la tupla antes de meterle el string
     t1.from_string(tupla);
     //cout << "n tupla " << t1.to_string()<<"\n";
-
+*/
     multiset<Tupla> almacenPrueba;
     MonitorServidor mS1(&almacenPrueba);
 
+    //cout << "entro RDN2" << endl;
 
+    Tupla tprueba2("prueba1","prueba2");
+    Tupla tprueba4("prueba1","prueba1");
+    //sleep(2);
+    mS1.PN(tprueba2);
+    mS1.PN(tprueba4);
+    cout<<"paso1\n";
+    //mS1.RN_2(tprueba1,tprueba2);
+    Tupla tprueba1("?X","prueba2");
+    Tupla tprueba3("?P","?Y");
+    mS1.RdN_2(tprueba1, tprueba3);
+    cout <<" " << tprueba1.to_string() <<" "<< tprueba3.to_string() <<"\n";
+    cout<<"paso1\n";
     //thread p(&prueba1, ref(mS1));
     //thread p1(&prueba1, ref(mS1));
     //thread p2(&prueba1, ref(mS1));
-    thread p3(&prueba, ref(mS1));
-    thread p4(&prueba, ref(mS1));
+    //thread p3(&prueba, ref(mS1));
+    //thread p4(&prueba, ref(mS1));
     //thread p5(&prueba, ref(mS1));
 
     //p.join();
     //p1.join();
     //p2.join();
-    p3.join();
-    p4.join();
+    //p3.join();
+    //p4.join();
     //p5.join();
 
 
 
-    thread p6(&prueba2, ref(mS1));
+    //thread p6(&prueba2, ref(mS1));
 
-    p6.join();
+    //p6.join();
 
    /*
     Tupla prueba("prueba1","prueba");
@@ -298,10 +309,11 @@ int main(int argc, char *argv[]) {
 
 	//Creamos el tipo de set que vamos a usar (donde guardamos las tuplas)
     multiset<Tupla> almacen;
-
+    MonitorServidor mS(&almacen);
+    /*
 	MonitorServidor mS(&almacen);
     Tupla tprueba("prueba1","prueba");
-    Tupla tprueba2("prueba2","prueba");
+    Tupla tprueba3("prueba2","prueba");
     cout << "creada tupla prueba 1" << endl;
     mS.PN(tprueba2);
     mS.PN(tprueba);
@@ -311,7 +323,7 @@ int main(int argc, char *argv[]) {
     //mS1.RdN(tprueba2);
     cout << "leída tupla inexistente" << endl;
     // Puerto donde escucha el proceso servidor
-    int SERVER_PORT = atoi(argv[1]);
+     */ int SERVER_PORT = atoi(argv[1]);
     thread cliente[N];
     int client_fd[N];
 

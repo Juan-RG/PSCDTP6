@@ -22,6 +22,8 @@ void MonitorServidor::PN(Tupla tupla) {
     unique_lock<mutex> lck(mtx);
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
+
+
 }
 
 void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
@@ -126,12 +128,13 @@ void MonitorServidor::RN(Tupla &tupla) {                         //TODO: Tenemos
 }
 
 void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
-    multiset <Tupla>::iterator itr;
-    multiset <Tupla>::iterator itr2;
 
     // Tuplas a sobreescribir con el resultado, de momento son copias de p1 y p2
     Tupla tuplaTemp1(p1);
     Tupla tuplaTemp2(p2);
+    cout<< tuplaTemp1.to_string()<<"\n";
+    cout<< tuplaTemp2.to_string()<<"\n";
+    cout<<"T inicializadas\n";
     bool parar = false;
     int lengthArrayComodines;
 
@@ -148,13 +151,13 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
         int indicesp1[6];
         int indicesp2[6];
     };
-
     // acotados a los tamaños de cada una de las tuplas
     //?x -> arrayComodines[0] y los valores
     comodines arrayComodinesp1[p1.size()];
     for (int i = 0; i < p1.size(); ++i) {
         arrayComodinesp1[i].numIndices = 0;
     }
+    cout<<"Inicializados\n";
     //cout<< "inicializo "<< arrayComodinesp1->numIndices << " a s "<< arrayComodinesp1->valor << " asd "<< arrayComodinesp1->indices[1]<<"\n";
     comodines arrayComodinesp2[p2.size()];
     for (int i = 0; i < p2.size(); ++i) {
@@ -195,6 +198,7 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
             }
         }
     }
+    cout<<"1 comodines\n";
     //cout << "asdaasd\n";
     for (int i = 0; i < p1.size(); ++i) {
         //cout <<" aa " <<arrayComodinesp1[i].valor << "\n";
@@ -236,14 +240,14 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
             }
         }
     }
-
+    cout<<"2 comodines\n";
 
     //cout << "segundoaaa  11\n";
     // Se juntan los comodines de ambas en el vector de estructuras de
     // comodines comunes
     int numComodinesComunes = 0;
-    for (int i = 0; i < p1.size(); i++) {
-        for (int j = 0; j < p2.size(); j++) {
+    for (int i = 0; i < numComodinesp1; i++) {
+        for (int j = 0; j < numComodinesp2; j++) {
             // si dos coinciden , se añade un nuevo comodín común
             // se sabe que en ninguno de los dos hay comodines repetidos
             //cout << "paso 1\n";
@@ -266,27 +270,43 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
             }
         }
     }
+    cout<<"comodines conjuntos\n";
 
+    multiset <Tupla>::iterator itr;
+    multiset <Tupla>::iterator itr2;
+    cout << "empezamos\n";
     bool sigueLocal = true;
+
+
+    multiset <Tupla>::iterator itrp;
+    for (itrp = almacen.begin(); itrp != almacen.end(); ++itrp) {
+        Tupla tmp(*itrp);
+        tuplaTemp1.from_string(tmp.to_string());
+        cout << tuplaTemp1.to_string() <<"paso\n";
+    }
+
     while (!parar) {
+        cout << "1\n";
         for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
+            cout<<"itero\n";
             Tupla tmp(*itr);
             tuplaTemp1.from_string(tmp.to_string());                                        // FIXME: Tiene que haber una forma mejor de hacerlo
-
+            cout <<"valor tuplatemp1 " <<tuplaTemp1.to_string() <<"\n";
             for (itr2 = almacen.begin(); itr2 != almacen.end(); ++itr2) {
+                cout<<"itero\n";
                 Tupla tmp(*itr2);
                 tuplaTemp2.from_string(tmp.to_string());                                    // FIXME: Tiene que haber una forma mejor de hacerlo
-
+                cout <<"valor tuplatem2 " <<tuplaTemp2.to_string() <<"\n";
                 if (numComodinesComunes == 0) { // si no hay índices comunes
-                                                // ya se puede matchear sin más
-                    cout << "NUMCOMODINESCOMUNES == 0" << endl;
                     if (p1.match(tuplaTemp1) && p2.match(tuplaTemp2)) {
+                        cout << "if 2\n";
                         itr2 = almacen.end();
+                        itr2--;
                         itr = almacen.end();
+                        itr--;
                         parar = true;
                     }
                 } else {
-
                     //p1: [?y, cosa, ?y]
                     //p2: [cosa, ?y, ?z]
 
@@ -294,14 +314,14 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
                     //tuplaTemp2: [cosaza, cosita, cosin]
 
                     //arrayCOmodinesCOmunes[0] = ?y
-
-
                     for (int i = 0; (i < numComodinesComunes) && (sigueLocal); i++) {
                         for (int j = 0; (j < arrayComodinesComunes[i].numIndicesp1) && (sigueLocal); j++) {
                             for (int k = 0; (k < arrayComodinesComunes[i].numIndicesp2) && (sigueLocal); k++) {
                                 // sigueLocal será false si se encuentra algún par de posiciones con comodines comunes entre
                                 // las dos tuplas que sean diferentes en contenido
+                                cout <<"v TUplas" <<tuplaTemp1.to_string() << " " <<tuplaTemp2.to_string()<<"\n";
                                 sigueLocal = (tuplaTemp1.get(arrayComodinesComunes[i].indicesp1[j]) == tuplaTemp2.get(arrayComodinesComunes[i].indicesp2[k]));
+                                cout << "sigue local "<< sigueLocal<<"\n";
                             }
                         }
                     }
@@ -310,12 +330,17 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
                         // las hemos encontrado
                         if (tuplaTemp1.match(p1) && tuplaTemp2.match(p2)) {
                             itr2 = almacen.end();
+                            itr2--;
                             itr = almacen.end();
+                            itr--;
                             parar = true;
+                            cout<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
                         }
+                        cout<<"??????????????????????????????????\n";
                     }
                 }
             }
+
 
         }
         // No se ha encontrado
@@ -323,15 +348,33 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {  //TODO: Desarrollar
     }
 
     // devolvemos las tuplas
-    p1 = tuplaTemp1;
-    p2 = tuplaTemp2;
+    cout<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+    cout << tuplaTemp1.to_string()<< "\n";
+    cout << tuplaTemp2.to_string()<< "\n";
+    p1.from_string(tuplaTemp1.to_string());
+    p2.from_string(tuplaTemp2.to_string());
+
+    cout<<"final\n";
 
 }
 
 
 void MonitorServidor::RN_2(Tupla &t1, Tupla &t2) {  //TODO: Desarrollar
-    Tupla temporal("");
+    /*
+        Tupla temporal("");
     Tupla temporal2("");
     multiset <Tupla> :: iterator itr;
+     */
+
+    multiset <Tupla>::iterator itr;
+    multiset <Tupla>::iterator itr2;
+    int i = 0;
+    cout << almacen.size() <<"\n";
+    for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
+        for (itr2 = almacen.begin(); itr2 != almacen.end(); ++itr2) {
+            cout<< "paso "<< i <<"\n";
+        }
+    }
+
 }
 
