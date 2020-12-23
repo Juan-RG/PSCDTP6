@@ -68,14 +68,26 @@ void prueba1(MonitorServidor& mS){
 // ----->OK
 // Tupla tprueba1("?X","?Y");
 // Tupla tprueba2("prueba1","?X");
+//
+// ----->OK
+// Tupla tprueba1("prueba1","?Y");
+// Tupla tprueba2("prueba1","?X");
+//
+// ----->OK (no debería salir encontrado)
+// Tupla tprueba1("prueba2","?Y");
+// Tupla tprueba2("prueba1","prueba2");
+//
+// ----->OK (no debería salir encontrado)
+// Tupla tprueba1("prueba2","?Y");
+// Tupla tprueba2("prueba1","prueba2");
 
 // [aqui, prueba2] [prueba1, aqui]          ---> [prueba1, prueba2] [prueba1, prueba1]
 
 
-void prueba2(MonitorServidor& mS){
+void prueba2(MonitorServidor& mS) {
     cout << "entro RDN2" << endl;
-    Tupla tprueba1("?X","?Y");
-    Tupla tprueba2("?Y","?X");
+    Tupla tprueba1("prueba2","?Y","?Z");
+    Tupla tprueba2("prueba1","prueba2", "?Z");
     //sleep(2);
     mS.RdN_2(tprueba1, tprueba2);
     cout<<"RDN2!\n";
@@ -233,14 +245,14 @@ int main(int argc, char *argv[]) {
     //thread p1(&prueba1, ref(mS1));
     //thread p2(&prueba1, ref(mS1));
     thread p3(&prueba, ref(mS1));
-    //thread p4(&prueba, ref(mS1));
+    thread p4(&prueba, ref(mS1));
     //thread p5(&prueba, ref(mS1));
 
     //p.join();
     //p1.join();
     //p2.join();
     p3.join();
-    //p4.join();
+    p4.join();
     //p5.join();
 
 
