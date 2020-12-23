@@ -77,9 +77,9 @@ Tupla::Tupla(const Tupla& t) {
     }
 }
 
-bool Tupla::operator<=(const Tupla b) const
+bool Tupla::operator<(const Tupla b) const
 {
-    return (this->data->at(0) <= b.data->at(0));
+    return (this->data->at(0) < b.data->at(0));
     //if (this->data->at(0) == b.data->at(0)){
     //    return false;
     //}
