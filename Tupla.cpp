@@ -167,13 +167,18 @@ void Tupla::from_string(string s) {
     //       por defecto que luego se modificaría)
     delete data;
     data = new vector<string>(strings,"");
+    trocear(elem,strings,s);
     //cout << "Ahora data es de tamaño " << data->size() << endl;
 
     //if(strings != this->size()){}
     //data = new vector<string>(strings,"");
 
-    if(strings == 1){
-        trocear(elem,strings,s);
+    for(int i = 0; i < strings; i++){
+        set(i,elem[i]);
+    }
+
+    /*if(strings == 1){
+        //trocear(elem,strings,s);
         data = new vector<string>{elem[0]};
 
         //set(0, "s1");
@@ -181,7 +186,7 @@ void Tupla::from_string(string s) {
         //Meter string en data
     }else if (strings == 2){
         //scanf(s.c_str(), "[%s,%s]", &s1, &s2);
-        trocear(elem,strings,s);
+        //trocear(elem,strings,s);
         data = new vector<string>{elem[0],elem[1]};
         //std::cout << s1 << std::endl;
         //std::cout << s2 << std::endl;
@@ -191,24 +196,24 @@ void Tupla::from_string(string s) {
         //data->at(1) = s2;
         //Meter string en data
     }else if(strings == 3){
-        trocear(elem,strings,s);
+        //trocear(elem,strings,s);
         data = new vector<string>{elem[0],elem[1],elem[2]};
         //Meter string en data
     }else if(strings == 4){
         //sscanf(s.c_str(), "[%s,%s,%s,%s]", &s1, &s2, &s3, &s4);
-        trocear(elem,strings,s);
+        //trocear(elem,strings,s);
         data = new vector<string>{elem[0],elem[1],elem[2],elem[3]};
         //Meter string en data
     }else if(strings == 5){
         //sscanf(s.c_str(), "[%s,%s,%s,%s,%s]", &s1, &s2, &s3, &s4, &s5);
-        trocear(elem,strings,s);
+        //trocear(elem,strings,s);
         data = new vector<string>{elem[0],elem[1],elem[2],elem[3],elem[4]};
     }else if(strings == 6){
         //sscanf(s.c_str(), "[%s,%s,%s,%s,%s,%s]", &s1, &s2, &s3, &s4, &s5, &s6);
-        trocear(elem,strings,s);
+        //trocear(elem,strings,s);
         data = new vector<string>{elem[0],elem[1],elem[2],elem[3],elem[4],elem[5]};
         //Meter string en data
-    }
+    }*/
 
 }
 
@@ -249,7 +254,6 @@ bool Tupla::match(Tupla p) const{
 		            //cout<<"paso aa \n";
 	                rep = true;
                 }
-            
             } 
             if(!rep) {
                 //std::cout << "no es repetido, w= " << w  << "i= " << i << std::endl;
