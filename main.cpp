@@ -1,32 +1,54 @@
 #include <iostream>
 #include <set>
 
+
+
+
 using namespace std;
-int main() {
-    // empty set container
-    multiset<int> aa;
-    aa.insert(1);
-    aa.insert(1);
-    aa.insert(1);
-    aa.insert(2);
-    aa.insert(2);
-    multiset<int>::iterator itr;
-    //aa.erase(1);
-    auto itry = aa.find(2);
-    if(itry!=aa.end()){
-        aa.erase(*itry);
+void patata(int i, string basicString);
+
+void asignarCiudad(string *ciudad) {
+    int valorMin = 1, valorMax = 10;
+    //Calculamos un valor aleatorio entre el min y el max
+    int nAleatorio = rand () % (valorMax - valorMin +1) + valorMin;
+    switch (nAleatorio) {
+        case 1:
+            *ciudad = "Barcelona";
+            break;
+        case 2:
+            *ciudad = "Madrid";
+            break;
+        case 3:
+            *ciudad = "Valencia";
+            break;
+        case 4:
+            *ciudad = "Sevilla";
+            break;
+        case 5:
+            *ciudad = "La Coruña";
+            break;
+        case 6:
+            *ciudad = "Tenerife";
+            break;
+        case 7:
+            *ciudad = "Bilbao";
+            break;
+        case 8:
+            *ciudad = "Badajoz";
+            break;
+        case 9:
+            *ciudad = "Zaragoza";
+            break;
+        case 10:
+            *ciudad = "Teruel";
+            break;
     }
-    for (itr = aa.begin(); itr != aa.end(); ++itr) {
-        if(*itr == 2){
-            aa.erase(itr);
-        }
-        //cout << *itr <<"paso\n";
+}
+int main() {
+    for (int i = 0; i <8 ; ++i) {
+       cout<<"paso\n";
     }
 
-    multiset<int>::iterator itrt;
-    for (itrt = aa.begin(); itrt != aa.end(); ++itrt) {
-        cout << *itrt <<"paso\n";
-    }
-    cout<<"fin\n";
-    return 0;
 }
+
+

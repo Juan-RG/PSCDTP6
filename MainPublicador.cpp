@@ -1,8 +1,6 @@
 
 #include <iostream>
 #include <chrono>
-#include <thread>
-#include "Socket/Socket.hpp"
 #include "LindaDriver.hpp"
 #include <unordered_set>
 
@@ -253,9 +251,10 @@ int main(int argc, char* argv[]) {
     //join del hilo para cuando finalice
 
     //LindaDriver pizarra(argv[1],argv[2]);
-    LindaDriver pizarra("localhost",2021,BUSCADOR);
-    int totalTuplas;
+    LindaDriver pizarra("localhost",2021,PUBLICADOR);
+    int numeroTuplas;
     //extraeremos la tupla de RN['totalTuplas',?totalTuplas]
+    srand(time(NULL)); //reseteamos la semilla
     string origen;
     asignarCiudad(&origen);
 
@@ -265,30 +264,14 @@ int main(int argc, char* argv[]) {
     while(origen == destino){
         asignarCiudad(&destino);
     }
-
     int precioMin = 1, precioMax = 10;
     //Calculamos un valor aleatorio entre el min y el max
     int precio = rand () % (precioMax - precioMin + 1) + precioMin;
-
-    //Linda.pn[totalTuplas+1,origen,destino,precio] //habra que mirar el parametro id si controlarlo aqui o con la estructura de datos
-    //si no eliminamos las ofertas no sera muy complicado comerse el coco y se elimiman ojo cuidado
-    //linda.Pn['totalTuplas',totalTuplas+1]
-
-    sleep(10);
-   /*
-    mensaje = DESCONEXION;
-    send_bytes = chan.Send(socket_fd, mensaje);
-    if(send_bytes == -1) {
-        cerr << "Error al enviar datos: " << strerror(errno) << endl;
-        // Cerramos el socket
-        chan.Close(socket_fd);
-        exit(1);
-    }
-    // Cerramos el socket
-    int error_code = chan.Close(socket_fd);
-    if(error_code == -1) {
-        cerr << "Error cerrando el socket: " << strerror(errno) << endl;
-    }
-    */
+    Tupla totalTuplas("TotalTuplas","?X");
+    pizarra.RN(totalTuplas,totalTuplas);
+    numeroTuplas = stoi(totalTuplas.get(1));
+    //Linda.pn[totalTuplas+1,origen,destino,precio]
+    Tupla nuevaTupla(to_string(numeroTuplas+1),origen,destino,to_string(precio));
+    pizarra.PN(nuevaTupla);
     return 0;
 }
