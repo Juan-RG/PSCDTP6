@@ -83,12 +83,14 @@ int main(int argc, char* argv[]) {
 
 
     set<Tupla, less<Tupla> >::iterator itr;
-
+    int y = 0;
     for (set<Tupla>::iterator i = s1.begin(); i != s1.end(); i++) {
         Tupla t(*i);
         cout << t.to_string();
+        y++;
     }
-    cout<< "\n";
+    cout << "numTuplas= " << y << endl;
+
     Tupla t22("?X","árbol");
     //cout <<"repe\n";
     set<Tupla>::iterator i = s1.find(t2);
@@ -97,14 +99,32 @@ int main(int argc, char* argv[]) {
         Tupla p(*i);
         cout << p.to_string() <<"   " << t2.to_string()<< "\n";
     }
+
     cout <<"\nAhora borro... " << t3.to_string() << endl;
+
+    int k = 0;
     s1.erase(t3);
     for (set<Tupla>::iterator i = s1.begin(); i != s1.end(); i++) {
         Tupla t(*i);
         cout << t.to_string() << "\n";
+        k++;
+    }
+    cout << "numTuplas= " << k << endl;
+
+    // fuerza bruta
+    for (int i = 0; i < 10000; i++) {
+        s1.insert(t1);
+    }
+    int j = 0;
+    cout <<"\nAñadidas 10000 tuplas a fuerza bruta: " << t1.to_string() << endl;
+    cout <<"\n..y peta porque el operador < no va bien..." << endl;
+    for (set<Tupla>::iterator i = s1.begin(); i != s1.end(); i++) {
+        Tupla t(*i);
+        cout << t.to_string() << "\n";
+        j++;
     }
 
-
+    cout << "numTuplas= " << j << endl;
     //cout << "\nThe set s1 is : \n";
     // printing set s1
     //set<Tupla,std::less<Tupla>>::iterator itr;
