@@ -90,23 +90,25 @@ int main(int argc, char* argv[]) {
     }
     cout<< "\n";
     Tupla t22("?X","árbol");
-    cout <<"repe\n";
+    //cout <<"repe\n";
     set<Tupla>::iterator i = s1.find(t2);
     if(i != s1.end()){
-        cout << "entro repe\n";
+        cout << "\nresultado del find:\n";
         Tupla p(*i);
         cout << p.to_string() <<"   " << t2.to_string()<< "\n";
     }
-    cout <<"repe\n";
+    cout <<"\nAhora borro... " << t3.to_string() << endl;
     s1.erase(t3);
     for (set<Tupla>::iterator i = s1.begin(); i != s1.end(); i++) {
         Tupla t(*i);
-        cout << t.to_string();
+        cout << t.to_string() << "\n";
     }
-    cout << "\nThe set s1 is : \n";
+
+
+    //cout << "\nThe set s1 is : \n";
     // printing set s1
     //set<Tupla,std::less<Tupla>>::iterator itr;
-    cout << "\nThe set s1 is : \n";
+    //cout << "\nThe set s1 is : \n";
 
 
     cout << endl;

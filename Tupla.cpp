@@ -189,7 +189,7 @@ void Tupla::from_string(string s) {
 
 }
 
-bool Tupla::match(Tupla p) {
+bool Tupla::match(Tupla p) const{
     if (p.size() != data->size()) { // si las tuplas tienen dif tamaño
         return false;
     }

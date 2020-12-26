@@ -267,14 +267,14 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {                             
         bool sigueLocal = true;
         while (!encontrado) {
             for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
-                Tupla tmp(*itr);
-                tuplaTemp1.from_string(tmp.to_string());                                        // FIXME: Tiene que haber una forma mejor de hacerlo
+                Tupla tuplaTemp1(*itr);
+                //tuplaTemp1.from_string(tmp.to_string());                                        // FIXME: Tiene que haber una forma mejor de hacerlo
 
                 if (p1.size() == tuplaTemp1.size()) { // Si la tupla obtenida es de tamaño distinto a p1, se salta
                     for (itr2 = almacen.begin(); itr2 != almacen.end(); ++itr2) {
                         if (itr != itr2) { // si el objeto al que apuntan ambos iteradores es el mismo, se descarta
-                            Tupla tmp(*itr2);
-                            tuplaTemp2.from_string(tmp.to_string());                                    // FIXME: Tiene que haber una forma mejor de hacerlo
+                            Tupla tuplaTemp2(*itr2);
+                            //tuplaTemp2.from_string(tmp.to_string());                                    // FIXME: Tiene que haber una forma mejor de hacerlo
                             if (p2.size() == tuplaTemp2.size()) { // Si la tupla obtenida es de tamaño distinto a p2, se salta
                                 if (numComodinesComunes == 0) { // si no hay índices comunes
                                     // ya se puede matchear sin más
