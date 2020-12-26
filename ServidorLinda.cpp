@@ -218,7 +218,7 @@ int main(int argc, char *argv[]) {
     t1.from_string(tupla);
     //cout << "n tupla " << t1.to_string()<<"\n";
 */
-    multiset<Tupla> almacenPrueba;
+    unordered_multiset<Tupla,TuplaHash> almacenPrueba;
     MonitorServidor mS1(&almacenPrueba);
     Tupla t1("1","mi␣casa","´arbol"); // 3 elementos
     Tupla t2("1000");
@@ -300,6 +300,14 @@ int main(int argc, char *argv[]) {
 // t9 con ["EINA","PSCD","DIIS"], o viceversa
     cout << p3.to_string() << endl;
     cout << p4.to_string() << endl;
+
+    Tupla p5("EINA","?Y","?X");
+    Tupla p6("EINA","?Z","?X");
+    mS1.RN_2(p5,p6);
+// Podr´a haber cargado t8 con ["EINA","AOC","DIIS"] y
+// t9 con ["EINA","PSCD","DIIS"], o viceversa
+    cout << p5.to_string() << endl;
+    cout << p6.to_string() << endl;
 
     //thread p(&prueba1, ref(mS1));
     //thread p1(&prueba1, ref(mS1));
@@ -394,7 +402,7 @@ int main(int argc, char *argv[]) {
     const int N = 5;
 
 	//Creamos el tipo de set que vamos a usar (donde guardamos las tuplas)
-    multiset<Tupla> almacen;
+    unordered_multiset<Tupla,TuplaHash> almacen;
     MonitorServidor mS(&almacen);
     /*
 	MonitorServidor mS(&almacen);

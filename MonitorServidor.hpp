@@ -11,8 +11,9 @@
 
 #include <mutex>
 #include <condition_variable>
-#include <set>
+#include <unordered_set>
 #include "Tupla.hpp"
+#include "TuplaHash.cpp"
 
 //-----------------------------------------------------
 using namespace std; //mutex, condition_variable, etc.
@@ -23,11 +24,11 @@ class MonitorServidor {
 
 		condition_variable enEspera;
 
-        multiset<Tupla> almacen;
+        unordered_multiset<Tupla,TuplaHash> almacen;
 
 	public:
 		//------------------------- constructor
-		MonitorServidor(multiset<Tupla> *almacen);
+		MonitorServidor(unordered_multiset<Tupla,TuplaHash> *almacen);
 		//------------------------- destructor
 		~MonitorServidor();
 		//Los "r" serán los recursos que se quieren reservar o liberar.

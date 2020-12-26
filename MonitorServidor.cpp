@@ -11,14 +11,14 @@
 #include "Tupla.hpp"
 
 //------------------------- constructor
-MonitorServidor::MonitorServidor(multiset<Tupla> *almacen){
+MonitorServidor::MonitorServidor(unordered_multiset<Tupla, TuplaHash> *almacen){
 	this->almacen = *almacen;
 }
 
 //------------------------- destructor
 MonitorServidor::~MonitorServidor(){}
 void MonitorServidor::borrar(Tupla &tupla){
-    multiset <Tupla> :: iterator itr;
+    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     almacen.erase(almacen.equal_range(tupla).first);
 
 }
@@ -29,7 +29,7 @@ void MonitorServidor::PN(Tupla tupla) {
 
 }
 void MonitorServidor::mostrar() {
-    multiset <Tupla> :: iterator itr;
+    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     Tupla tuplaTemp1("");
     for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
         Tupla tmp(*itr);
@@ -41,7 +41,7 @@ void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el ca
 	unique_lock<mutex> lck(mtx);
     /**/const bool is_in = almacen.find(tupla) != almacen.end();            // Todo: if con find para detectar si la tupla esta si no comprobacion recorriendo el multiset con match
     Tupla temporal("");
-    multiset <Tupla> :: iterator itr;
+    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     bool bandera = false;
     while (!bandera){
         for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
@@ -67,7 +67,7 @@ void MonitorServidor::RN(Tupla &tupla) {                         //TODO: Tenemos
     unique_lock<mutex> lck(mtx);
     /**/const bool is_in = almacen.find(tupla) != almacen.end();            // Todo: if con find para detectar si la tupla esta si no comprobacion recorriendo el multiset con match
     Tupla temporal("");
-    multiset <Tupla> :: iterator itr;
+    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     bool bandera = false;
     while (!bandera){
         for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
@@ -87,10 +87,10 @@ void MonitorServidor::RN(Tupla &tupla) {                         //TODO: Tenemos
     cout << "entrada "<<tupla.to_string()<<"\n";
     tupla.from_string(temporal.to_string());
     cout << "salida "<<tupla.to_string()<<"\n";
-    almacen.erase(temporal);
+    almacen.erase(temporal);                                                                                            // FIXME : Se borrarían todas...
     cout<<"prueba\n";
 /*
-    multiset <Tupla> :: iterator itr;
+    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     Tupla tuplaDelIterador(*itr);
 
     while(!tupla.match(tuplaDelIterador)){
@@ -115,8 +115,8 @@ void MonitorServidor::RN(Tupla &tupla) {                         //TODO: Tenemos
 void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {                                                                     // TODO: Desarrollar
     unique_lock<mutex> lck(mtx);
 
-    multiset <Tupla>::iterator itr;
-    multiset <Tupla>::iterator itr2;
+    unordered_multiset<Tupla, TuplaHash>::iterator itr;
+    unordered_multiset<Tupla, TuplaHash>::iterator itr2;
     bool encontrado = false;
 
     if (p1.size() == p2.size()) {
@@ -287,9 +287,12 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {                             
                                         //cout << "itr2 era..." << &itr2 << endl;
                                         // while ()
                                         cout << "match Si";
-                                        itr2 = almacen.end();
-                                        itr = almacen.end();
-                                        itr--;itr2--;
+                                        cout << "hola?" << endl;
+                                        p1.from_string(tuplaTemp1.to_string());                                                                         // FIXME: Esto es horrendo
+                                        p2.from_string(tuplaTemp2.to_string());
+                                        //itr2 = almacen.end();
+                                        //itr = almacen.end();
+                                        //itr--;itr2--;
                                         //cout << "ahora es..." << &itr << endl;
                                         //cout << "itr2 era..." << &itr2 << endl;
                                         //usleep(1000000);
@@ -334,9 +337,13 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {                             
                                             cout << "compruebo si matchean...:" << tuplaTemp1.to_string() << " y " << tuplaTemp2.to_string() << endl;
 
                                             cout << "match Si" << endl;
-                                            itr2 = almacen.end();
-                                            itr = almacen.end();
-                                            itr--;itr2--;
+                                            cout << "hola?" << endl;
+                                            //itr2 = almacen.end();
+                                            //itr = almacen.end();
+                                            p1.from_string(tuplaTemp1.to_string());                                                                         // FIXME: Esto es horrendo
+                                            p2.from_string(tuplaTemp2.to_string());
+                                            cout << "hola?" << endl;
+                                            //itr--;itr2--;
                                             //parar = true;
                                             encontrado = true;
                                         }
@@ -361,8 +368,8 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {                             
         }
         if (encontrado) {
             cout << "ENCONTRADO!" << endl;
-            p1.from_string(tuplaTemp1.to_string());                                                                         // FIXME: Esto es horrendo
-            p2.from_string(tuplaTemp2.to_string());
+            //p1.from_string(tuplaTemp1.to_string());                                                                         // FIXME: Esto es horrendo
+            //p2.from_string(tuplaTemp2.to_string());
         } else {
             cout << "NO ENCONTRADO!" << endl;
         }
@@ -378,8 +385,8 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {                             
 void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {                                                                     // TODO: Desarrollar
     unique_lock<mutex> lck(mtx);
 
-    multiset <Tupla>::iterator itr;
-    multiset <Tupla>::iterator itr2;
+    unordered_multiset<Tupla, TuplaHash>::iterator itr;
+    unordered_multiset<Tupla, TuplaHash>::iterator itr2;
     bool encontrado = false;
 
     if (p1.size() == p2.size()) {
@@ -548,9 +555,11 @@ void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {                              
                                         //cout << "itr2 era..." << &itr2 << endl;
                                         // while ()
                                         cout << "match Si";
-                                        itr2 = almacen.end();
-                                        itr = almacen.end();
-                                        itr--;itr2--;
+                                        p1.from_string(tuplaTemp1.to_string());                                                                         // FIXME: Esto es horrendo
+                                        p2.from_string(tuplaTemp2.to_string());
+                                        //itr2 = almacen.end();
+                                        //itr = almacen.end();
+                                        //itr--;itr2--;
                                         //cout << "ahora es..." << &itr << endl;
                                         //cout << "itr2 era..." << &itr2 << endl;
                                         //usleep(1000000);
@@ -595,9 +604,11 @@ void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {                              
                                             cout << "compruebo si matchean...:" << tuplaTemp1.to_string() << " y " << tuplaTemp2.to_string() << endl;
 
                                             cout << "match Si" << endl;
-                                            itr2 = almacen.end();
-                                            itr = almacen.end();
-                                            itr--;itr2--;
+                                            p1.from_string(tuplaTemp1.to_string());                                     // FIXME: Esto es horrendo
+                                            p2.from_string(tuplaTemp2.to_string());
+                                            //itr2 = almacen.end();
+                                            //itr = almacen.end();
+                                            //itr--;itr2--;
                                             //parar = true;
                                             encontrado = true;
                                         }
@@ -621,10 +632,10 @@ void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {                              
         }
         if (encontrado) {
             cout << "ENCONTRADO!" << endl;
-            p1.from_string(tuplaTemp1.to_string());                                                                         // FIXME: Esto es horrendo
-            p2.from_string(tuplaTemp2.to_string());
-            almacen.erase(tuplaTemp1);
-            almacen.erase(tuplaTemp2);
+            almacen.erase(p1);
+            almacen.erase(p2);
+            //p1.from_string(tuplaTemp1.to_string());                                                                         // FIXME: Esto es horrendo
+            //p2.from_string(tuplaTemp2.to_string());
 
         } else {
             cout << "NO ENCONTRADO!" << endl;
