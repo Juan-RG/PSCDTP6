@@ -67,11 +67,11 @@ void servCliente(Socket &soc, int client_fd, MonitorConexiones& monitorCone, con
     }
     /*******************************************************************            Esperando mensaje DESCONEXION */
     //espero final de conexion
-    rcv_bytes = soc.Recv(client_fd,buffer,length);
-    monitorCone.liberarConexion();                                              //ELIMINAR EL METODO Y LIBERAR BIEN :>
-    comprobarErrorRecepcion(soc, client_fd, rcv_bytes);
+    //rcv_bytes = soc.Recv(client_fd,buffer,length);
+    //monitorCone.liberarConexion();                                              //ELIMINAR EL METODO Y LIBERAR BIEN :>
+    //comprobarErrorRecepcion(soc, client_fd, rcv_bytes);
     //if(buffer == DESCONEXION)                                                 //mirar la elegancia de esto
-    printf("FINAL \n");
+    //printf("FINAL \n");
 }
 
 void comprobarErrorEnvio(Socket &soc, int client_fd, int send_bytes) {
