@@ -63,6 +63,10 @@ public:
 	bool match(Tupla p) const;
     void trocear(string elem[],int strings, string s);
     bool operator<(const Tupla b) const;
+    // Operador == para unordered_multiset
+    bool operator==(const Tupla& b) const;
+    // Operador () para unordered_multiset
+    //std::hash<Tupla>operator()();
 
 private:
 	//la tupla se almacenará como un vector de strings. Dado que antes

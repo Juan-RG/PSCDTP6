@@ -4,7 +4,7 @@
 #include <thread>
 #include "Socket/Socket.hpp"
 #include "LindaDriver.hpp"
-#include <set>
+#include <unordered_set>
 
 using namespace std;
 
@@ -74,26 +74,40 @@ int main(int argc, char* argv[]) {
     Tupla t3("aprieta","el","pan","45","34","88");
     Tupla t7("el","pan","45","34","88");
    // Tupla t(t3);
+    //class Hash = std::hash<Key>,
+    //class Pred = std::equal_to<Key>>
 
-    set<Tupla> s1;
+    struct TuplaHash {
+        const std::hash<std::string> m_stringHash {};
+
+        size_t operator()(const Tupla& value) const {
+            return m_stringHash(value.get(0));
+        };
+    };
+
+    unordered_multiset<Tupla, TuplaHash> s1;
+
     s1.insert(t1);
     s1.insert(t2);
     s1.insert(t3);
     s1.insert(t7);
 
+    cout << "insertados..." << endl;
 
-    set<Tupla, less<Tupla> >::iterator itr;
+
+    unordered_multiset<Tupla, TuplaHash>::iterator itr;
     int y = 0;
-    for (set<Tupla>::iterator i = s1.begin(); i != s1.end(); i++) {
+    for (unordered_multiset<Tupla, TuplaHash>::iterator i = s1.begin(); i != s1.end(); i++) {
         Tupla t(*i);
         cout << t.to_string();
         y++;
     }
     cout << "numTuplas= " << y << endl;
 
+
     Tupla t22("?X","árbol");
     //cout <<"repe\n";
-    set<Tupla>::iterator i = s1.find(t2);
+    unordered_multiset<Tupla, TuplaHash>::iterator i = s1.find(t2);
     if(i != s1.end()){
         cout << "\nresultado del find:\n";
         Tupla p(*i);
@@ -104,7 +118,7 @@ int main(int argc, char* argv[]) {
 
     int k = 0;
     s1.erase(t3);
-    for (set<Tupla>::iterator i = s1.begin(); i != s1.end(); i++) {
+    for (unordered_multiset<Tupla, TuplaHash>::iterator i = s1.begin(); i != s1.end(); i++) {
         Tupla t(*i);
         cout << t.to_string() << "\n";
         k++;
@@ -112,26 +126,37 @@ int main(int argc, char* argv[]) {
     cout << "numTuplas= " << k << endl;
 
     // fuerza bruta
-    for (int i = 0; i < 10000; i++) {
+    int numTuplas = 5;
+    for (int i = 0; i < numTuplas; i++) {
         s1.insert(t1);
     }
     int j = 0;
-    cout <<"\nAñadidas 10000 tuplas a fuerza bruta: " << t1.to_string() << endl;
-    cout <<"\n..y peta porque el operador < no va bien..." << endl;
-    for (set<Tupla>::iterator i = s1.begin(); i != s1.end(); i++) {
+    cout <<"\nAñadidas " << numTuplas << " tuplas a fuerza bruta: " << t1.to_string() << endl;
+    for (unordered_multiset<Tupla, TuplaHash>::iterator i = s1.begin(); i != s1.end(); i++) {
         Tupla t(*i);
         cout << t.to_string() << "\n";
         j++;
     }
 
     cout << "numTuplas= " << j << endl;
+
+    cout <<"\nAhora borro... " << t1.to_string() << endl;
+
+    int l = 0;
+    s1.erase(s1.equal_range(t1).first); // = que en multiset normal, indicar que se borra 1
+    for (unordered_multiset<Tupla, TuplaHash>::iterator i = s1.begin(); i != s1.end(); i++) {
+        Tupla t(*i);
+        cout << t.to_string() << "\n";
+        l++;
+    }
+    cout << "numTuplas= " << l << endl;
+
+
     //cout << "\nThe set s1 is : \n";
     // printing set s1
     //set<Tupla,std::less<Tupla>>::iterator itr;
     //cout << "\nThe set s1 is : \n";
 
-
-    cout << endl;
 
 
     /*

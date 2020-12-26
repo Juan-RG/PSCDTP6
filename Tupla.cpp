@@ -77,8 +77,7 @@ Tupla::Tupla(const Tupla& t) {
     }
 }
 
-bool Tupla::operator<(const Tupla b) const
-{
+bool Tupla::operator<(const Tupla b) const {
     return (this->data->at(0) <= b.data->at(0));
     //if (this->data->at(0) == b.data->at(0)){
     //    return false;
@@ -86,6 +85,30 @@ bool Tupla::operator<(const Tupla b) const
     //return true;
     //return this->data->size() > b.data->size();
 }
+
+// Operador iguales para el unordered multiset, devuelve true si y solo si las dos tuplas tienen el mismo tamaño y contenido
+bool Tupla::operator ==(const Tupla& b) const {                                                                          // TODO: Ver si se puede poner con &
+    if (data->size() != b.size()) {
+        return false; // ya sabemos que no son iguales
+    } else {
+        for (int i = 0; i < data->size(); i++) {
+            if (data->at(i) != b.get(i)) {
+                return false; // si hay una posición en la que sus strings no sean iguales, se devuelve false
+            }
+        }
+        return true; // ya sabemos que lo son
+    }
+}
+
+// Operador hash
+//std::hash<Tupla>Tupla::operator()() {                                                                         // TODO: Ver si se puede poner con &
+    // hash basado en la posición 0 de la tupla (podría ser cualquiera, pero de esta forma es general a todas)
+    //const std::hash<std::string> m_stringHash {};
+
+    //return m_stringHash(data->at(0));
+
+    //return hash<string>()(data->at(0));
+//}
 
 Tupla::~Tupla() {
     delete data;
