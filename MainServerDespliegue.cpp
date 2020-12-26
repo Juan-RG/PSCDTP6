@@ -39,29 +39,12 @@ void servCliente(Socket &soc, int client_fd, MonitorConexiones& monitorCone, con
     string buffer = "";
     bool out = false; // Inicialmente no salir del bucle
     int rcv_bytes;
-    /*******************************************************************           ENVIO CONECTAR */
-  /*
-    int rcv_bytes = soc.Recv(client_fd,buffer,length);
-    comprobarErrorRecepcion(soc, client_fd, rcv_bytes);
-    cout << "Mensaje del cliente " + to_string(i)  + " recibido : " + buffer + "\n";
-    if(buffer != MENS_SOLIC){
-        cout << "Mensaje incorrecto del cliente " + to_string(i)  + " recibido : " + buffer + "\n";
-        //cerrar
-        soc.Close(client_fd);
-        pthread_exit(NULL);
-    }
-    // Enviamos la respuesta
-    /*******************************************************************           ENVIO CONEXION ESTABLECIDA */
-    /*
-    int send_bytes = soc.Send(client_fd, CONEXION_ESTABLECIDA);
-    comprobarErrorEnvio(soc, client_fd, send_bytes);
-     */
-    //--Serivicio-----
     /*******************************************************************            ESPERANDO TIPO DE CLIENTE PUBLICADOR BUSCADOR */
     rcv_bytes = soc.Recv(client_fd,buffer,length);
     comprobarErrorRecepcion(soc, client_fd, rcv_bytes);
     cout << "Mensaje del cliente " + to_string(i)  + " recibido : " + buffer + "\n";
     if(buffer == BUSCADOR || buffer == PUBLICADOR){
+     /***************************************************    por tanto sobra esto y el monitor
         string datosConexion;
         if(buffer == BUSCADOR ){
             monitorCone.puedeConectar();
@@ -70,7 +53,9 @@ void servCliente(Socket &soc, int client_fd, MonitorConexiones& monitorCone, con
         }else{
             datosConexion = ip1+","+ip2+","+ip3+","+to_string(puerto1)+","+to_string(puerto2)+","+to_string(puerto3);
         }
-        cout << datosConexion;
+      *////////////////////////////////////
+        string datosConexion = ip1+","+ip2+","+ip3+","+to_string(puerto1)+","+to_string(puerto2)+","+to_string(puerto3);
+
         /*******************************************************************            ENVIO DATOS */
         int send_bytes = soc.Send(client_fd, datosConexion);
         comprobarErrorEnvio(soc, client_fd, send_bytes);
