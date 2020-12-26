@@ -64,10 +64,13 @@ public:
 
 private:
 	// se podrá? o habrá que crear uno temporalmente en cada operación? <-- ver si se puede, de momento se crean en cada operación
-	// Socket chanServer1; // Servidor de tuplas de tamaño 1 a 3
-	// Socket chanServer2; // Servidor de tuplas de tamaño 4 a 5
-	// Socket chanServer3; // Servidor de tuplas de tamaño 6
-	
+	Socket chanServer1; // Servidor de tuplas de tamaño 1 a 3
+	Socket chanServer2; // Servidor de tuplas de tamaño 4 a 5
+	Socket chanServer3; // Servidor de tuplas de tamaño 6
+    int fdChanServer1; // fd del Socket chanServer1
+    int fdChanServer2; // fd del Socket chanServer2
+    int fdChanServer3; // fd del Socket chanServer3
+
 	string ip_server_1;
 	string puerto_server_1;
 	string ip_server_2;

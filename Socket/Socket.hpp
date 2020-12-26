@@ -29,6 +29,12 @@ private:
 
 public:
 	// CONSTRUCTORES
+
+	// Constructor de la clase vacío, sin indicar nada, para modificar más
+    // adelante con Socket::CambiaDetallesServidor
+    Socket();
+
+
 	// Constructor de la clase indicando la dirección
 	// y el puerto de escucha del servidor. Para clientes.
 	Socket(string address, int port);
@@ -40,6 +46,11 @@ public:
 
 	// MÉTODOS
 
+    // Cambia los detalles del servidor
+    // PRE: NO se ha realizado un Bind()
+    // POST: Reemplaza la dirección y puerto del servidor con las proporcionadas
+    void CambiaDetallesServidor(string address, int port);
+
 	// Acepta la conexión de un nuevo cliente.
 	// PRE:
 	// POST: Abre una nueva conexión con un cliente.
@@ -47,6 +58,7 @@ public:
 	// al nuevo cliente en caso de exito.
 	// Devuelve -1 en caso de error.
 	int Accept();
+
 
 	// Binding de la nueva conexión.
 	// PRE: 

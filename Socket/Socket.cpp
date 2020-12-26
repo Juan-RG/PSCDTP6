@@ -25,6 +25,11 @@ using namespace std;
 //-------------------------------------------------------------
 const int ACK_BUFFER_SIZE = 4; //para hacer la comunición síncrona
 //-------------------------------------------------------------
+// Constructor de la clase vacío, sin indicar nada, para modificar más
+// adelante con Socket::CambiaDetallesServidor
+Socket::Socket() {
+}
+//-------------------------------------------------------------
 // Constructor de la clase indicando la dirección
 // y el puerto de escucha del servidor. Para clientes.
 Socket::Socket(string address, int port) {
@@ -40,6 +45,12 @@ Socket::Socket(int port) {
 
     // Guardamos datos del servidor
     SERVER_ADDRESS = "localhost";
+    SERVER_PORT    = port;
+}
+//-------------------------------------------------------------
+void Socket::CambiaDetallesServidor(string address, int port) {
+    // Guardamos datos del servidor
+    SERVER_ADDRESS = address;
     SERVER_PORT    = port;
 }
 //-------------------------------------------------------------
