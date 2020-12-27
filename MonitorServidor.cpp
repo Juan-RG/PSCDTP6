@@ -96,8 +96,8 @@ void MonitorServidor::RN(Tupla &tupla) {                         //TODO: Tenemos
     }
     cout << "entrada "<<tupla.to_string()<<"\n";
     tupla.from_string(temporal.to_string());
-    cout << "salida "<<tupla.to_string()<<"\n";
-    almacen.erase(temporal);                                                                                            // FIXME : Se borrarían todas...
+    cout << "salida "<<tupla.to_string()<<"\n";     // FIXME : Se borrarían todas...
+    almacen.erase(almacen.equal_range(temporal).first);
     cout<<"prueba\n";
 /*
     unordered_multiset<Tupla, TuplaHash> :: iterator itr;
@@ -578,6 +578,7 @@ void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {                              
 
                                         //parar = true;
                                         encontrado = true;
+
                                     }
                                 } else {
 
@@ -642,8 +643,8 @@ void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {                              
         }
         if (encontrado) {
             cout << "ENCONTRADO!" << endl;
-            almacen.erase(p1);
-            almacen.erase(p2);
+            almacen.erase(almacen.equal_range(p1).first);
+            almacen.erase(almacen.equal_range(p2).first);
             //p1.from_string(tuplaTemp1.to_string());                                                                         // FIXME: Esto es horrendo
             //p2.from_string(tuplaTemp2.to_string());
 
