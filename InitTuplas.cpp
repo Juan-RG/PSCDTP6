@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
     const string PUBLICADOR = "PUBLICADOR";
     const string BUSCADOR = "BUSCADOR";
     //LindaDriver pizarra(argv[1],argv[2]);
-    LindaDriver pizarra("localhost",2021,BUSCADOR);
+    LindaDriver pizarra("localhost",2022,BUSCADOR);
     //si controlamos con tuplas
     Tupla numeroTuplas("TotalTuplas","0");
     pizarra.PN(numeroTuplas);
