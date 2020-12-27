@@ -124,11 +124,27 @@ LindaDriver::LindaDriver(string ipServerRegistro, int puertoServerRegistro, stri
 }
 
 //destructor -----------------------------
-LindaDriver::~LindaDriver(){
+LindaDriver::~LindaDriver() {
+    mensaje = MENSAJE_DESCONEXION;
+    send_bytes = chanServer1.Send(fdChanServer1, mensaje);
+    if(send_bytes == -1) {
+        cerr << "Error al enviar despedida al servidor 1: " << strerror(errno) << endl;
+    }
+
+    send_bytes = chanServer2.Send(fdChanServer2, mensaje);
+    if(send_bytes == -1) {
+        cerr << "Error al enviar despedida al servidor 2: " << strerror(errno) << endl;
+    }
+
+    send_bytes = chanServer3.Send(fdChanServer3, mensaje);
+    if(send_bytes == -1) {
+        cerr << "Error al enviar despedida al servidor 3: " << strerror(errno) << endl;
+    }
+
     // Cierra los sockets
     chanServer1.Close(fdChanServer1);
-    chanServer1.Close(fdChanServer2);
-    chanServer1.Close(fdChanServer3);
+    chanServer2.Close(fdChanServer2);
+    chanServer3.Close(fdChanServer3);
 
     std::cout << "Conexión terminada con todos los servidores" << std::endl;
 }
