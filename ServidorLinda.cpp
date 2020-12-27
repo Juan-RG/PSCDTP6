@@ -214,12 +214,13 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 
 
 int main(int argc, char *argv[]) {
+
     if (argc != 2) {
         cerr << "Número de parámetros incorrecto \n";
         cerr << "Introduce ./ServidorMulticliente, puerto del servidor para hacer bind\n";
         exit(1); // finaliza el programa indicando salida incorrecta (1)
     }
-    const int N = 5;
+    const int N = 5;                                                                                                    // FIXME: AUMENTAR O HACER INFINITO
 
 	//Creamos el tipo de set que vamos a usar (donde guardamos las tuplas)
     unordered_multiset<Tupla, TuplaHash> almacen;

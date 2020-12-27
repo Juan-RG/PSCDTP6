@@ -10,7 +10,7 @@ LINDA_DRIVER=LindaDriver
 CLIENTE_PUBLICADOR=MainPublicador
 CLIENTE_BUSCADOR=MainBuscador
 INIT_TUPLAS=InitTuplas
-
+PRUEBAS=pruebas
 
 SERVER_REGISTRO=MainServerDespliegue
 MONITOR_CONEXIONES=MonitorConexiones
@@ -21,7 +21,7 @@ MONITOR_LINDA=MonitorServidor
 CPPFLAGS=-I. -I${SOCKET_DIR} -O2 -std=c++11 -lsockets # Flags compilacion
 LDFLAGS=-pthread # Flags linkado threads
 
-all: ${SERVER_REGISTRO} ${SERVER_LINDA} ${CLIENTE_PUBLICADOR} ${CLIENTE_BUSCADOR} ${INIT_TUPLAS}
+all: ${SERVER_REGISTRO} ${SERVER_LINDA} ${CLIENTE_PUBLICADOR} ${CLIENTE_BUSCADOR} ${INIT_TUPLAS} ${PRUEBAS}
 
 server_registro: ${SERVER_REGISTRO}
 
@@ -76,6 +76,11 @@ ${INIT_TUPLAS}.o: ${INIT_TUPLAS}.cpp
 ${INIT_TUPLAS}: ${LINDA_DRIVER}.o ${TUPLA}.o ${SOCKET}.o ${INIT_TUPLAS}.o
 	${CC} ${LDFLAGS} ${LINDA_DRIVER}.o ${TUPLA}.o ${SOCKET}.o ${INIT_TUPLAS}.o -o ${INIT_TUPLAS} ${SOCKETSFLAGS}
 
+${PRUEBAS}.o: ${PRUEBAS}.cpp
+	${CC} -c ${CPPFLAGS} ${PRUEBAS}.cpp
+# Linkado
+${PRUEBAS}: ${MONITOR_LINDA}.o ${LINDA_DRIVER}.o ${TUPLA}.o ${SOCKET}.o ${PRUEBAS}.o
+	${CC} ${LDFLAGS} ${MONITOR_LINDA}.o ${LINDA_DRIVER}.o ${TUPLA}.o ${SOCKET}.o ${PRUEBAS}.o -o ${PRUEBAS} ${SOCKETSFLAGS}
 #-----------------------------------------------------------
 # MONITOR_CONEXIONES
 # Compilacion
