@@ -40,6 +40,7 @@ int main(int argc, char* argv[]) {
                 cout<<"paso el set\n";
                 cout<<oferta.to_string()<<"\n";
                 pizarra.RDN(oferta,oferta);
+                cout<<"oferta devuelta del server\n";
                 cout<<oferta.to_string()<<"\n";
             }
           cout<< "Oferta leida: "+ oferta.to_string()<< "\n";

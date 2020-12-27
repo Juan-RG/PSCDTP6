@@ -255,6 +255,9 @@ int main(int argc, char* argv[]) {
     int numeroTuplas;
     //extraeremos la tupla de RN['totalTuplas',?totalTuplas]
     srand(time(NULL)); //reseteamos la semilla
+    int n = 0;
+    while (n < 1000){
+        n++;
     string origen;
     asignarCiudad(&origen);
 
@@ -278,6 +281,7 @@ int main(int argc, char* argv[]) {
     pizarra.PN(nuevaTupla);
     totalTuplas.set(1,to_string(numeroTuplas));
     pizarra.PN(totalTuplas);
+    }
 
     //Tupla nuevaTupla2(to_string(1),origen,to_string(precio)); // 3
     //pizarra.PN(nuevaTupla2);
