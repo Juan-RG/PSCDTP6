@@ -129,7 +129,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
             cout << "no es mensaje de desconexion, miro a ver qué es" << endl;
             trocea(buffer, operacion, tupla);			//Separamos la orden de la tupla (son strings)
 
-            string tuplaString;
+            string tuplaDobleString;
             if(operacion == MENSAJE_PN) {//postnote, mete algo en memoria
                 tuplaTemp1.from_string(tupla);	//pasamos la tupla tipo string a tipo "tupla"
 
@@ -177,9 +177,9 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 
                 mS.RdN_2(tuplaTemp1, tuplaTemp2);         //Llamamos a la operacion de servidor
 
-                tuplaString = tuplaTemp1.to_string() + tuplaTemp2.to_string(); //Juntamos las dos tuplas para enviarlas
+                tuplaDobleString = tuplaTemp1.to_string() + tuplaTemp2.to_string(); //Juntamos las dos tuplas para enviarlas
 
-                send_bytes = soc.Send(client_fd, tuplaString);   //Enviamos la Tupla.
+                send_bytes = soc.Send(client_fd, tuplaDobleString);   //Enviamos la Tupla.
                 if(send_bytes == -1) {
                     cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                     soc.Close(client_fd); // Cerramos los sockets.
@@ -199,9 +199,9 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 
                 mS.RN_2(tuplaTemp1, tuplaTemp2);         //Llamamos a la operacion de servidor
 
-                tuplaString1 = tuplaTemp1.to_string() + tuplaTemp2.to_string(); //Juntamos las dos tuplas para enviarlas
+                tuplaDobleString = tuplaTemp1.to_string() + tuplaTemp2.to_string(); //Juntamos las dos tuplas para enviarlas
 
-                send_bytes = soc.Send(client_fd, tuplaString1);   //Enviamos la Tupla.
+                send_bytes = soc.Send(client_fd, tuplaDobleString);   //Enviamos la Tupla.
                 if(send_bytes == -1) {
                     cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                     soc.Close(client_fd); // Cerramos los sockets.
