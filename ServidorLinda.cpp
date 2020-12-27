@@ -110,7 +110,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
     Tupla tuplaTemp2("");                   //Para buscar la tupla en la memoria para operaciones "2".
     bool out = false;                       // Inicialmente no salir del bucle
 
-	//while(!out) {
+	while(!out) {
 		// Recibimos el mensaje del cliente
 		rcv_bytes = soc.Recv(client_fd,buffer,length);
         cout << "paso \n";
@@ -120,7 +120,12 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 			exit(1);
 		}
 
+        if(buffer == MENSAJE_DESCONEXION){  //Salimos del bucle
+            out = true;
+        }
+
         trocea(buffer, operacion, tupla);			//Separamos la orden de la tupla (son strings)
+
         string tuplaString;
 		if(operacion == MENSAJE_PN) {//postnote, mete algo en memoria
             tuplaTemp.from_string(tupla);	//pasamos la tupla tipo string a tipo "tupla"
@@ -199,10 +204,10 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
                 soc.Close(client_fd); // Cerramos los sockets.
                 exit(1);
             }
-        } else if(operacion != MENSAJE_DESCONEXION){
+        }/* else if(operacion != MENSAJE_DESCONEXION){
 		    out = true;
-		}
-	//}
+		}*/
+	}
 }
 
 int main(int argc, char *argv[]) {
