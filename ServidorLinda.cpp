@@ -191,7 +191,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 
             mS.RN_2(tuplaTemp, tuplaTemp2);         //Llamamos a la operacion de servidor
 
-            tuplaString = tuplaTemp.to_string() + tuplaTemp2.to_string(); //Juntamos las dos tuplas para enviarlas
+            string tuplaString = tuplaTemp.to_string() + tuplaTemp2.to_string(); //Juntamos las dos tuplas para enviarlas
 
             send_bytes = soc.Send(client_fd, tuplaString);   //Enviamos la Tupla.
             if(send_bytes == -1) {
