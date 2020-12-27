@@ -63,18 +63,18 @@ LindaDriver::LindaDriver(string ipServerRegistro, int puertoServerRegistro, stri
     // Recibe los datos de los servidores (ip1,ip2,ip3,puerto)
     read_bytes = chan.Recv(socket_fd, buffer, MESSAGE_SIZE);
     cout << buffer + "\n";
-    cout<< "hola \n";
+    //cout<< "hola \n";
     // Se desconecta del servidor
-    mensaje = MENSAJE_DESCONEXION;
-    send_bytes = chan.Send(socket_fd, mensaje);
-    if(send_bytes == -1) {
-        cerr << "Error al enviar datos al servidor de registro: " << strerror(errno) << endl;
-        // Cerramos el socket
-        chan.Close(socket_fd);
-        std::terminate();                                                                                                        // FIXME: Terminar el hilo, no el proceso
-    }
+    //mensaje = MENSAJE_DESCONEXION;
+    //send_bytes = chan.Send(socket_fd, mensaje);
+    //if(send_bytes == -1) {
+    //    cerr << "Error al enviar datos al servidor de registro: " << strerror(errno) << endl;
+    //    // Cerramos el socket
+    //    chan.Close(socket_fd);
+    //    std::terminate();                                                                                                        // FIXME: Terminar el hilo, no el proceso
+    //}
     chan.Close(socket_fd); // y cierra el Socket
-
+    cout<< "socket con server de registro cerrado\n";
     // seguramente explote:
     //sscanf(buffer.c_str(), "%s,%s,%s,%s", &this->ip_server_1.c_str(), &this->ip_server_2.c_str(), &this->ip_server_3.c_str(), &this->puerto.c_str());
 
@@ -124,11 +124,27 @@ LindaDriver::LindaDriver(string ipServerRegistro, int puertoServerRegistro, stri
 }
 
 //destructor -----------------------------
-LindaDriver::~LindaDriver(){
+LindaDriver::~LindaDriver() {
+    string mensaje = MENSAJE_DESCONEXION;
+    int send_bytes = chanServer1.Send(fdChanServer1, mensaje);
+    if(send_bytes == -1) {
+        cerr << "Error al enviar despedida al servidor 1: " << strerror(errno) << endl;
+    }
+
+    send_bytes = chanServer2.Send(fdChanServer2, mensaje);
+    if(send_bytes == -1) {
+        cerr << "Error al enviar despedida al servidor 2: " << strerror(errno) << endl;
+    }
+
+    send_bytes = chanServer3.Send(fdChanServer3, mensaje);
+    if(send_bytes == -1) {
+        cerr << "Error al enviar despedida al servidor 3: " << strerror(errno) << endl;
+    }
+
     // Cierra los sockets
     chanServer1.Close(fdChanServer1);
-    chanServer1.Close(fdChanServer2);
-    chanServer1.Close(fdChanServer3);
+    chanServer2.Close(fdChanServer2);
+    chanServer3.Close(fdChanServer3);
 
     std::cout << "Conexión terminada con todos los servidores" << std::endl;
 }
@@ -140,16 +156,17 @@ void LindaDriver::PN(const Tupla t) {
     int read_bytes;   // num de bytes recibidos en un mensaje
     int send_bytes;   // num de bytes enviados en un mensaje
     string buffer;
-
+    cout << "LindaDriver: PN" << endl;
     //int socket_fd;
     //Socket chanServer1(this->ip_server_1, stoi(this->puerto));
     //Socket chanServer2(this->ip_server_2, stoi(this->puerto));
     //Socket chanServer3(this->ip_server_3, stoi(this->puerto));
     mensaje = MENSAJE_PN + t.to_string();
+    cout << "LindaDriver: Mando..." << mensaje << "y t.size() es" << t.size()<< endl;
 
     if (t.size() < 4) { // tam. 1 a 3, va al servidor 1
-        conectar(chanServer1, fdChanServer1);
-
+        //conectar(chanServer1, fdChanServer1);
+        cout << "LindaDriver: mando al server 1" << endl;
         // manda el código de operación junto a la tupla convertida a string
         send_bytes = chanServer1.Send(fdChanServer1, mensaje);
         if(send_bytes == -1) {
@@ -160,11 +177,13 @@ void LindaDriver::PN(const Tupla t) {
         }
 
         // Espera a recibir una confirmación
+        cout << "LindaDriver: espero confirmacion del server 1" << endl;
         read_bytes = chanServer1.Recv(fdChanServer1, buffer, MESSAGE_SIZE);
+        cout << "LindaDriver: recibo..." << buffer << endl;
         //chanServer1.Close(fdChanServer1); // y cierra el socket
     } else if (t.size() < 6) { // tam. 4 a 5, va al servidor 2
-        conectar(chanServer2, fdChanServer2);
-
+        //conectar(chanServer2, fdChanServer2);
+        cout << "LindaDriver: mando al server 2" << endl;
         // manda el código de operación junto a la tupla convertida a string
         send_bytes = chanServer2.Send(fdChanServer2, mensaje);
         if(send_bytes == -1) {
@@ -175,11 +194,13 @@ void LindaDriver::PN(const Tupla t) {
         }
 
         // Espera a recibir una confirmación
+        cout << "LindaDriver: espero confirmacion del server 2" << endl;
         read_bytes = chanServer2.Recv(fdChanServer2, buffer, MESSAGE_SIZE);
+        cout << "LindaDriver: recibo..." << buffer << endl;
         //chanServer2.Close(fdChanServer2); // y cierra el socket
     } else { // tam. 6, va al servidor 3
-        conectar(chanServer3, fdChanServer3);
-
+        //conectar(chanServer3, fdChanServer3);
+        cout << "LindaDriver: mando al server 3" << endl;
         // manda el código de operación junto a la tupla convertida a string
         send_bytes = chanServer3.Send(fdChanServer3, mensaje);
         if(send_bytes == -1) {
@@ -190,7 +211,9 @@ void LindaDriver::PN(const Tupla t) {
         }
 
         // Espera a recibir una confirmación
+        cout << "LindaDriver: espero confirmacion del server 3" << endl;
         read_bytes = chanServer3.Recv(fdChanServer3, buffer, MESSAGE_SIZE);
+        cout << "LindaDriver: recibo..." << buffer << endl;
         //chanServer3.Close(fdChanServer3); // y cierra el socket
     }
 
@@ -216,7 +239,7 @@ void LindaDriver::RN(const Tupla p, Tupla& t) {
     mensaje = MENSAJE_RN + p.to_string();
 
     if (p.size() < 4) { // tam. 1 a 3, va al servidor 1
-        conectar(chanServer1, fdChanServer1);
+        //conectar(chanServer1, fdChanServer1);
 
         // manda el código de operación junto a la tupla convertida a string
         send_bytes = chanServer1.Send(fdChanServer1, mensaje);
@@ -231,7 +254,7 @@ void LindaDriver::RN(const Tupla p, Tupla& t) {
         read_bytes = chanServer1.Recv(fdChanServer1, buffer, MESSAGE_SIZE);
         //chanServer1.Close(socket_fd); // y cierra el socket
     } else if (p.size() < 6) { // tam. 4 a 5, va al servidor 2
-        conectar(chanServer2, fdChanServer2);
+        //conectar(chanServer2, fdChanServer2);
 
         // manda el código de operación junto a la tupla convertida a string
         send_bytes = chanServer2.Send(fdChanServer2, mensaje);
@@ -246,7 +269,7 @@ void LindaDriver::RN(const Tupla p, Tupla& t) {
         read_bytes = chanServer2.Recv(fdChanServer2, buffer, MESSAGE_SIZE);
         //chanServer2.Close(socket_fd); // y cierra el socket
     } else { // tam. 6, va al servidor 3
-        conectar(chanServer3, fdChanServer3);
+        //conectar(chanServer3, fdChanServer3);
 
         // manda el código de operación junto a la tupla convertida a string
         send_bytes = chanServer3.Send(fdChanServer3, mensaje);
@@ -283,7 +306,7 @@ void LindaDriver::RN_2(const Tupla p1, const Tupla p2, Tupla& t1, Tupla& t2) {
 
     if (p1.size() == p2.size()) { // Si las tuplas son de diferente tamaño, no las vamos a enviar (requisito)
         if (p1.size() < 4) { // tam. 1 a 3, va al servidor 1
-            conectar(chanServer1, fdChanServer1);
+            //conectar(chanServer1, fdChanServer1);
 
             // manda el código de operación junto a la tupla convertida a string
             send_bytes = chanServer1.Send(fdChanServer1, mensaje);
@@ -298,7 +321,7 @@ void LindaDriver::RN_2(const Tupla p1, const Tupla p2, Tupla& t1, Tupla& t2) {
             read_bytes = chanServer1.Recv(fdChanServer1, buffer, MESSAGE_SIZE);
             //chanServer1.Close(socket_fd); // y cierra el socket
         } else if (p1.size() < 6) { // tam. 4 a 5, va al servidor 2
-            conectar(chanServer2, fdChanServer2);
+            //conectar(chanServer2, fdChanServer2);
 
             // manda el código de operación junto a la tupla convertida a string
             send_bytes = chanServer2.Send(fdChanServer2, mensaje);
@@ -313,7 +336,7 @@ void LindaDriver::RN_2(const Tupla p1, const Tupla p2, Tupla& t1, Tupla& t2) {
             read_bytes = chanServer2.Recv(fdChanServer2, buffer, MESSAGE_SIZE);
             //chanServer2.Close(socket_fd); // y cierra el socket
         } else { // tam. 6, va al servidor 3
-            conectar(chanServer3, fdChanServer3);
+            //conectar(chanServer3, fdChanServer3);
 
             // manda el código de operación junto a la tupla convertida a string
             send_bytes = chanServer3.Send(fdChanServer3, mensaje);
@@ -354,7 +377,7 @@ void LindaDriver::RDN(const Tupla p, Tupla& t) {
     mensaje = MENSAJE_RDN + p.to_string();
 
     if (p.size() < 4) { // tam. 1 a 3, va al servidor 1
-        conectar(chanServer1, fdChanServer1);
+        //conectar(chanServer1, fdChanServer1);
 
         // manda el código de operación junto a la tupla convertida a string
         send_bytes = chanServer1.Send(fdChanServer1, mensaje);
@@ -369,7 +392,7 @@ void LindaDriver::RDN(const Tupla p, Tupla& t) {
         read_bytes = chanServer1.Recv(fdChanServer1, buffer, MESSAGE_SIZE);
         //chanServer1.Close(socket_fd); // y cierra el socket
     } else if (p.size() < 6) { // tam. 4 a 5, va al servidor 2
-        conectar(chanServer2, fdChanServer2);
+        //conectar(chanServer2, fdChanServer2);
 
         // manda el código de operación junto a la tupla convertida a string
         send_bytes = chanServer2.Send(fdChanServer2, mensaje);
@@ -384,7 +407,7 @@ void LindaDriver::RDN(const Tupla p, Tupla& t) {
         read_bytes = chanServer2.Recv(fdChanServer2, buffer, MESSAGE_SIZE);
         //chanServer2.Close(socket_fd); // y cierra el socket
     } else { // tam. 6, va al servidor 3
-        conectar(chanServer3, fdChanServer3);
+        //conectar(chanServer3, fdChanServer3);
 
         // manda el código de operación junto a la tupla convertida a string
         send_bytes = chanServer3.Send(fdChanServer3, mensaje);
@@ -420,7 +443,7 @@ void LindaDriver::RDN_2(const Tupla p1, const Tupla p2, Tupla& t1, Tupla& t2) { 
 
     if (p1.size() == p2.size()) { // Si las tuplas son de diferente tamaño, no las vamos a enviar (requisito)
         if (p1.size() < 4) { // tam. 1 a 3, va al servidor 1
-            conectar(chanServer1, fdChanServer1);
+            //conectar(chanServer1, fdChanServer1);
 
             // manda el código de operación junto a la tupla convertida a string
             send_bytes = chanServer1.Send(fdChanServer1, mensaje);
@@ -435,7 +458,7 @@ void LindaDriver::RDN_2(const Tupla p1, const Tupla p2, Tupla& t1, Tupla& t2) { 
             read_bytes = chanServer1.Recv(fdChanServer1, buffer, MESSAGE_SIZE);
             //chanServer1.Close(socket_fd); // y cierra el socket
         } else if (p1.size() < 6) { // tam. 4 a 5, va al servidor 2
-            conectar(chanServer2, fdChanServer2);
+            //conectar(chanServer2, fdChanServer2);
 
             // manda el código de operación junto a la tupla convertida a string
             send_bytes = chanServer2.Send(fdChanServer2, mensaje);
@@ -450,7 +473,7 @@ void LindaDriver::RDN_2(const Tupla p1, const Tupla p2, Tupla& t1, Tupla& t2) { 
             read_bytes = chanServer2.Recv(fdChanServer2, buffer, MESSAGE_SIZE);
             //chanServer2.Close(socket_fd); // y cierra el socket
         } else { // tam. 6, va al servidor 3
-            conectar(chanServer3, fdChanServer3);
+            //conectar(chanServer3, fdChanServer3);
 
             // manda el código de operación junto a la tupla convertida a string
             send_bytes = chanServer3.Send(fdChanServer3, mensaje);

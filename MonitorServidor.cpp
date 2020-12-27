@@ -24,7 +24,17 @@ void MonitorServidor::borrar(Tupla &tupla){
 }
 void MonitorServidor::PN(Tupla tupla) {
     unique_lock<mutex> lck(mtx);
+    cout << "operacion PN llamada" << endl;
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
+
+    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
+    Tupla tuplaTemp1("");
+    for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
+        Tupla tmp(*itr);
+        tuplaTemp1.from_string(tmp.to_string());
+        cout << tuplaTemp1.to_string() <<"paso\n";
+    }
+
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
 
 }
@@ -54,7 +64,7 @@ void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el ca
                 }
             }
         }
-        if (bandera == false){
+        if (bandera == false) {
             cout << "bloqueado\n";
             enEspera.wait(lck);
         }
@@ -87,8 +97,8 @@ void MonitorServidor::RN(Tupla &tupla) {                         //TODO: Tenemos
     }
     cout << "entrada "<<tupla.to_string()<<"\n";
     tupla.from_string(temporal.to_string());
-    cout << "salida "<<tupla.to_string()<<"\n";
-    almacen.erase(temporal);                                                                                            // FIXME : Se borrarían todas...
+    cout << "salida "<<tupla.to_string()<<"\n";     // FIXME : Se borrarían todas...
+    almacen.erase(almacen.equal_range(temporal).first);
     cout<<"prueba\n";
 /*
     unordered_multiset<Tupla, TuplaHash> :: iterator itr;
@@ -572,6 +582,7 @@ void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {                              
 
                                         //parar = true;
                                         encontrado = true;
+
                                     }
                                 } else {
 
@@ -649,8 +660,7 @@ void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {                              
             cout << "ENCONTRADO!" << endl;
             almacen.erase(almacen.equal_range(p1).first);
             almacen.erase(almacen.equal_range(p2).first);
-            //almacen.erase(p1);
-            //almacen.erase(p2);
+
             //p1.from_string(tuplaTemp1.to_string());                                                                         // FIXME: Esto es horrendo
             //p2.from_string(tuplaTemp2.to_string());
 

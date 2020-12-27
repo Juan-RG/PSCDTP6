@@ -267,11 +267,21 @@ int main(int argc, char* argv[]) {
     int precioMin = 1, precioMax = 10;
     //Calculamos un valor aleatorio entre el min y el max
     int precio = rand () % (precioMax - precioMin + 1) + precioMin;
-    Tupla totalTuplas("TotalTuplas","?X");
-    pizarra.RN(totalTuplas,totalTuplas);
-    numeroTuplas = stoi(totalTuplas.get(1));
+    //Tupla totalTuplas("TotalTuplas","?X");
+    //pizarra.RN(totalTuplas,totalTuplas);
+    //numeroTuplas = stoi(totalTuplas.get(1));
     //Linda.pn[totalTuplas+1,origen,destino,precio]
-    Tupla nuevaTupla(to_string(numeroTuplas+1),origen,destino,to_string(precio));
+    //Tupla nuevaTupla(to_string(numeroTuplas+1),origen,destino,to_string(precio));
+    Tupla nuevaTupla(to_string(1),origen,destino,to_string(precio));
     pizarra.PN(nuevaTupla);
+
+    //Tupla nuevaTupla2(to_string(1),origen,to_string(precio)); // 3
+    //pizarra.PN(nuevaTupla2);
+
+    //Tupla nuevaTupla3(to_string(1),to_string(precio)); // 2
+    //pizarra.PN(nuevaTupla3);
+
+    //Tupla nuevaTupla4(to_string(1),origen,destino,destino,destino,to_string(precio)); // 6
+    //pizarra.PN(nuevaTupla4);
     return 0;
 }

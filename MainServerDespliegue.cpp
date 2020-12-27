@@ -107,12 +107,12 @@ int main(int numArg, char *args[]) {
         exit(1);
     }
      */
-    string ip1="192.20.1.2";
-    string ip2="192.20.1.2";
-    string ip3="192.20.1.2";
-    int puerto1 = 22;
-    int puerto2 = 23;
-    int puerto3 = 24;
+    string ip1="localhost";
+    string ip2="localhost";
+    string ip3="localhost";
+    int puerto1 = 2023;
+    int puerto2 = 2024;
+    int puerto3 = 2025;
     //total de conexiones;
     //const int N = atoi(args[2]);
     const int N = 100;                      //INTENTAR MIRAR PARA NO LIMITAR
