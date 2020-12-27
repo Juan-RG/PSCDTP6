@@ -130,7 +130,7 @@ int main(int numArg, char *args[]) {
 
     // Puerto donde escucha el proceso servidor
     //int SERVER_PORT = atoi(args[1]);
-    int SERVER_PORT = 2021;
+    int SERVER_PORT = 2022;
     //
     /*
     if(N==0){

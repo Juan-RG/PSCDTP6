@@ -231,83 +231,19 @@ int main(int argc, char *argv[]) {
     mS1.PN(t1);
     mS1.PN(t1);
     mS1.PN(t1);
-    cout<<"asdasdada\n";
     mS1.PN(t2);
-    cout<<"asdasdasdadasdadwwwwwwwwwwwwww\n";
+    cout<<"-------------------------\n";
     mS1.mostrar();
-    mS1.borrar(t1);
+    cout<<"-------------------------\n";
+    t1.set(0,"maracana");
+    Tupla tPa("?O","?X","?L"); // 3 elementos
+    Tupla tPa2("?Q","?X","?E"); // 3 elementos
+    mS1.RN_2(tPa,tPa2);
+    cout << "infor "<< tPa.to_string() <<"  -- "<< tPa2.to_string()<<"\n";
+    cout<<"-------------------------\n";
     mS1.mostrar();
+    cout<<"-------------------------\n";
     cout<< "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11\n";
-//muestra "mi casa" por stdout
-    cout << t1.get(2) << endl;
-// t3.to_string() devuelve el string "[aprieta,el,pan,45,34,88]"
-    string serial = t3.to_string();
-    cout << serial << endl;
-// las componentes de t3 tomar´an, respectivamente,
-// los valores "a","b","c","45","34","pan"
-    t3.from_string("[a,b,c,45,34,pan]");
-// mostrar´a [a,b,c,45,34,pan] por stdout
-    cout << t3.to_string() << endl;
-    mS1.PN(t3);
-    cout<< "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!12\n";
-    Tupla t5(3);//0-2
-    cout<< "??????????????????????????\n";
-
-    t5.set(1, "hola");
-    cout<<"******************************\n";
-    t5.set(2, "Mundo");  //1 2 3
-    cout<< "-------------------------------\n";
-    mS1.PN(t5);
-// mostrar´a [,hola,Mundo] por stdout
-    cout << t5.to_string() << endl;
-// informar´a de que tiene 3 elementos
-    cout << "t5␣tiene␣" << t5.size() << "␣elementos" << endl;
-// Un patr´on no es otra cosa que una tupla con
-// la posibilidad de contener el comod´ın "?" en una o m´as posiciones
-// "?" no puede ser un valor de componente de tupla. Para ello se
-// tendr´ıa que representar mediante "??". Creamos dos patrones
-    Tupla p1("?X");
-    Tupla p2("a","?X","c","?Y","34","?Z");
-// Dos nuevas tuplas, de tama˜no 1 y 6, respectivamente
-    Tupla res1(1),res2(p2.size());
-    cout<< "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1\n";
-// ejemplos de RemoveNote
-    mS1.RN(p1); // res1 tomar´a ´el valor que ten´ıa t2
-    mS1.RN(p2); // res2 tomar´a el valor que ten´ıa t3
-    cout << p1.to_string() << endl; //mostrar´a [1000]
-    cout << p2.to_string() << endl; //mostrar´a [a,b,c,45,34,pan]
-
-    cout<< "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!2\n";
-// ¿Si necesitamos un array de tuplas?
-// Tupla v[2]; // NO permitido: no hay constructor por defecto
-    Tupla* v[2];
-    v[0] = new Tupla("Juan", "1000");
-    v[1] = new Tupla("Luisa", "1000", "enero");
-    cout<< "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!3\n";
-    delete v[0];
-    delete v[1];
-
-    Tupla t6("EINA","AOC","DIIS");
-    Tupla t7("EINA","PSCD","DIIS");
-    mS1.PN(t6);
-    mS1.PN(t7);
-    Tupla p3("EINA","?Y","?X");
-    Tupla p4("EINA","?Z","?X");
-    cout<< "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!4\n";
-    Tupla t8(3), t9(3);
-    mS1.RdN_2(p3,p4);
-// Podr´a haber cargado t8 con ["EINA","AOC","DIIS"] y
-// t9 con ["EINA","PSCD","DIIS"], o viceversa
-    cout << p3.to_string() << endl;
-    cout << p4.to_string() << endl;
-
-    Tupla p5("EINA","?Y","?X");
-    Tupla p6("EINA","?Z","?X");
-    mS1.RN_2(p5,p6);
-// Podr´a haber cargado t8 con ["EINA","AOC","DIIS"] y
-// t9 con ["EINA","PSCD","DIIS"], o viceversa
-    cout << p5.to_string() << endl;
-    cout << p6.to_string() << endl;
 
     //thread p(&prueba1, ref(mS1));
     //thread p1(&prueba1, ref(mS1));

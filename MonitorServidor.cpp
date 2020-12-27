@@ -35,6 +35,7 @@ void MonitorServidor::mostrar() {
         Tupla tmp(*itr);
         tuplaTemp1.from_string(tmp.to_string());
         cout << tuplaTemp1.to_string() <<"paso\n";
+
     }
 }
 void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
@@ -534,12 +535,15 @@ void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {                              
         //multiset<Tupla> almacen2 = almacen
         bool sigueLocal = true;
         while (!encontrado) {
+            cout<<"1\n";
             for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
+                cout<<"asigno11\n";
                 Tupla tmp(*itr);
                 tuplaTemp1.from_string(tmp.to_string());                                        // FIXME: Tiene que haber una forma mejor de hacerlo
 
                 if (p1.size() == tuplaTemp1.size()) { // Si la tupla obtenida es de tamaño distinto a p1, se salta
                     for (itr2 = almacen.begin(); itr2 != almacen.end(); ++itr2) {
+                        cout<<"asigno\n";
                         if (itr != itr2) { // si el objeto al que apuntan ambos iteradores es el mismo, se descarta
                             Tupla tmp(*itr2);
                             tuplaTemp2.from_string(tmp.to_string());                                    // FIXME: Tiene que haber una forma mejor de hacerlo
@@ -606,24 +610,35 @@ void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {                              
                                             cout << "match Si" << endl;
                                             p1.from_string(tuplaTemp1.to_string());                                     // FIXME: Esto es horrendo
                                             p2.from_string(tuplaTemp2.to_string());
+                                            cout<<"end\n";
                                             //itr2 = almacen.end();
                                             //itr = almacen.end();
+                                            cout<<"end-----\n";
+                                            //break;
                                             //itr--;itr2--;
                                             //parar = true;
                                             encontrado = true;
+                                            cout<<"end-----1\n";
                                         }
+                                        cout<<"salgo if\n";
                                     }
+                                    cout<<"salgo other if\n";
                                 }
+                                cout<<"salgo other else\n";
                             } else {                                                                                        // TODO: quitar esto, es solo para comprobar
                                 cout << "p2.size() != tuplaTemp2.size()!!!" << endl;
+                                cout<<"entro else else\n";
                             }
+                            cout<<"if iteradores diferentes\n";
                         }
-
+                        cout<<"salgo if iteradores diferentes estoy for\n";
                     }
+                    cout<<"salgo for\n";
                 } else {                                                                                                    // TODO: quitar esto, es solo para comprobar
                     cout << "p1.size() != tuplaTemp1.size()!!!" << endl;
                 }
             }
+            cout<<"salgo for2 \n";
             // No se ha encontrado, dormimos
             if (!encontrado) {
                 enEspera.wait(lck);
@@ -632,8 +647,10 @@ void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {                              
         }
         if (encontrado) {
             cout << "ENCONTRADO!" << endl;
-            almacen.erase(p1);
-            almacen.erase(p2);
+            almacen.erase(almacen.equal_range(p1).first);
+            almacen.erase(almacen.equal_range(p2).first);
+            //almacen.erase(p1);
+            //almacen.erase(p2);
             //p1.from_string(tuplaTemp1.to_string());                                                                         // FIXME: Esto es horrendo
             //p2.from_string(tuplaTemp2.to_string());
 
