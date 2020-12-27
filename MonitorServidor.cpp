@@ -24,7 +24,17 @@ void MonitorServidor::borrar(Tupla &tupla){
 }
 void MonitorServidor::PN(Tupla tupla) {
     unique_lock<mutex> lck(mtx);
+    cout << "operacion PN llamada" << endl;
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
+
+    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
+    Tupla tuplaTemp1("");
+    for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
+        Tupla tmp(*itr);
+        tuplaTemp1.from_string(tmp.to_string());
+        cout << tuplaTemp1.to_string() <<"paso\n";
+    }
+
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
 
 }
@@ -53,7 +63,7 @@ void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el ca
                 }
             }
         }
-        if (bandera == false){
+        if (bandera == false) {
             cout << "bloqueado\n";
             enEspera.wait(lck);
         }
