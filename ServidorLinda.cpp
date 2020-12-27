@@ -114,6 +114,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 	while(!out) {
 		// Recibimos el mensaje del cliente
 		rcv_bytes = soc.Recv(client_fd,buffer,length);
+		cout<< buffer<<"\n";
         cout << "nueva iter \n";
 		if (rcv_bytes == -1) {
 			cerr << "Error al recibir datos: " + string(strerror(errno)) + "\n";
@@ -155,7 +156,8 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
             } else if(operacion == MENSAJE_RN){ //Busca tupla y la borra
                 tuplaTemp.from_string(tupla);	//pasamos la tupla tipo string a tipo "tupla"
 
-                mS.RdN(tuplaTemp);
+                //mS.RdN(tuplaTemp);
+                mS.RN(tuplaTemp);
 
                 send_bytes = soc.Send(client_fd, tuplaTemp.to_string());    //Enviamos la tupla encontrada
                 if(send_bytes == -1) {
@@ -220,7 +222,7 @@ int main(int argc, char *argv[]) {
         cerr << "Introduce ./ServidorMulticliente, puerto del servidor para hacer bind\n";
         exit(1); // finaliza el programa indicando salida incorrecta (1)
     }
-    const int N = 5;
+    const int N = 5000;
 
 	//Creamos el tipo de set que vamos a usar (donde guardamos las tuplas)
     unordered_multiset<Tupla, TuplaHash> almacen;

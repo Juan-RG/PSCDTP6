@@ -50,7 +50,7 @@ void MonitorServidor::mostrar() {
 }
 void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
 	unique_lock<mutex> lck(mtx);
-    /**/const bool is_in = almacen.find(tupla) != almacen.end();            // Todo: if con find para detectar si la tupla esta si no comprobacion recorriendo el multiset con match
+    /*const bool is_in = almacen.find(tupla) != almacen.end(); */           // Todo: if con find para detectar si la tupla esta si no comprobacion recorriendo el multiset con match
     Tupla temporal("");
     unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     bool bandera = false;
@@ -65,6 +65,7 @@ void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el ca
             }
         }
         if (bandera == false) {
+            cout<<"me bloqueo\n";
             cout << "bloqueado\n";
             enEspera.wait(lck);
         }
