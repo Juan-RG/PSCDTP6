@@ -30,11 +30,12 @@ static const string MENSAJE_RN = "RN,";
 static const string MENSAJE_RDN = "RDN,";
 //static const string MENSAJE_RDN_2 = "RDN_2,";
 static const string MENSAJE_DESCONEXION = "DESCONEXION";
-static const string MENSAJE_RDN_2 = "RDN2,,";
-static const string MENSAJE_RN_2 = "RN2,";
+static const string MENSAJE_RDN_2 = "RDN_2,";
+static const string MENSAJE_RN_2 = "RN_2,";
 
 class LindaDriver {
 public:
+    //
 	//constructores -----------------------------
     LindaDriver(string ipServerRegistro, int puertoServerRegistro, string tipoCliente);
 	//destructor -----------------------------

@@ -51,25 +51,35 @@ void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el ca
 	unique_lock<mutex> lck(mtx);
     /**/const bool is_in = almacen.find(tupla) != almacen.end();            // Todo: if con find para detectar si la tupla esta si no comprobacion recorriendo el multiset con match
     Tupla temporal("");
+    Tupla resultado("");
     unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     bool bandera = false;
     while (!bandera){
+
         for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
             Tupla tmp(*itr);
             if(tmp.size() == tupla.size()){
                 temporal.from_string(tmp.to_string());
                 if (tupla.match(temporal)) {
+                    cout<<"valores tuplas\n";
+                    cout<<tupla.to_string()<<"\n";
+                    cout<<temporal.to_string()<<"\n";
+                    resultado.from_string(temporal.to_string());
+                    cout<<"----------------\n";
                     bandera = true;
                 }
             }
-        }
+
+       }
         if (bandera == false) {
             cout << "bloqueado\n";
             enEspera.wait(lck);
         }
     }
     cout << "entrada "<<tupla.to_string()<<"\n";
-    tupla.from_string(temporal.to_string());
+    cout << "temporal "<< temporal.to_string()<<"\n";
+    cout << "temporal "<< resultado.to_string()<<"\n";
+    tupla.from_string(resultado.to_string());
     cout << "salida "<<tupla.to_string()<<"\n";
 }
 
@@ -361,6 +371,9 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {                             
                                             //cout << "hola?" << endl;
                                             encontrado = true;
                                             itr2 = almacen.end();
+                                            cout<<p1.to_string()<<"\n";
+                                            cout<<p2.to_string()<<"\n";
+
                                             //break;
                                             //itr--;itr2--;
                                             //parar = true;
@@ -390,6 +403,7 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {                             
 
             // No se ha encontrado, dormimos
             if (!encontrado) {
+                cout<<"bloqueo\n";
                 enEspera.wait(lck);
             }
             //parar = true;

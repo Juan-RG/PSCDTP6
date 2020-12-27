@@ -107,7 +107,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 	string operacion;
 	string tupla;
 
-	Tupla tuplaTemp("");                    //Para buscar la tupla en la memoria
+	Tupla tuplaTemp1("");                    //Para buscar la tupla en la memoria
     Tupla tuplaTemp2("");                   //Para buscar la tupla en la memoria para operaciones "2".
     bool out = false;                       // Inicialmente no salir del bucle
 
@@ -128,12 +128,12 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
         } else {
             cout << "no es mensaje de desconexion, miro a ver qué es" << endl;
             trocea(buffer, operacion, tupla);			//Separamos la orden de la tupla (son strings)
-
-            string tuplaString;
+            cout<< buffer<<"\n";
+            string tuplaDobleString;
             if(operacion == MENSAJE_PN) {//postnote, mete algo en memoria
-                tuplaTemp.from_string(tupla);	//pasamos la tupla tipo string a tipo "tupla"
+                tuplaTemp1.from_string(tupla);	//pasamos la tupla tipo string a tipo "tupla"
 
-                mS.PN(tuplaTemp);    //Guardamos en la coleccion la tupla que nos han pasado(llamamos al monitor)
+                mS.PN(tuplaTemp1);    //Guardamos en la coleccion la tupla que nos han pasado(llamamos al monitor)
 
                 send_bytes = soc.Send(client_fd, RECIBIDO);
                 if(send_bytes == -1) {
@@ -142,22 +142,22 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
                     exit(1);
                 }
             } else if(operacion == MENSAJE_RDN) {//lee tupla y la copia
-                tuplaTemp.from_string(tupla);	//pasamos la tupla tipo string a tipo "tupla"
+                tuplaTemp1.from_string(tupla);	//pasamos la tupla tipo string a tipo "tupla"
 
-                mS.RdN(tuplaTemp);
+                mS.RdN(tuplaTemp1);
 
-                send_bytes = soc.Send(client_fd, tuplaTemp.to_string());    //Enviamos la tupla
+                send_bytes = soc.Send(client_fd, tuplaTemp1.to_string());    //Enviamos la tupla
                 if(send_bytes == -1) {
                     cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                     soc.Close(client_fd); // Cerramos los sockets.
                     exit(1);
                 }
             } else if(operacion == MENSAJE_RN){ //Busca tupla y la borra
-                tuplaTemp.from_string(tupla);	//pasamos la tupla tipo string a tipo "tupla"
+                tuplaTemp1.from_string(tupla);	//pasamos la tupla tipo string a tipo "tupla"
 
-                mS.RdN(tuplaTemp);
+                mS.RN(tuplaTemp1);
 
-                send_bytes = soc.Send(client_fd, tuplaTemp.to_string());    //Enviamos la tupla encontrada
+                send_bytes = soc.Send(client_fd, tuplaTemp1.to_string());    //Enviamos la tupla encontrada
                 if(send_bytes == -1) {
                     cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                     soc.Close(client_fd); // Cerramos los sockets.
@@ -172,14 +172,14 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
                 cout << "LA TUPLA 1: " << tuplaString1 << endl;
                 cout << "LA TUPLA 2: " << tuplaString2 << endl;
 
-                tuplaTemp.from_string(tuplaString1);		    //pasamos la tupla 1 tipo string a tipo "tupla"
+                tuplaTemp1.from_string(tuplaString1);		    //pasamos la tupla 1 tipo string a tipo "tupla"
                 tuplaTemp2.from_string(tuplaString2);			//pasamos la tupla 1 tipo string a tipo "tupla"
 
-                mS.RdN_2(tuplaTemp, tuplaTemp2);         //Llamamos a la operacion de servidor
+                mS.RdN_2(tuplaTemp1, tuplaTemp2);         //Llamamos a la operacion de servidor
 
-                tuplaString = tuplaTemp.to_string() + tuplaTemp2.to_string(); //Juntamos las dos tuplas para enviarlas
+                tuplaDobleString = tuplaTemp1.to_string() + tuplaTemp2.to_string(); //Juntamos las dos tuplas para enviarlas
 
-                send_bytes = soc.Send(client_fd, tuplaString);   //Enviamos la Tupla.
+                send_bytes = soc.Send(client_fd, tuplaDobleString);   //Enviamos la Tupla.
                 if(send_bytes == -1) {
                     cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                     soc.Close(client_fd); // Cerramos los sockets.
@@ -194,14 +194,14 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
                 cout << "LA TUPLA 1: " << tuplaString1 << endl;
                 cout << "LA TUPLA 2: " << tuplaString2 << endl;
 
-                tuplaTemp.from_string(tuplaString1);		    //pasamos la tupla 1 tipo string a tipo "tupla"
+                tuplaTemp1.from_string(tuplaString1);		    //pasamos la tupla 1 tipo string a tipo "tupla"
                 tuplaTemp2.from_string(tuplaString2);			//pasamos la tupla 1 tipo string a tipo "tupla"
 
-                mS.RN_2(tuplaTemp, tuplaTemp2);         //Llamamos a la operacion de servidor
+                mS.RN_2(tuplaTemp1, tuplaTemp2);         //Llamamos a la operacion de servidor
 
-                tuplaString1 = tuplaTemp.to_string() + tuplaTemp2.to_string(); //Juntamos las dos tuplas para enviarlas
+                tuplaDobleString = tuplaTemp1.to_string() + tuplaTemp2.to_string(); //Juntamos las dos tuplas para enviarlas
 
-                send_bytes = soc.Send(client_fd, tuplaString1);   //Enviamos la Tupla.
+                send_bytes = soc.Send(client_fd, tuplaDobleString);   //Enviamos la Tupla.
                 if(send_bytes == -1) {
                     cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                     soc.Close(client_fd); // Cerramos los sockets.
@@ -217,7 +217,7 @@ int main(int argc, char *argv[]) {
 
     if (argc != 2) {
         cerr << "Número de parámetros incorrecto \n";
-        cerr << "Introduce ./ServidorMulticliente, puerto del servidor para hacer bind\n";
+        cerr << "Introduce ./ServidorLinda, puerto del servidor para hacer bind\n";
         exit(1); // finaliza el programa indicando salida incorrecta (1)
     }
     const int N = 5;                                                                                                    // FIXME: AUMENTAR O HACER INFINITO

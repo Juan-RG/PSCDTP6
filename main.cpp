@@ -47,17 +47,23 @@ void asignarCiudad(string *ciudad) {
     }
 }
 int main() {
-    unordered_multiset<Tupla, TuplaHash>::iterator itr2;
-    unordered_multiset<Tupla,TuplaHash> almacen;
-    Tupla p("asdasd");
-    almacen.insert(p);
-    almacen.insert(p);
-    almacen.insert(p);
-    almacen.insert(p);
-    almacen.insert(p);
-    almacen.insert(p);
+    unordered_multiset<int>::iterator itr2;
+    unordered_multiset<int> almacen;
+
+    almacen.insert(1);
+    almacen.insert(2);
+    almacen.insert(3);
+    almacen.insert(4);
+    almacen.insert(4);
+    almacen.insert(1);
     for (itr2 = almacen.begin(); itr2 != almacen.end(); ++itr2) {
         cout<<"paso\n";
+    }
+    cout<<"-----------\n";
+    itr2 = almacen.begin();
+    while (itr2 != almacen.end()){
+        cout<<"paso\n";
+        itr2++;
     }
 }
 
