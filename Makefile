@@ -9,6 +9,8 @@ LINDA_DRIVER=LindaDriver
 
 CLIENTE_PUBLICADOR=MainPublicador
 CLIENTE_BUSCADOR=MainBuscador
+INIT_TUPLAS=InitTuplas
+
 
 SERVER_REGISTRO=MainServerDespliegue
 MONITOR_CONEXIONES=MonitorConexiones
@@ -19,7 +21,7 @@ MONITOR_LINDA=MonitorServidor
 CPPFLAGS=-I. -I${SOCKET_DIR} -O2 -std=c++11 -lsockets # Flags compilacion
 LDFLAGS=-pthread # Flags linkado threads
 
-all: ${SERVER_REGISTRO} ${SERVER_LINDA} ${CLIENTE_PUBLICADOR} ${CLIENTE_BUSCADOR}
+all: ${SERVER_REGISTRO} ${SERVER_LINDA} ${CLIENTE_PUBLICADOR} ${CLIENTE_BUSCADOR} ${INIT_TUPLAS}
 
 server_registro: ${SERVER_REGISTRO}
 
@@ -29,7 +31,9 @@ cliente_publicador: ${CLIENTE_PUBLICADOR}
 
 cliente_buscador: ${CLIENTE_BUSCADOR}
 
-clientes: ${CLIENTE_PUBLICADOR} ${CLIENTE_BUSCADOR}
+init_tuplas: ${INIT_TUPLAS}
+
+clientes: ${CLIENTE_PUBLICADOR} ${CLIENTE_BUSCADOR} ${INIT_TUPLAS}
 
 #----------------------------------------------------------------------------
 #Descomentar la siguiente línea para compilar en hendrix
@@ -65,6 +69,12 @@ ${CLIENTE_BUSCADOR}.o: ${CLIENTE_BUSCADOR}.cpp
 # Linkado
 ${CLIENTE_BUSCADOR}: ${LINDA_DRIVER}.o ${TUPLA}.o ${SOCKET}.o ${CLIENTE_BUSCADOR}.o
 	${CC} ${LDFLAGS} ${LINDA_DRIVER}.o ${TUPLA}.o ${SOCKET}.o ${CLIENTE_BUSCADOR}.o -o ${CLIENTE_BUSCADOR} ${SOCKETSFLAGS}
+
+${INIT_TUPLAS}.o: ${INIT_TUPLAS}.cpp
+	${CC} -c ${CPPFLAGS} ${INIT_TUPLAS}.cpp
+# Linkado
+${INIT_TUPLAS}: ${LINDA_DRIVER}.o ${TUPLA}.o ${SOCKET}.o ${INIT_TUPLAS}.o
+	${CC} ${LDFLAGS} ${LINDA_DRIVER}.o ${TUPLA}.o ${SOCKET}.o ${INIT_TUPLAS}.o -o ${INIT_TUPLAS} ${SOCKETSFLAGS}
 
 #-----------------------------------------------------------
 # MONITOR_CONEXIONES
