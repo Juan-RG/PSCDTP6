@@ -22,6 +22,18 @@ void comprobarErrorEnvio(Socket &soc, int client_fd, int send_bytes);
 
 
 //-------------------------------------------------------------
+/**
+ * metodo para atender las peticiones de los clientes con RCP
+ * @param soc
+ * @param client_fd
+ * @param i
+ * @param ip1
+ * @param ip2
+ * @param ip3
+ * @param puerto1
+ * @param puerto2
+ * @param puerto3
+ */
 void servCliente(Socket &soc, int client_fd, const int i, const string ip1, const string ip2,
                  const string ip3, const int puerto1, const int puerto2, const int puerto3) {
     // Buffer para recibir el mensaje
@@ -39,14 +51,20 @@ void servCliente(Socket &soc, int client_fd, const int i, const string ip1, cons
         /*******************************************************************            ENVIO DATOS */
         int send_bytes = soc.Send(client_fd, datosConexion);
         comprobarErrorEnvio(soc, client_fd, send_bytes);
-    }else{  //si mensaje erroneo cerramos conexion
+    }else{
+        //si mensaje erroneo cerramos conexion
         cerr << "Mensaje incorrecto del cliente " + to_string(i)  + " recibido : " + buffer + "\n";
         //cerrar
         soc.Close(client_fd);
         pthread_exit(NULL);
     }
 }
-
+/**
+ * metodo para detectar el error en el envio de mensajes
+ * @param soc
+ * @param client_fd
+ * @param send_bytes
+ */
 void comprobarErrorEnvio(Socket &soc, int client_fd, int send_bytes) {
     if(send_bytes == -1) {
         cerr << "Error al enviar datos: " + string(strerror(errno)) + "\n";
@@ -55,7 +73,12 @@ void comprobarErrorEnvio(Socket &soc, int client_fd, int send_bytes) {
         pthread_exit(NULL);
     }
 }
-
+/**
+ * Metodo para comprobar el error en la recepcion de los mensajes
+ * @param soc
+ * @param client_fd
+ * @param rcv_bytes
+ */
 void comprobarErrorRecepcion(Socket &soc, int client_fd, int rcv_bytes) {
     if (rcv_bytes == -1) {
         cerr << "Error al recibir datos: " + string(strerror(errno)) + "\n";
@@ -105,7 +128,6 @@ int main(int numArg, char *args[]) {
     // Creación del socket con el que se llevará a cabo
     // la comunicación con el servidor.
     Socket chan(SERVER_PORT);
-
 
     // Bind
     int socket_fd = chan.Bind(); //reserva del puerto en el SO

@@ -14,7 +14,6 @@ INIT_TUPLAS=InitTuplas
 PRUEBAS=pruebas
 
 SERVER_REGISTRO=MainServerDespliegue
-MONITOR_CONEXIONES=MonitorConexiones
 
 SERVER_LINDA=ServidorLinda
 MONITOR_LINDA=MonitorServidor
@@ -94,11 +93,7 @@ ${PRUEBAS}.o: ${PRUEBAS}.cpp
 ${PRUEBAS}: ${MONITOR_LINDA}.o ${LINDA_DRIVER}.o ${TUPLA}.o ${SOCKET}.o ${PRUEBAS}.o
 	${CC} ${LDFLAGS} ${MONITOR_LINDA}.o ${LINDA_DRIVER}.o ${TUPLA}.o ${SOCKET}.o ${PRUEBAS}.o -o ${PRUEBAS} ${SOCKETSFLAGS}
 
-#-----------------------------------------------------------
-# MONITOR_CONEXIONES
-# Compilacion
-${MONITOR_CONEXIONES}.o: ${MONITOR_CONEXIONES}.hpp ${MONITOR_CONEXIONES}.cpp
-	${CC} -c ${CPPFLAGS} ${MONITOR_CONEXIONES}.cpp -o ${MONITOR_CONEXIONES}.o
+
 
 #-----------------------------------------------------------
 # SERVIDOR DE REGISTRO
@@ -107,8 +102,8 @@ ${SERVER_REGISTRO}.o: ${SERVER_REGISTRO}.cpp
 	${CC} -c ${CPPFLAGS} ${SERVER_REGISTRO}.cpp
 
 # Linkado
-${SERVER_REGISTRO}: ${MONITOR_CONEXIONES}.o ${SOCKET}.o ${SERVER_REGISTRO}.o
-	${CC} ${LDFLAGS} ${MONITOR_CONEXIONES}.o ${SOCKET}.o ${SERVER_REGISTRO}.o -o ${SERVER_REGISTRO} ${SOCKETSFLAGS}
+${SERVER_REGISTRO}: ${SOCKET}.o ${SERVER_REGISTRO}.o
+	${CC} ${LDFLAGS} ${SOCKET}.o ${SERVER_REGISTRO}.o -o ${SERVER_REGISTRO} ${SOCKETSFLAGS}
 
 #-----------------------------------------------------------
 # MONITOR_LINDA
@@ -133,7 +128,6 @@ clean:
 	$(RM) ${LINDA_DRIVER}.o
 	$(RM) ${CLIENTE_PUBLICADOR} ${CLIENTE_PUBLICADOR}.o
 	$(RM) ${CLIENTE_BUSCADOR} ${CLIENTE_BUSCADOR}.o
-	$(RM) ${MONITOR_CONEXIONES}.o
 	$(RM) ${SERVER_REGISTRO} ${SERVER_REGISTRO}.o
 	$(RM) ${MONITOR_LINDA}.o
 	$(RM) ${SERVER_LINDA} ${SERVER_LINDA}.o

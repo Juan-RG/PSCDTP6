@@ -8,16 +8,23 @@ using namespace std;
 
 
 int main(int argc, char* argv[]) {
+    //comprobacion de los datos
+    /*
+    if(argc != 3){
+        cerr << "Numero de parametros introducios incorrecto:" + string(strerror(errno)) + "\n";
+        exit(1);
+    }*/
+    // string ipServidorDespliegue = argv[1];
+    //int puerto = stoi(argv[2]);
+    //pasarlo los datos por el constructor
     srand(time(NULL)); //reseteamos la semilla
-    const string PUBLICADOR = "PUBLICADOR";
-    const string BUSCADOR = "BUSCADOR";
-    //LindaDriver pizarra(argv[1],argv[2]);
     LindaDriver pizarra("localhost",2022);
-    //si controlamos con tuplas
+    //colocamos la tupla para contear las tuplas
     Tupla numeroTuplas("TotalTuplas","0");
     pizarra.PN(numeroTuplas);
+    //colocamos los 8 testigo de los buscadores
     Tupla tuplaControl("BUSCADOR");
-    for (int i = 0; i <8 ; ++i) {
+    for (int i = 0; i < 8 ; ++i) {
         pizarra.PN(tuplaControl);
     }
     return 0;
