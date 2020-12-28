@@ -6,23 +6,13 @@
 //*****************************************************************
 
 #include "Socket/Socket.hpp" //añadir
-#include "MonitorConexiones.hpp"
 #include <iostream>
 #include <thread>
 #include <cstdlib>
-#include <regex>
 
 using namespace std;
 
-using namespace std;
-
-const string PUBLICADOR = "PUBLICADOR";
-const string MENS_SOLIC = "CONECTAR";
-const string BUSCADOR = "BUSCADOR";
-const string CONEXION_ESTABLECIDA = "CONEXION ESTABLECIDA";
-const string DESCONEXION = "DESCONEXION";
-
-const int TOTAL_CONEXIONES = 3;
+const string MENSAJE = "PETICION_DATOS"; // Todo: escribir mensaje que me diga samu
 
 const int tamanioBufferMensaje = 100;
 
@@ -32,28 +22,18 @@ void comprobarErrorEnvio(Socket &soc, int client_fd, int send_bytes);
 
 
 //-------------------------------------------------------------
-void servCliente(Socket &soc, int client_fd, MonitorConexiones& monitorCone, const int i, const string ip1, const string ip2,
+void servCliente(Socket &soc, int client_fd, const int i, const string ip1, const string ip2,
                  const string ip3, const int puerto1, const int puerto2, const int puerto3) {
     // Buffer para recibir el mensaje
     int length = tamanioBufferMensaje;
     string buffer = "";
-    bool out = false; // Inicialmente no salir del bucle
     int rcv_bytes;
-    /*******************************************************************            ESPERANDO TIPO DE CLIENTE PUBLICADOR BUSCADOR */
+    /*******************************************************************           Compruebo que la conexion es correcta */
     rcv_bytes = soc.Recv(client_fd,buffer,length);
     comprobarErrorRecepcion(soc, client_fd, rcv_bytes);
     cout << "Mensaje del cliente " + to_string(i)  + " recibido : " + buffer + "\n";
-    if(buffer == BUSCADOR || buffer == PUBLICADOR){
-     /***************************************************    por tanto sobra esto y el monitor
-        string datosConexion;
-        if(buffer == BUSCADOR ){
-            monitorCone.puedeConectar();
-            cout << "paso\n";
-            datosConexion = ip1+","+ip2+","+ip3+","+to_string(puerto1)+","+to_string(puerto2)+","+to_string(puerto3);                          //llevar a metodo
-        }else{
-            datosConexion = ip1+","+ip2+","+ip3+","+to_string(puerto1)+","+to_string(puerto2)+","+to_string(puerto3);
-        }
-      *////////////////////////////////////
+    if(buffer == MENSAJE){
+
         string datosConexion = ip1+","+ip2+","+ip3+","+to_string(puerto1)+","+to_string(puerto2)+","+to_string(puerto3);
 
         /*******************************************************************            ENVIO DATOS */
@@ -62,16 +42,9 @@ void servCliente(Socket &soc, int client_fd, MonitorConexiones& monitorCone, con
     }else{  //si mensaje erroneo cerramos conexion
         cerr << "Mensaje incorrecto del cliente " + to_string(i)  + " recibido : " + buffer + "\n";
         //cerrar
-        // soc.Close(client_fd);
+        soc.Close(client_fd);
         pthread_exit(NULL);
     }
-    /*******************************************************************            Esperando mensaje DESCONEXION */
-    //espero final de conexion
-    //rcv_bytes = soc.Recv(client_fd,buffer,length);
-    //monitorCone.liberarConexion();                                              //ELIMINAR EL METODO Y LIBERAR BIEN :>
-    //comprobarErrorRecepcion(soc, client_fd, rcv_bytes);
-    //if(buffer == DESCONEXION)                                                 //mirar la elegancia de esto
-    //printf("FINAL \n");
 }
 
 void comprobarErrorEnvio(Socket &soc, int client_fd, int send_bytes) {
@@ -95,49 +68,40 @@ void comprobarErrorRecepcion(Socket &soc, int client_fd, int rcv_bytes) {
 
 //-------------------------------------------------------------
 int main(int numArg, char *args[]) {
-    //args[1] == ip server 1
-    //args[2] == ip server 2
-    //args[3] == ip server 3
-    //args[4] == ip server 4
-    //args[5] == Puerto
-    //if(numArg != 3){
+    //Ejecutar con ./MainServidor IP1 IP2 IP3 PUERTO1 PUERTO2 PUERTO3 puertoServerDespliegue
+
+
     /*                                                                                      Realizar un mejor control de er
-    if(numArg != 5){
+    if(numArg != 8){
         cerr << "Numero de parametros introducios incorrecto:" + string(strerror(errno)) + "\n";
         exit(1);
     }
      */
+    /*
+    string ip1 = args[1];
+    string ip2 = args[2];
+    string ip3 = args[3];
+    int puerto1 = stoi(args[4]);
+    int puerto2 = stoi(args[5]);
+    int puerto3 = stoi(args[6]);
+    */
     string ip1="localhost";
     string ip2="localhost";
     string ip3="localhost";
     int puerto1 = 2023;
     int puerto2 = 2024;
     int puerto3 = 2025;
-    //total de conexiones;
-    //const int N = atoi(args[2]);
-    const int N = 100;                      //INTENTAR MIRAR PARA NO LIMITAR
-    /*
-    if(N == 0){
-        cerr << "Error asignacion de nº puerto: " + string(strerror(errno)) + "\n";
-        exit(1);
-    }
-    */
-    MonitorConexiones monitorC(TOTAL_CONEXIONES);
 
+    //total de conexiones;
+    const int N = 1000;                      //INTENTAR MIRAR PARA NO LIMITAR
 
     thread cliente[N];
     int client_fd[N];
 
     // Puerto donde escucha el proceso servidor
-    //int SERVER_PORT = atoi(args[1]);
+    //int SERVER_PORT = atoi(args[7]);
     int SERVER_PORT = 2022;
-    //
-    /*
-    if(N==0){
-        cerr << "error asignacion de puerto: " + string(strerror(errno)) + "\n";
-        exit(1);
-    }
-     */
+
     // Creación del socket con el que se llevará a cabo
     // la comunicación con el servidor.
     Socket chan(SERVER_PORT);
@@ -170,7 +134,7 @@ int main(int numArg, char *args[]) {
             exit(1);
         }
 
-        cliente[i] = thread(&servCliente, ref(chan), client_fd[i],ref(monitorC), i, ip1, ip2, ip3, puerto1, puerto2, puerto3); //lanzar servicio para cliente modelo RPC
+        cliente[i] = thread(&servCliente, ref(chan), client_fd[i], i, ip1, ip2, ip3, puerto1, puerto2, puerto3); //lanzar servicio para cliente modelo RPC
         cout << "Nuevo cliente " + to_string(i) + " aceptado" + "\n";
     }
 
