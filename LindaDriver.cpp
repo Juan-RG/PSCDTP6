@@ -17,7 +17,7 @@
 void conectar(Socket& chan, int& socket_fd);
 
 //constructores -----------------------------
-LindaDriver::LindaDriver(string ipServerRegistro, int puertoServerRegistro, string tipoCliente) {                       // FIXME: tipoCliente debería desaparecer de aquí
+LindaDriver::LindaDriver(string ipServerRegistro, int puertoServerRegistro) {
     Socket chan(ipServerRegistro, puertoServerRegistro);
     int socket_fd;
 
@@ -50,8 +50,8 @@ LindaDriver::LindaDriver(string ipServerRegistro, int puertoServerRegistro, stri
     int send_bytes;   // num de bytes enviados en un mensaje
     string buffer; 
 
-    // manda qué tipo de cliente es                                                                                     // FIXME: Debería desaparecer de aquí
-    mensaje = tipoCliente; // BUSCADOR | PUBLICADOR
+    // manda la petición de obtener datos de los servidores
+    mensaje = PETICION_DATOS;
     send_bytes = chan.Send(socket_fd, mensaje);
     if(send_bytes == -1) {
         cerr << "Error al enviar datos al servidor de registro: " << strerror(errno) << endl;

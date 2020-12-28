@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
     //hilo para utilizar el linda driver con la conexion o bucle
     //join del hilo para cuando finalice
     //LindaDriver pizarra(argv[1],argv[2]);
-    LindaDriver pizarra("localhost",2022,BUSCADOR);
+    LindaDriver pizarra("localhost",2022);
     Tupla tuplaControl("BUSCADOR");
     pizarra.RN(tuplaControl,tuplaControl);
     Tupla primeraOferta("?A","?B","?C","?D");

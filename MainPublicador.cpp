@@ -251,7 +251,7 @@ int main(int argc, char* argv[]) {
     //join del hilo para cuando finalice
 
     //LindaDriver pizarra(argv[1],argv[2]);
-    LindaDriver pizarra("localhost",2022,PUBLICADOR);
+    LindaDriver pizarra("localhost",2022);
     int numeroTuplas;
     //extraeremos la tupla de RN['totalTuplas',?totalTuplas]
     srand(time(NULL)); //reseteamos la semilla
