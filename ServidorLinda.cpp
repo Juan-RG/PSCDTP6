@@ -45,7 +45,7 @@ void trocea(string s, string &t1, string &t2) { //TODO: de esta forma podemos us
     t2 = "[" + t2;                  //el delimitador se come el [ de t2, por lo que lo recolocamos
 }
 
-/*void troceaTuplaDoble(string s, string &t1, string &t2) {
+void troceaTuplaDoble(string s, string &t1, string &t2) {
     const char delim1[] = ","; //los separadores aquí son ","
     char* token;
     char* copia = strdup(s.c_str()); //trabajaremos sobre una copia
@@ -55,7 +55,7 @@ void trocea(string s, string &t1, string &t2) { //TODO: de esta forma podemos us
 
     token = strtok(nullptr, "\n");
     t2 = token;
-}*/
+}
 
 void prueba(MonitorServidor& mS){
     Tupla tprueba("prueba1","prueba2");
