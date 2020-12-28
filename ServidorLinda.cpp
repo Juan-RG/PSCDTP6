@@ -45,18 +45,6 @@ void trocea(string s, string &t1, string &t2) {
 }
 
 void troceaTuplaDoble(string s, string &t1, string &t2) {
-    const char delim[] = ";"; //el separador aquí es ";"
-    char* token;
-    char* copia = strdup(s.c_str()); //trabajaremos sobre una copia
-
-    token = strtok(copia, delim);    //hasta el delimitador de una tupla y otra
-    t1 = token;
-
-    token = strtok(nullptr, "\n");
-    t2 = token;
-}
-
-/*void troceaTuplaDoble(string s, string &t1, string &t2) {
     const char delim[] = "]"; //los separadores aquí son "]"
     char* token;
     char* token2;
@@ -72,7 +60,7 @@ void troceaTuplaDoble(string s, string &t1, string &t2) {
     token2 = &token[1];             //apuntamos a la sig posicion para quitarnos la ","
 
     t2 = token2;
-}*/
+}
 
 void prueba(MonitorServidor& mS){
     Tupla tprueba("prueba1","prueba2");
