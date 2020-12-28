@@ -19,7 +19,7 @@
 
 //Librerias para guardar datos dinamicamente
 #include <set>
-#include <iterator>
+//#include <iterator>
 
 using namespace std;
 
@@ -33,18 +33,29 @@ static const string MENSAJE_DESCONEXION = "DESCONEXION";
 static const string RECIBIDO = "OK";
 
 //-------------------------------------------------------------
-void trocea(string s, string &t1, string &t2) {
-	const char delim1[] = ","; //los separadores aquí son ","
+void trocea(string s, string &t1, string &t2) { //TODO: de esta forma podemos usar una sola funcion para trocear todo
+	const char delim[] = ",["; //los separadores aquí son ","
 	char* token;
 	char* copia = strdup(s.c_str()); //trabajaremos sobre una copia
 
-	//token = strtok(copia, delim1); //hasta el primer '[' <---- NOK
-    token = strtok(copia, delim1);
+    token = strtok(copia, delim);
     t1 = token;
 
 	token = strtok(nullptr, "\n");
-    t2 = token;
+    t2 = "[" + token;               //el delimitador se come el [ de t2, por lo que lo recolocamos
 }
+
+/*void troceaTuplaDoble(string s, string &t1, string &t2) {
+    const char delim1[] = ","; //los separadores aquí son ","
+    char* token;
+    char* copia = strdup(s.c_str()); //trabajaremos sobre una copia
+
+    token = strtok(copia, delim1);
+    t1 = token;
+
+    token = strtok(nullptr, "\n");
+    t2 = token;
+}*/
 
 void prueba(MonitorServidor& mS){
     Tupla tprueba("prueba1","prueba2");
