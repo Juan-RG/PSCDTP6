@@ -178,7 +178,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
                 string tuplaString1 = "";
                 string tuplaString2 = "";
 
-                trocea(tupla, tuplaString1, tuplaString2);      //Separamos la tupla doble para guardarla en dos
+                troceaTuplaDoble(tupla, tuplaString1, tuplaString2);      //Separamos la tupla doble para guardarla en dos
 
                 cout << "LA TUPLA 1: " << tuplaString1 << endl;
                 cout << "LA TUPLA 2: " << tuplaString2 << endl;
@@ -200,7 +200,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
                 string tuplaString1 = "";
                 string tuplaString2 = "";
 
-                trocea(tupla, tuplaString1, tuplaString2);      //Separamos la tupla doble para guardarla en dos
+                troceaTuplaDoble(tupla, tuplaString1, tuplaString2);      //Separamos la tupla doble para guardarla en dos
 
                 cout << "LA TUPLA 1: " << tuplaString1 << endl;
                 cout << "LA TUPLA 2: " << tuplaString2 << endl;
