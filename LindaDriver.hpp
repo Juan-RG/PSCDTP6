@@ -32,12 +32,13 @@ static const string MENSAJE_RDN = "RDN,";
 static const string MENSAJE_DESCONEXION = "DESCONEXION";
 static const string MENSAJE_RDN_2 = "RDN_2,";
 static const string MENSAJE_RN_2 = "RN_2,";
+static const string PETICION_DATOS = "PETICION_DATOS";
 
 class LindaDriver {
 public:
     //
 	//constructores -----------------------------
-    LindaDriver(string ipServerRegistro, int puertoServerRegistro, string tipoCliente);
+    LindaDriver(string ipServerRegistro, int puertoServerRegistro);
 	//destructor -----------------------------
 	~LindaDriver();
 	//operadores -----------------------------
@@ -64,7 +65,6 @@ public:
 	void RDN_2(const Tupla p1, const Tupla p2, Tupla& t1, Tupla& t2);
 
 private:
-	// se podrá? o habrá que crear uno temporalmente en cada operación? <-- ver si se puede, de momento se crean en cada operación
 	Socket chanServer1; // Servidor de tuplas de tamaño 1 a 3
 	Socket chanServer2; // Servidor de tuplas de tamaño 4 a 5
 	Socket chanServer3; // Servidor de tuplas de tamaño 6
@@ -79,7 +79,5 @@ private:
 	string ip_server_3;
 	string puerto_server_3;
 	string puerto;
-	//string puerto;
-	//string tipo_cliente; // PUBLICADOR | BUSCADOR, de momento no se lo guarda
 };
 #endif
