@@ -32,29 +32,34 @@ static const string MENSAJE_DESCONEXION = "DESCONEXION";
 static const string RECIBIDO = "OK";
 
 //-------------------------------------------------------------
-void trocea(string s, string &t1, string &t2) { //TODO: de esta forma podemos usar una sola funcion para trocear todo
-	const char delim[] = ",["; //los separadores aquí son ","
-	char* token;
-	char* copia = strdup(s.c_str()); //trabajaremos sobre una copia
-
-    token = strtok(copia, delim);    //hasta el primer ',['
-    t1 = token;
-
-	token = strtok(nullptr, "\n");
-    t2 = token;
-    t2 = "[" + t2;                  //el delimitador se come el [ de t2, por lo que lo recolocamos
-}
-
-void troceaTuplaDoble(string s, string &t1, string &t2) {
-    const char delim1[] = ","; //los separadores aquí son ","
+void trocea(string s, string &t1, string &t2) {
+    const char delim[] = ","; //los separadores aquí son ","
     char* token;
     char* copia = strdup(s.c_str()); //trabajaremos sobre una copia
 
-    token = strtok(copia, delim1);
+    token = strtok(copia, delim);    //hasta el primer ','
     t1 = token;
 
     token = strtok(nullptr, "\n");
     t2 = token;
+}
+
+void troceaTuplaDoble(string s, string &t1, string &t2) {
+    const char delim[] = "]"; //los separadores aquí son "]"
+    char* token;
+    char* token2;
+    char* copia = strdup(s.c_str()); //trabajaremos sobre una copia
+
+    token = strtok(copia, delim);    //hasta el primer ']'
+    t1 = token;
+    t1 = t1 + "]";
+
+    token = strtok(nullptr, "\n");
+
+
+    token2 = &token[1];             //apuntamos a la sig posicion para quitarnos la ","
+
+    t2 = token2;
 }
 
 void prueba(MonitorServidor& mS){
@@ -188,8 +193,8 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 
                 mS.RdN_2(tuplaTemp1, tuplaTemp2);         //Llamamos a la operacion de servidor
 
-                tuplaDobleString = tuplaTemp1.to_string() + tuplaTemp2.to_string(); //Juntamos las dos tuplas para enviarlas
-
+                tuplaDobleString = tuplaTemp1.to_string() +","+ tuplaTemp2.to_string(); //Juntamos las dos tuplas para enviarlas
+                cout<< tuplaDobleString<<endl;
                 send_bytes = soc.Send(client_fd, tuplaDobleString);   //Enviamos la Tupla.
                 if(send_bytes == -1) {
                     cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
@@ -210,7 +215,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 
                 mS.RN_2(tuplaTemp1, tuplaTemp2);         //Llamamos a la operacion de servidor
 
-                tuplaDobleString = tuplaTemp1.to_string() + tuplaTemp2.to_string(); //Juntamos las dos tuplas para enviarlas
+                tuplaDobleString = tuplaTemp1.to_string() +","+ tuplaTemp2.to_string(); //Juntamos las dos tuplas para enviarlas
 
                 send_bytes = soc.Send(client_fd, tuplaDobleString);   //Enviamos la Tupla.
                 if(send_bytes == -1) {

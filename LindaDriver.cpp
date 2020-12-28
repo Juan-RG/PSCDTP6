@@ -489,13 +489,16 @@ void LindaDriver::RDN_2(const Tupla p1, const Tupla p2, Tupla& t1, Tupla& t2) { 
             //chanServer3.Close(socket_fd); // y cierra el socket
         }
         // escribe los datos de la tupla obtenida
-
+        cout<<buffer<<endl;
         stringstream s_stream(buffer); //create string stream from the string
         string substr;
+        cout<<"prueba 1\n";
         getline(s_stream, substr, ','); //get first string delimited by comma
         t1.from_string(substr);
+        cout<<"prueba 2\n";
         getline(s_stream, substr, ','); //get first string delimited by comma
         t2.from_string(substr);
+        cout<<"prueba 3\n";
     }
 }
 

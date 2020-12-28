@@ -256,7 +256,7 @@ int main(int argc, char* argv[]) {
     //extraeremos la tupla de RN['totalTuplas',?totalTuplas]
     srand(time(NULL)); //reseteamos la semilla
     int n = 0;
-    while (n < 1000){
+    while (n < 350){
         n++;
     string origen;
     asignarCiudad(&origen);
