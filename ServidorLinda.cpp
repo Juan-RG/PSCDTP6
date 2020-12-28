@@ -5,7 +5,6 @@
 // Comms:   Servidor que provee recursos a múltiples clientes.
 //--------------------------------------------------------------------------------------------------
 
-
 #include "Socket/Socket.hpp"
 #include "MonitorServidor.hpp"
 #include "Tupla.hpp"
@@ -38,11 +37,12 @@ void trocea(string s, string &t1, string &t2) { //TODO: de esta forma podemos us
 	char* token;
 	char* copia = strdup(s.c_str()); //trabajaremos sobre una copia
 
-    token = strtok(copia, delim);
+    token = strtok(copia, delim);    //hasta el primer ',['
     t1 = token;
 
 	token = strtok(nullptr, "\n");
-    t2 = "[" + token;               //el delimitador se come el [ de t2, por lo que lo recolocamos
+    t2 = token;
+    t2 = "[" + t2;                  //el delimitador se come el [ de t2, por lo que lo recolocamos
 }
 
 /*void troceaTuplaDoble(string s, string &t1, string &t2) {
