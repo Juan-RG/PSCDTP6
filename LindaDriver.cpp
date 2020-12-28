@@ -353,11 +353,11 @@ void LindaDriver::RN_2(const Tupla p1, const Tupla p2, Tupla& t1, Tupla& t2) {
         }
         // escribe los datos de la tupla obtenida
 
-        stringstream s_stream(buffer); //create string stream from the string
+        stringstream s_stream(buffer);
         string substr;
-        getline(s_stream, substr, ','); //get first string delimited by comma
+        getline(s_stream, substr, ';');
         t1.from_string(substr);
-        getline(s_stream, substr, ','); //get first string delimited by comma
+        getline(s_stream, substr, ';');
         t2.from_string(substr);
     }
 }
@@ -490,13 +490,13 @@ void LindaDriver::RDN_2(const Tupla p1, const Tupla p2, Tupla& t1, Tupla& t2) { 
         }
         // escribe los datos de la tupla obtenida
         cout<<buffer<<endl;
-        stringstream s_stream(buffer); //create string stream from the string
+        stringstream s_stream(buffer);
         string substr;
         cout<<"prueba 1\n";
-        getline(s_stream, substr, ','); //get first string delimited by comma
+        getline(s_stream, substr, ';');
         t1.from_string(substr);
         cout<<"prueba 2\n";
-        getline(s_stream, substr, ','); //get first string delimited by comma
+        getline(s_stream, substr, ';');
         t2.from_string(substr);
         cout<<"prueba 3\n";
     }
