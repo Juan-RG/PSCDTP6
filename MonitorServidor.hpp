@@ -43,5 +43,6 @@ class MonitorServidor {
         struct comodinesComunes;
         void procesos_comodines(Tupla p1, Tupla p2,comodines arrayComodinesp1[],comodines arrayComodinesp2[],comodinesComunes arrayComodinesComunes[],int &numComodinesComunes);
         void buscando(Tupla &p1, Tupla &p2, bool &encontrado,int numComodinesComunes, comodinesComunes arrayComodinesComunes[]);
+
 };
 #endif

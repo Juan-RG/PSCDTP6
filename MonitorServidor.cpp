@@ -324,7 +324,7 @@ void MonitorServidor::buscando(Tupla &p1, Tupla &p2,bool &encontrado, int numCom
                                     //itr--;itr2--;
                                     //parar = true;
 
-                                    //break;
+
                                 }
                             } else {
                                 itr2++;
