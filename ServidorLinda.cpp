@@ -28,10 +28,9 @@ static const string RECIBIDO = "OK";
 
 //-------------------------------------------------------------
 
-/*
-Pre:  Recibimos tres strings, la cadena a trocear (s), y dos variables (t1 y t2) por referencia.
-Post: Trocea la cadena s y guarda en t1 los caracteres antes de llegar a una "," y el resto lo guarda en t2
-*/
+
+// Pre:  Recibimos tres strings, la cadena a trocear (s), y dos variables (t1 y t2) por referencia.
+// Post: Trocea la cadena s y guarda en t1 los caracteres antes de llegar a una "," y el resto lo guarda en t2
 void trocea(string s, string &t1, string &t2) {
     const char delim[] = ","; //los separadores aquí son ","
     char* token;
@@ -44,10 +43,8 @@ void trocea(string s, string &t1, string &t2) {
     t2 = token;
 }
 
-/*
-Pre:  Recibimos tres strings, la cadena a trocear (s), y dos variables (t1 y t2) por referencia.
-Post: Trocea la cadena s y guarda en t1 los caracteres antes de llegar a un "]" y el resto lo guarda en t2
-*/
+// Pre:  Recibimos tres strings, la cadena a trocear (s), y dos variables (t1 y t2) por referencia.
+// Post: Trocea la cadena s y guarda en t1 los caracteres antes de llegar a un "]" y el resto lo guarda en t2
 void troceaTuplaDoble(string s, string &t1, string &t2) {
     const char delim[] = "]"; //los separadores aquí son "]"
     char* token;
@@ -66,13 +63,11 @@ void troceaTuplaDoble(string s, string &t1, string &t2) {
 
 //-------------------------------------------------------------
 
-/*
-Pre:  Funcion usada en cada hilo para cada cliente que recibe el socket, el numero de cliente y el monitor por referencia
-inicializado en el main.
-Post: Se encarga de recibir la tupla, trocearla y dependiendo de que operacion a realizar recibe, llamara a una funcion
-del monitor u otra (PN, RN, RdN, RN_2, RdN_2). Si es PN, envia mensaje de OK y si es RN o RdN (de una o dos tuplas),
-envia la tupla encontrada. Finalizara cuando reciba mensaje de desconexion ("DESCONEXION").
-*/
+// Pre:  Funcion usada en cada hilo para cada cliente que recibe el socket, el numero de cliente y el monitor por referencia
+//       inicializado en el main.
+// Post: Se encarga de recibir la tupla, trocearla y dependiendo de que operacion a realizar recibe, llamara a una funcion
+//       del monitor u otra (PN, RN, RdN, RN_2, RdN_2). Si es PN, envia mensaje de OK y si es RN o RdN (de una o dos tuplas),
+//       envia la tupla encontrada. Finalizara cuando reciba mensaje de desconexion ("DESCONEXION").
 void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 	// Buffer para recibir el mensaje
     int length = 100;
