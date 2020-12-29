@@ -11,17 +11,28 @@
 #include "Tupla.hpp"
 
 //------------------------- constructor
+// Pre:  --
+//
+// Post: Crea un MonitorServidor almacen = el almacen pasado por el argumento.
 MonitorServidor::MonitorServidor(unordered_multiset<Tupla, TuplaHash> *almacen){
 	this->almacen = *almacen;
 }
 
 //------------------------- destructor
+// Pre:  Existe un MonitorServidor.
+//
+// Post: Libera la memoria dinámica usada por el MonitorServidor.
 MonitorServidor::~MonitorServidor(){}
 void MonitorServidor::borrar(Tupla &tupla){
     unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     almacen.erase(almacen.equal_range(tupla).first);
 
 }
+// Pre:  Existe un MonitorServidor y una tupla pasada como argumento.
+//
+//
+// Post: Inserta la tupla pasada como argumento en el almacen.
+//       Una vez insertada, desbloquea a cualquier otro proceso bloqueado en espera de una nueva tupla.
 void MonitorServidor::PN(Tupla tupla) {
     unique_lock<mutex> lck(mtx);
     cout << "operacion PN llamada" << endl;
@@ -38,6 +49,7 @@ void MonitorServidor::PN(Tupla tupla) {
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
 
 }
+
 void MonitorServidor::mostrar() {
     unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     Tupla tuplaTemp1("");
@@ -47,6 +59,14 @@ void MonitorServidor::mostrar() {
         cout << tuplaTemp1.to_string() <<"paso\n";
     }
 }
+// Pre:  Existe un MonitorServidor y una tupla pasada como argumento.
+//
+//
+// Post: Busca la tupla pasada como argumento en el almacén y la devuelve como resultado.
+//       En caso de no encontrarla en el almacén, el proceso se quedará bloqueado hasta que se realice un nuevo
+//       PostNote, y procederá a buscar de nuevo la tupla en el almacén.
+//       Este ciclo se repite hasta encontrar una coincidencia.
+//
 void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
 	unique_lock<mutex> lck(mtx);
     /**/const bool is_in = almacen.find(tupla) != almacen.end();            // Todo: if con find para detectar si la tupla esta si no comprobacion recorriendo el multiset con match
@@ -82,24 +102,31 @@ void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el ca
     tupla.from_string(resultado.to_string());
     cout << "salida "<<tupla.to_string()<<"\n";
 }
-
+// Pre:  Existe un MonitorServidor y una tupla pasada como argumento.
+//
+//
+// Post: Busca la tupla pasada como argumento en el almacén y la elimina.
+//       En caso de no encontrarla en el almacén, el proceso se quedará bloqueado hasta que se realice un nuevo
+//       PostNote, y procederá a buscar de nuevo la tupla en el almacén.
+//       Este ciclo se repite hasta encontrar una coincidencia.
+//
 void MonitorServidor::RN(Tupla &tupla) {                         //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
     unique_lock<mutex> lck(mtx);
     /**/const bool is_in = almacen.find(tupla) != almacen.end();            // Todo: if con find para detectar si la tupla esta si no comprobacion recorriendo el multiset con match
     Tupla temporal("");
     unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     bool bandera = false;
-    while (!bandera){
+    while (!bandera) {
         for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
             Tupla tmp(*itr);
-            if(tmp.size() == tupla.size()){
+            if(tmp.size() == tupla.size()) {
                 temporal.from_string(tmp.to_string());
                 if (tupla.match(temporal)) {
                    bandera = true;
                 }
             }
         }
-        if (bandera == false){
+        if (bandera == false) {
             cout << "bloqueado\n";
             enEspera.wait(lck);
         }

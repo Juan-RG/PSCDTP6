@@ -32,7 +32,7 @@ class MonitorServidor {
 		//------------------------- destructor
 		~MonitorServidor();
 		//Los "r" serán los recursos que se quieren reservar o liberar.
-
+        //Pre:
         void PN (Tupla tupla);
         void RdN(Tupla &tupla);
         void borrar(Tupla &tupla);
