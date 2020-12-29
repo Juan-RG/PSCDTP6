@@ -42,7 +42,6 @@ void MonitorServidor::PN(Tupla tupla) {
     }*/
 
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
-
 }
 
 // Pre:  Existe un MonitorServidor y una tupla pasada como argumento.
@@ -53,23 +52,19 @@ void MonitorServidor::PN(Tupla tupla) {
 //       PostNote, y procederá a buscar de nuevo la tupla en el almacén.
 //       Este ciclo se repite hasta encontrar una coincidencia.
 //
-void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
+void MonitorServidor::RdN(Tupla &tupla) {
 	unique_lock<mutex> lck(mtx);
+    cout << "operacion RdN llamada" << endl; //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
     Tupla resultado("");
     unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     bool bandera = false;
 
     while (!bandera) {
-        for (itr = almacen.begin(); itr != almacen.end(); ++itr) { //FIXME: ++itr, itr++ hace exactamente lo mismo (probado).
-
+        for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
             Tupla tmp(*itr);
 
             if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) { //TODO: si op1 es false, no se evalua op2, no destroza el coste.
-                cout<<"valores tuplas\n";   //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
-                cout<<tupla.to_string()<<"\n";
-                cout<<tmp.to_string()<<"\n";
                 resultado.from_string(tmp.to_string());
-                cout<<"----------------\n";
                 bandera = true;
             }
        }
@@ -78,11 +73,9 @@ void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el ca
             enEspera.wait(lck);
         }
     }
-    cout << "entrada "<<tupla.to_string()<<"\n";
-    cout << "resultado "<< resultado.to_string()<<"\n";
+
     tupla.from_string(resultado.to_string());
-    cout << "salida "<<tupla.to_string()<<"\n";
-    cout<<"Finaliza la función RdN\n";
+    cout<<"Finaliza la función RdN\n";                      //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
 }
 
 // Pre:  Existe un MonitorServidor y una tupla pasada como argumento.
@@ -93,23 +86,19 @@ void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el ca
 //       PostNote, y procederá a buscar de nuevo la tupla en el almacén.
 //       Este ciclo se repite hasta encontrar una coincidencia.
 //
-void MonitorServidor::RN(Tupla &tupla) {                         //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
+void MonitorServidor::RN(Tupla &tupla) {
     unique_lock<mutex> lck(mtx);
+    cout << "operacion RN llamada" << endl;                     //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
     Tupla resultado("");
     unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     bool bandera = false;
 
     while (!bandera) {
         for (itr = almacen.begin(); itr != almacen.end(); ++itr) { //FIXME: ++itr, itr++ hace exactamente lo mismo (probado).
-
             Tupla tmp(*itr);
 
-            if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) { //TODO: si op1 es false, no se evalua op2, no destroza el coste.
-                cout<<"valores tuplas\n";   //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
-                cout<<tupla.to_string()<<"\n";
-                cout<<tmp.to_string()<<"\n";
+            if( (tmp.size() == tupla.size()) && (tupla.match(tmp)) ) { //TODO: si op1 es false, no se evalua op2, no destroza el coste.
                 resultado.from_string(tmp.to_string());
-                cout<<"----------------\n";
                 bandera = true;
             }
         }
@@ -119,12 +108,9 @@ void MonitorServidor::RN(Tupla &tupla) {                         //TODO: Tenemos
         }
     }
 
-    cout << "entrada "<<tupla.to_string()<<"\n";
-    cout << "resultado "<< resultado.to_string()<<"\n";
     tupla.from_string(resultado.to_string());
-    cout << "salida "<<tupla.to_string()<<"\n";
     almacen.erase(almacen.equal_range(resultado).first);
-    cout<<"Finaliza la función RN\n";
+    cout<<"Finaliza la función RN\n";                      //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
 }
 
 void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {                                                                     // TODO: Desarrollar
