@@ -26,6 +26,7 @@ class MonitorServidor {
 
         unordered_multiset<Tupla,TuplaHash> almacen;
 
+
 	public:
 		//------------------------- constructor
 		MonitorServidor(unordered_multiset<Tupla,TuplaHash> *almacen);
@@ -38,6 +39,9 @@ class MonitorServidor {
         void RN (Tupla &tupla);
         void RdN_2(Tupla &t1, Tupla &t2);
         void RN_2(Tupla &t1, Tupla &t2);
-
+        struct comodines;
+        struct comodinesComunes;
+        void procesos_comodines(Tupla p1, Tupla p2,comodines arrayComodinesp1[],comodines arrayComodinesp2[],comodinesComunes arrayComodinesComunes[],int &numComodinesComunes);
+        void buscando(Tupla &p1, Tupla &p2, bool &encontrado,int numComodinesComunes, comodinesComunes arrayComodinesComunes[]);
 };
 #endif
