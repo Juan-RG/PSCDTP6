@@ -34,7 +34,7 @@ void comprobarErrorEnvio(Socket &soc, int client_fd, int send_bytes);
  * @param puerto2
  * @param puerto3
  */
-void servCliente(Socket &soc, int client_fd, const int i, const string ip1, const string ip2,
+void servCliente(Socket &soc, int client_fd, const string ip1, const string ip2,
                  const string ip3, const int puerto1, const int puerto2, const int puerto3) {
     // Buffer para recibir el mensaje
     int length = tamanioBufferMensaje;
@@ -43,17 +43,15 @@ void servCliente(Socket &soc, int client_fd, const int i, const string ip1, cons
     /*******************************************************************           Compruebo que la conexion es correcta */
     rcv_bytes = soc.Recv(client_fd,buffer,length);
     comprobarErrorRecepcion(soc, client_fd, rcv_bytes);
-    cout << "Mensaje del cliente " + to_string(i)  + " recibido : " + buffer + "\n";
+    cout << "Mensaje del cliente recibido : " + buffer + "\n";
     if(buffer == MENSAJE){
-
         string datosConexion = ip1+","+ip2+","+ip3+","+to_string(puerto1)+","+to_string(puerto2)+","+to_string(puerto3);
-
         /*******************************************************************            ENVIO DATOS */
         int send_bytes = soc.Send(client_fd, datosConexion);
         comprobarErrorEnvio(soc, client_fd, send_bytes);
     }else{
         //si mensaje erroneo cerramos conexion
-        cerr << "Mensaje incorrecto del cliente " + to_string(i)  + " recibido : " + buffer + "\n";
+        cerr << "Mensaje incorrecto del cliente recibido : " + buffer + "\n";
         //cerrar
         soc.Close(client_fd);
         pthread_exit(NULL);
@@ -156,8 +154,8 @@ int main(int numArg, char *args[]) {
             exit(1);
         }
 
-        cliente[i] = thread(&servCliente, ref(chan), client_fd[i], i, ip1, ip2, ip3, puerto1, puerto2, puerto3); //lanzar servicio para cliente modelo RPC
-        cout << "Nuevo cliente " + to_string(i) + " aceptado" + "\n";
+        cliente[i] = thread(&servCliente, ref(chan), client_fd[i], ip1, ip2, ip3, puerto1, puerto2, puerto3); //lanzar servicio para cliente modelo RPC
+        cout << "Nuevo cliente aceptado\n";
     }
 
     //¿Qué pasa si algún thread acaba inesperadamente?

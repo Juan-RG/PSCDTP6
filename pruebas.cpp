@@ -20,6 +20,7 @@ using namespace std;
 int main() {
     unordered_multiset<Tupla,TuplaHash> almacenPrueba;
     MonitorServidor mS1(&almacenPrueba);
+
     Tupla t1("1","mi␣casa","´arbol"); // 3 elementos
     Tupla t2("1000");
     Tupla t3("aprieta","el","pan","45","34","88");
