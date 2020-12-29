@@ -32,9 +32,9 @@ int main() {
     mS1.PN(t1);
     mS1.PN(t1);
     mS1.PN(t2);
-    mS1.mostrar();
-    mS1.borrar(t1);
-    mS1.mostrar();
+    //mS1.mostrar();
+    //mS1.borrar(t1);
+    //mS1.mostrar();
     //muestra "mi casa" por stdout
     cout << t1.get(2) << endl;
     // t3.to_string() devuelve el string "[aprieta,el,pan,45,34,88]"

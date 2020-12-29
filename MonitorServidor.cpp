@@ -7,14 +7,13 @@
 
 #include "MonitorServidor.hpp"
 #include <iostream>
-#include <unistd.h>                                         //////// <------------------------------------------------- QUITAME PLs
 #include "Tupla.hpp"
 
 //------------------------- constructor
 // Pre:  --
 //
-// Post: Crea un MonitorServidor almacen = el almacen pasado por el argumento.
-MonitorServidor::MonitorServidor(unordered_multiset<Tupla, TuplaHash> *almacen){
+// Post: Crea un MonitorServidor con el almacen pasado por el argumento.
+MonitorServidor::MonitorServidor(unordered_multiset<Tupla, TuplaHash> *almacen) {
 	this->almacen = *almacen;
 }
 
@@ -22,12 +21,8 @@ MonitorServidor::MonitorServidor(unordered_multiset<Tupla, TuplaHash> *almacen){
 // Pre:  Existe un MonitorServidor.
 //
 // Post: Libera la memoria dinámica usada por el MonitorServidor.
-MonitorServidor::~MonitorServidor(){}
-void MonitorServidor::borrar(Tupla &tupla){
-    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
-    almacen.erase(almacen.equal_range(tupla).first);
+MonitorServidor::~MonitorServidor() {}
 
-}
 // Pre:  Existe un MonitorServidor y una tupla pasada como argumento.
 //
 //
@@ -35,30 +30,21 @@ void MonitorServidor::borrar(Tupla &tupla){
 //       Una vez insertada, desbloquea a cualquier otro proceso bloqueado en espera de una nueva tupla.
 void MonitorServidor::PN(Tupla tupla) {
     unique_lock<mutex> lck(mtx);
-    cout << "operacion PN llamada" << endl;
+    cout << "operacion PN llamada" << endl; //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
 
-    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
+    /*unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     Tupla tuplaTemp1("");
-    for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
+    for (itr = almacen.begin(); itr != almacen.end(); ++itr) {     //FIXME ESTE FOR PARA PRUEBAS, MÁTAME POR FAVOR
         Tupla tmp(*itr);
         tuplaTemp1.from_string(tmp.to_string());
         cout << tuplaTemp1.to_string() <<"paso\n";
-    }
+    }*/
 
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
 
 }
 
-void MonitorServidor::mostrar() {
-    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
-    Tupla tuplaTemp1("");
-    for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
-        Tupla tmp(*itr);
-        tuplaTemp1.from_string(tmp.to_string());
-        cout << tuplaTemp1.to_string() <<"paso\n";
-    }
-}
 // Pre:  Existe un MonitorServidor y una tupla pasada como argumento.
 //
 //
@@ -69,39 +55,36 @@ void MonitorServidor::mostrar() {
 //
 void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
 	unique_lock<mutex> lck(mtx);
-    /**/const bool is_in = almacen.find(tupla) != almacen.end();            // Todo: if con find para detectar si la tupla esta si no comprobacion recorriendo el multiset con match
-    Tupla temporal("");
     Tupla resultado("");
     unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     bool bandera = false;
-    while (!bandera){
 
-        for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
+    while (!bandera) {
+        for (itr = almacen.begin(); itr != almacen.end(); ++itr) { //FIXME: ++itr, itr++ hace exactamente lo mismo (probado).
+
             Tupla tmp(*itr);
-            if(tmp.size() == tupla.size()){
-                temporal.from_string(tmp.to_string());
-                if (tupla.match(temporal)) {
-                    cout<<"valores tuplas\n";
-                    cout<<tupla.to_string()<<"\n";
-                    cout<<temporal.to_string()<<"\n";
-                    resultado.from_string(temporal.to_string());
-                    cout<<"----------------\n";
-                    bandera = true;
-                }
-            }
 
+            if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) { //TODO: si op1 es false, no se evalua op2, no destroza el coste.
+                cout<<"valores tuplas\n";   //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
+                cout<<tupla.to_string()<<"\n";
+                cout<<tmp.to_string()<<"\n";
+                resultado.from_string(tmp.to_string());
+                cout<<"----------------\n";
+                bandera = true;
+            }
        }
-        if (bandera == false) {
+        if (!bandera) {
             cout << "bloqueado\n";
             enEspera.wait(lck);
         }
     }
     cout << "entrada "<<tupla.to_string()<<"\n";
-    cout << "temporal "<< temporal.to_string()<<"\n";
-    cout << "temporal "<< resultado.to_string()<<"\n";
+    cout << "resultado "<< resultado.to_string()<<"\n";
     tupla.from_string(resultado.to_string());
     cout << "salida "<<tupla.to_string()<<"\n";
+    cout<<"Finaliza la función RdN\n";
 }
+
 // Pre:  Existe un MonitorServidor y una tupla pasada como argumento.
 //
 //
@@ -112,51 +95,36 @@ void MonitorServidor::RdN(Tupla &tupla) {    //TODO: Tenemos que controlar el ca
 //
 void MonitorServidor::RN(Tupla &tupla) {                         //TODO: Tenemos que controlar el caso de que llegue un comodin ?A-Z
     unique_lock<mutex> lck(mtx);
-    /**/const bool is_in = almacen.find(tupla) != almacen.end();            // Todo: if con find para detectar si la tupla esta si no comprobacion recorriendo el multiset con match
-    Tupla temporal("");
+    Tupla resultado("");
     unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     bool bandera = false;
+
     while (!bandera) {
-        for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
+        for (itr = almacen.begin(); itr != almacen.end(); ++itr) { //FIXME: ++itr, itr++ hace exactamente lo mismo (probado).
+
             Tupla tmp(*itr);
-            if(tmp.size() == tupla.size()) {
-                temporal.from_string(tmp.to_string());
-                if (tupla.match(temporal)) {
-                   bandera = true;
-                }
+
+            if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) { //TODO: si op1 es false, no se evalua op2, no destroza el coste.
+                cout<<"valores tuplas\n";   //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
+                cout<<tupla.to_string()<<"\n";
+                cout<<tmp.to_string()<<"\n";
+                resultado.from_string(tmp.to_string());
+                cout<<"----------------\n";
+                bandera = true;
             }
         }
-        if (bandera == false) {
+        if (!bandera) {
             cout << "bloqueado\n";
             enEspera.wait(lck);
         }
     }
+
     cout << "entrada "<<tupla.to_string()<<"\n";
-    tupla.from_string(temporal.to_string());
-    cout << "salida "<<tupla.to_string()<<"\n";     // FIXME : Se borrarían todas...
-    almacen.erase(almacen.equal_range(temporal).first);
-    cout<<"prueba\n";
-/*
-    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
-    Tupla tuplaDelIterador(*itr);
-
-    while(!tupla.match(tuplaDelIterador)){
-        //tuplaDelIterador = *itr;
-        //Buscamos en el almacen la tupla que queremos, hasta encontrarla o terminar la iteracion
-        for (itr = almacen.begin(); itr!= almacen.end() || tupla.match(tuplaDelIterador); ++itr) {
-            tuplaDelIterador = *itr;
-        }
-        //Si no la encuentra se pondra en espera hasta nuevo aviso
-        if(!tupla.match(tuplaDelIterador)){
-            enEspera.wait(lck);
-        }
-    }
-
-    //Si llega hasta aqui es que la ha encontrado
-    tupla = tuplaDelIterador;       //Pasamos por referencia la tupla para reenviarsela al lindaDriver
-
-    almacen.erase(tuplaDelIterador);    //Una vez encontrada la borramos
-**/
+    cout << "resultado "<< resultado.to_string()<<"\n";
+    tupla.from_string(resultado.to_string());
+    cout << "salida "<<tupla.to_string()<<"\n";
+    almacen.erase(almacen.equal_range(resultado).first);
+    cout<<"Finaliza la función RN\n";
 }
 
 void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {                                                                     // TODO: Desarrollar
