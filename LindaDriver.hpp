@@ -60,6 +60,11 @@ public:
 	//Post: ReaD Notes, siendo "p1" y "p2" los patrones y "t1" y "t2" las tuplas
 	void RDN_2(const Tupla p1, const Tupla p2, Tupla& t1, Tupla& t2);
 
+    // Funciones auxiliares
+    void conectar(Socket& chan, int& socket_fd);
+    void mandarMensaje(Socket& chan, const int& socket_fd, const string& mensaje);
+    void recibirMensaje(Socket& chan, const int& socket_fd, string& buffer);
+
 private:
 	Socket chanServer1; // Socket para el servidor Linda de tuplas de tamaño 1 a 3
 	Socket chanServer2; // Socket para el servidor Linda de tuplas de tamaño 4 a 5

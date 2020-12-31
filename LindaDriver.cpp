@@ -14,11 +14,6 @@
 #include <sstream>  // stringstream para reemplazar sscanf
 #include <regex>    // regex para reconocer mensajes del servidor de registro
 
-// Funciones auxiliares
-void conectar(Socket& chan, int& socket_fd);
-void mandarMensaje(Socket& chan, const int& socket_fd, const string& mensaje);
-void recibirMensaje(Socket& chan, const int& socket_fd, string& buffer);
-
 //constructor -----------------------------
 // Pre: ipServerRegistro y puertoServerRegistro representan direcciones IP y puertos válidos, respectivamente.
 // Post: Pide los datos de los servidores Linda al servidor de registro con la dirección y puerto especificados, y establece
@@ -326,7 +321,7 @@ void LindaDriver::RDN_2(const Tupla p1, const Tupla p2, Tupla& t1, Tupla& t2) { 
 
 // Pre: --
 // Post: Hace chan.Connect() sobre socket_fd, tratando los errores
-void conectar(Socket& chan, int& socket_fd) {
+void LindaDriver::conectar(Socket& chan, int& socket_fd) {
     int count = 0;
     do {
         // Conexión con el servidor
@@ -348,7 +343,7 @@ void conectar(Socket& chan, int& socket_fd) {
 
 // Pre: --
 // Post: Manda "mensaje" por el socket con fd indicados, tratando los errores
-void mandarMensaje(Socket& chan, const int& socket_fd, const string& mensaje) {
+void LindaDriver::mandarMensaje(Socket& chan, const int& socket_fd, const string& mensaje) {
     int send_bytes = chan.Send(socket_fd, mensaje);
 
     if(send_bytes == -1) {
@@ -366,7 +361,7 @@ void mandarMensaje(Socket& chan, const int& socket_fd, const string& mensaje) {
 
 // Pre: --
 // Post: Recibe "buffer" por el socket con fd indicados, tratando los errores
-void recibirMensaje(Socket& chan, const int& socket_fd, string& buffer) {
+void LindaDriver::recibirMensaje(Socket& chan, const int& socket_fd, string& buffer) {
     int read_bytes = chan.Recv(socket_fd, buffer, MESSAGE_SIZE);
 
     if(read_bytes == -1) {
