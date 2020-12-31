@@ -11,7 +11,7 @@
 #include "Tupla.hpp"
 #include <iostream> //                                                              <<-------------------------------------BOrrame pls
 #include <sstream>  // stringstream para reemplazar sscanf
-
+#include <regex>
 
 Tupla::Tupla(int n) {
     data = new vector<string>(n,"");
@@ -234,14 +234,16 @@ bool Tupla::match(Tupla p) const{
     comodines Comodin[p.size()];
     //std::cout << "vars inicializadas" << std::endl;
 
+    // Regex para matchear con comodines
+    regex e("\\?[A-Z]");
 
     for(int i=0;i<p.size();i++) {
         //std::cout << "iter" << i << std::endl;
 	    rep = false;
         palabra = data->at(i);
 
-	    if(palabra[0] == '?'){//if1
-            //cout<< "if\n";
+	    if(regex_match(palabra, e)){//if1
+            //cout<< "REGEX MATCH: " << palabra << "\n";
 	        //std::cout << "palabra[0] == '?'" << std::endl;
 	        for(int j = 0;j < w; j++) {
 	           // std::cout << "vuelta en comprobacion comodines" << std::endl;
