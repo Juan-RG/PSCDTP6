@@ -22,27 +22,40 @@ class MonitorServidor {
 	private:
 		mutex mtx; //para la ejecución de procs en exclusión mutua
 
-		condition_variable enEspera;
+    condition_variable enEspera;
 
-        unordered_multiset<Tupla,TuplaHash> almacen;
+    unordered_multiset <Tupla, TuplaHash> almacen;
 
 
-	public:
-		//------------------------- constructor
-		MonitorServidor(unordered_multiset<Tupla,TuplaHash> *almacen);
-		//------------------------- destructor
-		~MonitorServidor();
-		//Los "r" serán los recursos que se quieren reservar o liberar.
-        //Pre:
-        void PN (Tupla tupla);
-        void RdN(Tupla &tupla);
-        void RN (Tupla &tupla);
-        void RdN_2(Tupla &t1, Tupla &t2);
-        void RN_2(Tupla &t1, Tupla &t2);
-        struct comodines;
-        struct comodinesComunes;
-        void procesos_comodines(Tupla p1, Tupla p2,comodines arrayComodinesp1[],comodines arrayComodinesp2[],comodinesComunes arrayComodinesComunes[],int &numComodinesComunes);
-        void buscando(Tupla &p1, Tupla &p2, bool &encontrado,int numComodinesComunes, comodinesComunes arrayComodinesComunes[]);
+public:
+    //------------------------- constructor
+    MonitorServidor(unordered_multiset <Tupla, TuplaHash> *almacen);
 
+    //------------------------- destructor
+    ~MonitorServidor();
+
+    //Los "r" serán los recursos que se quieren reservar o liberar.
+    //Pre:
+    void PN(Tupla tupla);
+
+    void RdN(Tupla &tupla);
+
+    void RN(Tupla &tupla);
+
+    void RdN_2(Tupla &t1, Tupla &t2);
+
+    void RN_2(Tupla &t1, Tupla &t2);
+
+    struct comodines;
+    struct comodinesComunes;
+
+    void comodines_comunes(comodines arrayComodinesp1[], comodines arrayComodinesp2[],
+                           comodinesComunes arrayComodinesComunes[], int &numComodinesComunes, int numComodinesp1,
+                           int numComodinesp2);
+
+    void
+    buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numComodinesComunes, comodinesComunes arrayComodinesComunes[]);
+
+    void proceso_comodines(Tupla p, comodines arrayComodinesp[], int numComodinesp);
 };
 #endif
