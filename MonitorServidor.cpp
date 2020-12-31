@@ -52,18 +52,6 @@ void MonitorServidor::PN(Tupla tupla) {
 //       PostNote, y procederá a buscar de nuevo la tupla en el almacén.
 //       Este ciclo se repite hasta encontrar una coincidencia.
 //
-struct MonitorServidor::comodines {
-    string valor;
-    int numIndices;
-    int indices[6]; // tamaño máximo de una tupla
-};
-struct MonitorServidor::comodinesComunes {
-    string valor;
-    int numIndicesp1, numIndicesp2;
-    // acotados a los tamaños máximos de una tupla
-    int indicesp1[6];
-    int indicesp2[6];
-};
 
 void MonitorServidor::RdN(Tupla &tupla) {
 	unique_lock<mutex> lck(mtx);
@@ -123,13 +111,28 @@ void MonitorServidor::RN(Tupla &tupla) {
 
     tupla.from_string(resultado.to_string());
     almacen.erase(almacen.equal_range(resultado).first);
-    cout<<"Finaliza la función RN\n";                      //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
+    cout << "Finaliza la función RN\n";                      //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
 }
-void MonitorServidor::procesos_comodines(Tupla p1, Tupla p2,comodines arrayComodinesp1[],comodines arrayComodinesp2[],comodinesComunes arrayComodinesComunes[],int &numComodinesComunes){
+
+struct MonitorServidor::comodines {
+    string valor;
+    int numIndices;
+    int indices[6]; // tamaño máximo de una tupla
+};
+struct MonitorServidor::comodinesComunes {
+    string valor;
+    int numIndicesp1, numIndicesp2;
+    // acotados a los tamaños máximos de una tupla
+    int indicesp1[6];
+    int indicesp2[6];
+};
+
+void MonitorServidor::procesos_comodines(Tupla p1, Tupla p2, comodines arrayComodinesp1[], comodines arrayComodinesp2[],
+                                         comodinesComunes arrayComodinesComunes[], int &numComodinesComunes) {
     int numComodinesp1 = 0;
     bool estaba = false;
-    for(int i = 0; i < p1.size(); i++) {
-        if( (p1.get(i))[0] == '?') { // TODO: Sustituir por una regex
+    for (int i = 0; i < p1.size(); i++) {
+        if ((p1.get(i))[0] == '?') { // TODO: Sustituir por una regex
             // comprueba si ya estaba el comodín en la lista
             for (int j = 0; j < p1.size(); j++) {
                 // si está, se añade otro índice
