@@ -3,7 +3,9 @@
 // Author: PSCD-Unizar
 // Date:   noviembre 2015
 // Coms:   Especificación de una librería genérica para 
-//         comunicación síncrona utilizando sockets
+//         comunicación síncrona utilizando sockets.
+//
+//         Modificada con un nuevo constructor y un método de modificar datos.
 //*****************************************************************
 
 #ifndef _SOCKET_HPP_

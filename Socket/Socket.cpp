@@ -5,11 +5,8 @@
 // Coms:   Implementación de una librería genérica para
 //         comunicación síncrona utilizando sockets
 //         La especificación se encuentra en "Socket.hpp"
-//         Como realiza "#include <Socket.hpp>", es necesario que
-//         se indique al compilador que debe buscar ficheros
-//         para incluir también en el directorio donde se encuentre
-//         "Socket.hpp", mediante
-//              -IpathDondeSeEncuentaSocket.hpp
+//
+//         Modificada con un nuevo constructor y un método de modificar datos.
 //*****************************************************************
 
 #include <sys/socket.h>
