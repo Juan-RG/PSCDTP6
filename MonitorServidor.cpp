@@ -332,6 +332,7 @@ void MonitorServidor::buscando(Tupla &p1, Tupla &p2,bool &encontrado, int numCom
                         }
                     } else {                                                                                        // TODO: quitar esto, es solo para comprobar
                         cout << "p2.size() != tuplaTemp2.size()!!!" << endl;
+                        itr2++;
                     }
                 } else {
                     itr2++;
