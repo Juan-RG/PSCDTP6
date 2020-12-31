@@ -20,7 +20,6 @@ static const int NUM_MAX_INTENTOS = 10;             // Intentos de conexión
 
 // Mensajes para el servidor de registro
 static const string PETICION_DATOS = "PETICION_DATOS";
-static const string RESPUESTA_CONFIRMACION = "OK";
 
 // Mensajes para servidores Linda
 static const string MENSAJE_PN = "PN,";
@@ -29,6 +28,7 @@ static const string MENSAJE_RDN = "RDN,";
 static const string MENSAJE_RDN_2 = "RDN_2,";
 static const string MENSAJE_RN_2 = "RN_2,";
 static const string MENSAJE_DESCONEXION = "DESCONEXION";
+static const string RESPUESTA_CONFIRMACION = "OK";
 
 class LindaDriver {
 public:

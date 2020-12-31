@@ -37,16 +37,10 @@ LindaDriver::LindaDriver(string ipServerRegistro, int puertoServerRegistro) {
 
     // manda la petición de obtener datos de los servidores
     mensaje = PETICION_DATOS;
-    send_bytes = chan.Send(socket_fd, mensaje);
-    if(send_bytes == -1) {
-        std::cerr << "Error al enviar datos al servidor de registro: " << strerror(errno) << std::endl;
-        // Cerramos el socket
-        chan.Close(socket_fd);
-        std::terminate();
-    }
+    mandarMensaje(chan, socket_fd, mensaje);
 
     // Recibe los datos de los servidores
-    read_bytes = chan.Recv(socket_fd, buffer, MESSAGE_SIZE);
+    recibirMensaje(chan, socket_fd, buffer);
 
     // y cierra el socket
     chan.Close(socket_fd);
@@ -90,20 +84,10 @@ LindaDriver::LindaDriver(string ipServerRegistro, int puertoServerRegistro) {
 // Post: Manda un mensaje de desconexión a cada uno de los servidores Linda, y cierra los sockets.
 LindaDriver::~LindaDriver() {
     string mensaje = MENSAJE_DESCONEXION;
-    int send_bytes = chanServer1.Send(fdChanServer1, mensaje);
-    if(send_bytes == -1) {
-        std::cerr << "Error al enviar despedida al servidor 1: " << strerror(errno) << std::endl;
-    }
-
-    send_bytes = chanServer2.Send(fdChanServer2, mensaje);
-    if(send_bytes == -1) {
-        std::cerr << "Error al enviar despedida al servidor 2: " << strerror(errno) << std::endl;
-    }
-
-    send_bytes = chanServer3.Send(fdChanServer3, mensaje);
-    if(send_bytes == -1) {
-        std::cerr << "Error al enviar despedida al servidor 3: " << strerror(errno) << std::endl;
-    }
+    // Manda un mensaje de desconexión a cada servidor
+    mandarMensaje(chanServer1, fdChanServer1, mensaje);
+    mandarMensaje(chanServer2, fdChanServer2, mensaje);
+    mandarMensaje(chanServer3, fdChanServer3, mensaje);
 
     // Cierra los sockets
     chanServer1.Close(fdChanServer1);
@@ -369,8 +353,13 @@ void mandarMensaje(Socket& chan, const int& socket_fd, const string& mensaje) {
 
     if(send_bytes == -1) {
         std::cerr << "Error al enviar datos: " << strerror(errno) << std::endl;
-        // Cerramos el socket
-        chan.Close(socket_fd);
+        string mensaje = MENSAJE_DESCONEXION;
+        // Cierra los sockets
+        chanServer1.Close(fdChanServer1);
+        chanServer2.Close(fdChanServer2);
+        chanServer3.Close(fdChanServer3);
+
+        std::cout << "Conexión terminada con todos los servidores" << std::endl;
         std::terminate();
     }
 }
@@ -382,8 +371,13 @@ void recibirMensaje(Socket& chan, const int& socket_fd, string& buffer) {
 
     if(read_bytes == -1) {
         std::cerr << "Error al recibir datos " << strerror(errno) << std::endl;
-        // Cerramos el socket
-        chan.Close(socket_fd);
+        // Cierra los sockets
+        chanServer1.Close(fdChanServer1);
+        chanServer2.Close(fdChanServer2);
+        chanServer3.Close(fdChanServer3);
+
+        std::cout << "Conexión terminada con todos los servidores" << std::endl;
         std::terminate();
     }
+
 }

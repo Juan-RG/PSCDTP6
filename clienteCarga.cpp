@@ -92,6 +92,7 @@ int main(int argc, char* argv[]) {
         }
     }
     cout << "Tuplas retiradas" << endl;
+
     //-----------------------------------------------------
     //liberar la memoria dinámica reservada
     for (int i=0; i<MAX_LENGTH; i++) {
@@ -99,6 +100,4 @@ int main(int argc, char* argv[]) {
         delete tuplas[i];
     }
     //-----------------------------------------------------
-
-    return 0;
 }
