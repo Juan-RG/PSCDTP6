@@ -4,10 +4,37 @@
 #include <iostream>
 #include "LindaDriver.hpp"
 #include "Tupla.hpp"
-
+#include <regex>
 using namespace std;
 
 int main() {
+
+
+    regex e("\\?[A-Z]");
+    string cosa1 = "?X";
+    string cosa2 = "cosa2";
+    string cosa3 = "?";
+    string cosa4 = "?x";
+    string cosa5 = "?Ee";
+
+    if (regex_match (cosa1,e))
+        cout << "match con cosa1" << endl;
+
+    if (regex_match (cosa2,e))
+        cout << "match con cosa2" << endl;
+
+    if (regex_match (cosa3,e))
+        cout << "match con cosa3" << endl;
+
+    if (regex_match (cosa4,e))
+        cout << "match con cosa4" << endl;
+    if (regex_match (cosa5,e))
+        cout << "match con cosa5" << endl;
+
+
+    cout << "--------------------------------------------------------" << endl;
+    cout << "Fin prueba regex" << endl;
+    cout << "--------------------------------------------------------" << endl;
     LindaDriver pizarra("localhost",2022);
     Tupla tuplaTam1("TuplaDeTamaño1");
     Tupla tuplaTam2("TuplaDeTamaño", "2");
