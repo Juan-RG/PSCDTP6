@@ -33,10 +33,10 @@ static const string RECIBIDO = "OK";
 // Post: Trocea la cadena s y guarda en t1 los caracteres antes de llegar a una "," y el resto lo guarda en t2
 void trocea(string s, string &t1, string &t2) {
     const char delim[] = ","; //los separadores aquí son ","
-    char* token;
-    //char* copia = strdup(s.c_str()); //trabajaremos sobre una copia
+    char *token;
+    char *copia = strdup(s.c_str()); //trabajaremos sobre una copia
 
-    //token = strtok(copia, delim);    //hasta el primer ','
+    token = strtok(copia, delim);    //hasta el primer ','
     t1 = token;
 
     token = strtok(nullptr, "\n");
@@ -47,10 +47,10 @@ void trocea(string s, string &t1, string &t2) {
 // Post: Trocea la cadena s y guarda en t1 los caracteres antes de llegar a un "]" y el resto lo guarda en t2
 void troceaTuplaDoble(string s, string &t1, string &t2) {
     const char delim[] = "]"; //los separadores aquí son "]"
-    char* token;
-    //char* copia = strdup(s.c_str()); //trabajaremos sobre una copia
+    char *token;
+    char *copia = strdup(s.c_str()); //trabajaremos sobre una copia
 
-    //token = strtok(copia, delim);    //hasta el primer ']'
+    token = strtok(copia, delim);    //hasta el primer ']'
     t1 = token;
     t1 = t1 + "]";                   //Anyadimos ] al final de la primera tupla troceada
 
