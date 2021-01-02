@@ -66,14 +66,20 @@ Tupla::Tupla(string s1, string s2, string s3, string s4, string s5, string s6) {
 Tupla::Tupla(Tupla& t) {
     data = new vector<string>(t.size(),"");
     for(int i = 0;i<t.size();i++){
-        data->at(i)=t.get(i);
+        data->at(i) = t.get(i);
     }
 }
 
-Tupla::Tupla(const Tupla& t) {
-    data = new vector<string>(t.data->size(),"");
-    for(int i = 0;i<t.data->size();i++){
-        data->at(i)=t.data->at(i);
+Tupla::Tupla(const Tupla &t) {
+    data = new vector<string>(t.data->size(), "");
+    for (int i = 0; i < t.data->size(); i++) {
+        data->at(i) = t.data->at(i);
+    }
+}
+
+void Tupla::igual(Tupla &t) {
+    for (int i = 0; i < t.data->size(); i++) {
+        data->at(i) = t.data->at(i);
     }
 }
 
@@ -154,66 +160,20 @@ void Tupla::from_string(string s) {
     assert(s.length()>2 && s[0]=='[' && s[s.length()-1]==']');
     int strings = 1;
     string elem[6];
-    //cout << "string entrante "<< s << "\n";
+
     for(int i = 0; i<s.length();i++){                                                       //controlar en un futuro que si tupla.size() de 2 y el string sea de 4
                                                                                             //controlar o error o new de tupla. con el nuevo tamaño
         if(s[i]==','){
             strings++;
         }
     }
-
-    // TODO: Ahora que ya sabemos como machacar data y ponerle un nuevo size, se puede reescribir from_string más compacta
-    //       y evitar tener que adivinar el tamaño de la tupla al hacer from_string (se usaría una plantilla con tamaño
-    //       por defecto que luego se modificaría)
     delete data;
     data = new vector<string>(strings,"");
     trocear(elem,strings,s);
-    //cout << "Ahora data es de tamaño " << data->size() << endl;
-
-    //if(strings != this->size()){}
-    //data = new vector<string>(strings,"");
 
     for(int i = 0; i < strings; i++){
         set(i,elem[i]);
     }
-
-    /*if(strings == 1){
-        //trocear(elem,strings,s);
-        data = new vector<string>{elem[0]};
-
-        //set(0, "s1");
-        //Tupla(s1);
-        //Meter string en data
-    }else if (strings == 2){
-        //scanf(s.c_str(), "[%s,%s]", &s1, &s2);
-        //trocear(elem,strings,s);
-        data = new vector<string>{elem[0],elem[1]};
-        //std::cout << s1 << std::endl;
-        //std::cout << s2 << std::endl;
-        //set(0, "s1");
-        //set(1, "s2");
-        //data->at(0) = s1;
-        //data->at(1) = s2;
-        //Meter string en data
-    }else if(strings == 3){
-        //trocear(elem,strings,s);
-        data = new vector<string>{elem[0],elem[1],elem[2]};
-        //Meter string en data
-    }else if(strings == 4){
-        //sscanf(s.c_str(), "[%s,%s,%s,%s]", &s1, &s2, &s3, &s4);
-        //trocear(elem,strings,s);
-        data = new vector<string>{elem[0],elem[1],elem[2],elem[3]};
-        //Meter string en data
-    }else if(strings == 5){
-        //sscanf(s.c_str(), "[%s,%s,%s,%s,%s]", &s1, &s2, &s3, &s4, &s5);
-        //trocear(elem,strings,s);
-        data = new vector<string>{elem[0],elem[1],elem[2],elem[3],elem[4]};
-    }else if(strings == 6){
-        //sscanf(s.c_str(), "[%s,%s,%s,%s,%s,%s]", &s1, &s2, &s3, &s4, &s5, &s6);
-        //trocear(elem,strings,s);
-        data = new vector<string>{elem[0],elem[1],elem[2],elem[3],elem[4],elem[5]};
-        //Meter string en data
-    }*/
 
 }
 
@@ -221,7 +181,6 @@ bool Tupla::match(Tupla p) const{
     if (p.size() != data->size()) { // si las tuplas tienen dif tamaño
         return false;
     }
-    //cout<<"paso\n";
     bool rep = false;
     int w = 0;
     string palabra = " ";
@@ -232,7 +191,6 @@ bool Tupla::match(Tupla p) const{
     };
 
     comodines Comodin[p.size()];
-    //std::cout << "vars inicializadas" << std::endl;
 
     // Regex para matchear con comodines
     regex e("\\?[A-Z]");
@@ -243,43 +201,23 @@ bool Tupla::match(Tupla p) const{
         palabra = data->at(i);
 
 	    if(regex_match(palabra, e)){//if1
-            //cout<< "REGEX MATCH: " << palabra << "\n";
-	        //std::cout << "palabra[0] == '?'" << std::endl;
 	        for(int j = 0;j < w; j++) {
-	           // std::cout << "vuelta en comprobacion comodines" << std::endl;
                 if(data->at(i) == Comodin[j].valor){
 		            if(p.get(i) != Comodin[j].palabra){
-                        //std::cout << "retorno" << std::endl;
-                        //cout<<"aqui\n";
 			            return false;
                     }
-		            //cout<<"paso aa \n";
 	                rep = true;
                 }
             } 
             if(!rep) {
-                //std::cout << "no es repetido, w= " << w  << "i= " << i << std::endl;
 	            Comodin[w].valor = data->at(i);
 	            Comodin[w].palabra = p.get(i);
-                //std::cout << "hola?" << std::endl;
 	            w++;
             }
 	    } else{
-            //cout<< "else\n";
-            //std::cout << "palabra[0] != '?'" << std::endl;
-
-            // std::cout << data->at(i) << std::endl;
-            //std::cout << p.get(i) << std::endl;
-            //std::cout << "....." << std::endl;
-
             string stringTemp1 = data->at(i);
             string stringTemp2 = p.get(i);
-
-            //std::cout << stringTemp1.length() << std::endl;
-            //std::cout << stringTemp2.length() << std::endl;
-
             if((stringTemp1).compare(stringTemp2) != 0) {//if6
-                //std::cout << "retorno" << std::endl;
                 return false;//
 	        }
 	    }

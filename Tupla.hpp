@@ -45,35 +45,42 @@ public:
 	//Com:  Ver ejemplos en mainLindaDriver.cpp
 	string to_string() const;
 
-	//Pre:  "s" tiene el formato adecuado para una tupla: "[val1,val2,..]"
-	//      correspondiente al tamaño de "this"
-	//Post: "data" tomará el valor adecuado a partir de "s"
-	void from_string(string s);
+    //Pre:  "s" tiene el formato adecuado para una tupla: "[val1,val2,..]"
+    //      correspondiente al tamaño de "this"
+    //Post: "data" tomará el valor adecuado a partir de "s"
+    void from_string(string s);
 
-	//Pre:  0<="pos"<this->size()
-	//Post: devuelve el elemento en la posición "pos" de la tupla
-	string get(int pos) const;
+    //Pre:  0<="pos"<this->size()
+    //Post: devuelve el elemento en la posición "pos" de la tupla
+    string get(int pos) const;
 
-	//Pre:  0<="pos"<this->size()
-	//Post: pone "value" en la posición "pos" de la tupla	
-	void set(int pos, string value);
+    //Pre:  0<="pos"<this->size()
+    //Post: pone "value" en la posición "pos" de la tupla
+    void set(int pos, string value);
 
-	//Pre:  "p" es un patrón
-	//Post: ¿Se emparejan "this" y "p"?
-	bool match(Tupla p) const;
-    void trocear(string elem[],int strings, string s);
+    //Pre:  "p" es un patrón
+    //Post: ¿Se emparejan "this" y "p"?
+    bool match(Tupla p) const;
+
+    //Pre: "t" es un patron
+    //Post: "this" = "p"
+    void igual(Tupla &t);
+
+    void trocear(string elem[], int strings, string s);
+
     bool operator<(const Tupla b) const;
+
     // Operador == para unordered_multiset
-    bool operator==(const Tupla& b) const;
+    bool operator==(const Tupla &b) const;
     // Operador () para unordered_multiset
     //std::hash<Tupla>operator()();
 
 private:
-	//la tupla se almacenará como un vector de strings. Dado que antes
-	//de su declaración no se conoce el número de componentes, declaramos
-	//"data" como un puntero para el que se reservará memoria en el constructor,
+    //la tupla se almacenará como un vector de strings. Dado que antes
+    //de su declaración no se conoce el número de componentes, declaramos
+    //"data" como un puntero para el que se reservará memoria en el constructor,
     //momento en el que conocerá el tamaño. No olvidar liberar la memoria en 
     //el destructor
-	vector<string> *data;
+    vector <string> *data;
 };
 #endif

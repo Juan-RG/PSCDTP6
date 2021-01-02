@@ -56,6 +56,6 @@ public:
     void
     buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numComodinesComunes, comodinesComunes arrayComodinesComunes[]);
 
-    void proceso_comodines(Tupla p, comodines arrayComodinesp[], int numComodinesp);
+    void proceso_comodines(Tupla p, comodines arrayComodinesp[], int &numComodinesp);
 };
 #endif

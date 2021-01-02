@@ -22,7 +22,7 @@ CPPFLAGS=-I. -I${SOCKET_DIR} -O2 -std=c++11 -lsockets # Flags compilacion
 LDFLAGS=-pthread # Flags linkado threads
 
 
-all: ${SERVER_REGISTRO} ${SERVER_LINDA} ${CLIENTE_PUBLICADOR} ${CLIENTE_BUSCADOR} ${INIT_TUPLAS} ${CLIENTE_BUSCADORCOMBINADO}
+all: ${SERVER_REGISTRO} ${SERVER_LINDA} ${CLIENTE_PUBLICADOR} ${CLIENTE_BUSCADOR} ${INIT_TUPLAS} ${CLIENTE_BUSCADORCOMBINADO} ${PRUEBAS}
 
 
 server_registro: ${SERVER_REGISTRO}
@@ -45,7 +45,6 @@ clientes_pruebas: ${CLIENTE_CARGA} ${PRUEBAS}
 #Descomentar la siguiente línea para compilar en hendrix
 #SOCKETSFLAGS=-lsocket -lnsl
 #----------------------------------------------------------------------------
-
 #-----------------------------------------------------------
 # SOCKET
 ${SOCKET}.o: ${SOCKET}.hpp ${SOCKET}.cpp
