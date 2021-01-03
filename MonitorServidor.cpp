@@ -68,7 +68,7 @@ void MonitorServidor::RdN(Tupla &tupla) {
         while((itr != almacen.end())){
             Tupla tmp(*itr);
             if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) {
-                resultado.igual(tmp);
+                resultado.from_string(tmp.to_string());
                 bandera = true;
             }
             cout << "Paso "<< tmp.to_string()<<"\n";
@@ -82,8 +82,7 @@ void MonitorServidor::RdN(Tupla &tupla) {
             enEspera.wait(lck);
         }
     }
-
-    tupla.igual(resultado);
+    tupla.from_string(resultado.to_string());
 }
 
 // Pre:  Existe un MonitorServidor y una tupla pasada como argumento.
@@ -106,7 +105,7 @@ void MonitorServidor::RN(Tupla &tupla) {
         while((itr != almacen.end())){
             Tupla tmp(*itr);
             if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) {
-                resultado.igual(tmp);
+                resultado.from_string(tmp.to_string());
                 bandera = true;
             }
             itr++;
@@ -116,12 +115,12 @@ void MonitorServidor::RN(Tupla &tupla) {
             }
         }
         if (!bandera) {
-            cout << "Operacion RdN bloqueada\n";
+            cout << "Operacion RN bloqueada\n";
             enEspera.wait(lck);
         }
     }
 
-    tupla.igual(resultado);
+    tupla.from_string(resultado.to_string());
     almacen.erase(almacen.equal_range(resultado).first);
 }
 
