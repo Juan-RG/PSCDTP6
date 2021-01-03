@@ -30,6 +30,20 @@ int main(int argc, char* argv[]) {
     for (int i = 0;i < 5; i++){
         Tupla primeraOfertaLocal(4);
         Tupla segundaOfertaLocal(4);
+        //---------------------------------------------------------
+        //aumento numero de lecturas                                ---------------------------
+        //declaro la tupla de control lecturas
+        Tupla peticionesLectura("PeticionesLectura","?X");
+        //cojo la tupla de control del total de tuplas
+        pizarra.RN(peticionesLectura,peticionesLectura);
+        //extraigo el numero de tuplas actuales
+        int numeroTuplas = stoi(peticionesLectura.get(1));
+        //aumento en 1 con la publicada
+        numeroTuplas = numeroTuplas + 1;
+        peticionesLectura.set(1,to_string(numeroTuplas));
+        pizarra.PN(peticionesLectura);
+
+        //_-------------------------------------------------------
         //realizamos la busqueda doble
         pizarra.RDN_2(primeraOferta,segundaOferta,primeraOfertaLocal,segundaOfertaLocal);
         cout<<"Oferta combinada seleccioanda: "<< primeraOfertaLocal.to_string() <<" ---- "<<segundaOfertaLocal.to_string()<<"\n";

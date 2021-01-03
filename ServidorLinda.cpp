@@ -94,7 +94,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 		if (rcv_bytes == -1) {
 			cerr << "Error al recibir datos: " + string(strerror(errno)) + "\n";
 			soc.Close(client_fd); // Cerramos los sockets.
-			exit(1);
+            std::terminate();
 		}
 
         if(buffer == MENSAJE_DESCONEXION){  //Salimos del bucle
@@ -112,7 +112,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
                 if(send_bytes == -1) {
                     cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                     soc.Close(client_fd); // Cerramos los sockets.
-                    exit(1);
+                    std::terminate();
                 }
             } else if(operacion == MENSAJE_RDN) {//lee tupla y la copia
                 tuplaTemp1.from_string(tupla);	//pasamos la tupla tipo string a tipo "tupla"
@@ -123,7 +123,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
                 if(send_bytes == -1) {
                     cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                     soc.Close(client_fd); // Cerramos los sockets.
-                    exit(1);
+                    std::terminate();
                 }
             } else if(operacion == MENSAJE_RN){  //Busca tupla y la borra
                 tuplaTemp1.from_string(tupla);	//pasamos la tupla tipo string a tipo "tupla"
@@ -134,7 +134,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
                 if(send_bytes == -1) {
                     cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                     soc.Close(client_fd); // Cerramos los sockets.
-                    exit(1);
+                    std::terminate();
                 }
             } else if(operacion == MENSAJE_RDN_2){  //lee tupla doble y la copia
                 troceaTuplaDoble(tupla, tuplaString1, tuplaString2);   //Separamos la tupla doble para guardarla en dos
@@ -150,7 +150,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
                 if(send_bytes == -1) {
                     cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                     soc.Close(client_fd); // Cerramos los sockets.
-                    exit(1);
+                    std::terminate();
                 }
             } else if(operacion == MENSAJE_RN_2){  //lee tupla doble y se la "lleva" (la borra de la coleccion)
                 troceaTuplaDoble(tupla, tuplaString1, tuplaString2);   //Separamos la tupla doble para guardarla en dos
@@ -166,7 +166,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
                 if(send_bytes == -1) {
                     cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                     soc.Close(client_fd); // Cerramos los sockets.
-                    exit(1);
+                    std::terminate();
                 }
             }
         }

@@ -31,15 +31,17 @@ MonitorServidor::~MonitorServidor() {}
 //       Una vez insertada, desbloquea a cualquier otro proceso bloqueado en espera de una nueva tupla.
 void MonitorServidor::PN(Tupla tupla) {
     unique_lock<mutex> lck(mtx);
-    cout << "operacion PN llamada" << endl; //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
+    cout << "Operacion PN llamada" << endl;
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
 
-    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
-    Tupla tuplaTemp1("");
+    unordered_multiset<Tupla, TuplaHash>::iterator itr;
+    Tupla tuplaTemp1(tupla);
     for (itr = almacen.begin(); itr != almacen.end(); ++itr) {     //FIXME ESTE FOR PARA PRUEBAS, MÁTAME POR FAVOR
         Tupla tmp(*itr);
-        tuplaTemp1.from_string(tmp.to_string());
-        cout << tuplaTemp1.to_string() <<"paso\n";
+        if (tmp.size() == tupla.size()) {
+            tuplaTemp1.igual(tmp);
+            cout << tuplaTemp1.to_string() << "paso\n";
+        }
     }
 
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
@@ -56,27 +58,32 @@ void MonitorServidor::PN(Tupla tupla) {
 
 void MonitorServidor::RdN(Tupla &tupla) {
     unique_lock<mutex> lck(mtx);
-    cout << "operacion RdN llamada" << endl; //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
+    cout << "Operacion RdN llamada" << endl; //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
     Tupla resultado("");
     unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     bool bandera = false;
 
     while (!bandera) {
-        for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
+        itr = almacen.begin();
+        while((itr != almacen.end())){
             Tupla tmp(*itr);
-            if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) { //TODO: si op1 es false, no se evalua op2, no destroza el coste.
+            if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) {
                 resultado.igual(tmp);
                 bandera = true;
             }
+            cout << "Paso "<< tmp.to_string()<<"\n";
+            itr++;
+            if(bandera){
+                itr = almacen.end();
+            }
         }
         if (!bandera) {
-            cout << "bloqueado\n";
+            cout << "Operacion RdN bloqueada\n";
             enEspera.wait(lck);
         }
     }
 
     tupla.igual(resultado);
-    cout << "Finaliza la función RdN\n";                      //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
 }
 
 // Pre:  Existe un MonitorServidor y una tupla pasada como argumento.
@@ -89,29 +96,33 @@ void MonitorServidor::RdN(Tupla &tupla) {
 //
 void MonitorServidor::RN(Tupla &tupla) {
     unique_lock<mutex> lck(mtx);
-    cout << "operacion RN llamada" << endl;                     //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
-    Tupla resultado("");
-    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
+    cout << "Operacion RN llamada" << endl;                     //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
+    Tupla resultado(tupla);
+    unordered_multiset<Tupla, TuplaHash>::iterator itr;
     bool bandera = false;
 
     while (!bandera) {
-        for (itr = almacen.begin(); itr != almacen.end(); ++itr) { //FIXME: ++itr, itr++ hace exactamente lo mismo (probado).
+        itr = almacen.begin();
+        while((itr != almacen.end())){
             Tupla tmp(*itr);
-
-            if( (tmp.size() == tupla.size()) && (tupla.match(tmp)) ) { //TODO: si op1 es false, no se evalua op2, no destroza el coste.
-                resultado.from_string(tmp.to_string());
+            if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) {
+                resultado.igual(tmp);
                 bandera = true;
+            }
+            itr++;
+            cout << "Paso "<< tmp.to_string()<<"\n";
+            if(bandera){
+                itr = almacen.end();
             }
         }
         if (!bandera) {
-            cout << "bloqueado\n";
+            cout << "Operacion RdN bloqueada\n";
             enEspera.wait(lck);
         }
     }
 
     tupla.igual(resultado);
     almacen.erase(almacen.equal_range(resultado).first);
-    cout << "Finaliza la función RN\n";                      //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
 }
 
 // Pre:  Existe un MonitorServidor.
@@ -222,8 +233,8 @@ void MonitorServidor::buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numCo
                             if (p1.match(tuplaTemp1) && p2.match(tuplaTemp2)) {
                                 //p1.igual(tuplaTemp1);
                                 //p2.igual(tuplaTemp2);
-                                p1.from_string(tuplaTemp1.to_string());
-                                p2.from_string(tuplaTemp2.to_string());
+                                p1.igual(tuplaTemp1);
+                                p2.igual(tuplaTemp2);
                                 encontrado = true;
                                 itr2 = almacen.end();
                             } else {
@@ -248,8 +259,8 @@ void MonitorServidor::buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numCo
                                     //p1.igual(tuplaTemp1);                                                                         // FIXME: Esto es horrendo
                                     //p2.igual(tuplaTemp2);
 
-                                    p1.from_string(tuplaTemp1.to_string());
-                                    p2.from_string(tuplaTemp2.to_string());
+                                    p1.igual(tuplaTemp1);
+                                    p2.igual(tuplaTemp2);
                                     encontrado = true;
                                     itr2 = almacen.end();
                                 }

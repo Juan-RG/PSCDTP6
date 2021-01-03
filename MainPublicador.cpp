@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
     //extraeremos la tupla de RN['totalTuplas',?totalTuplas]
     srand(time(NULL)); //reseteamos la semilla
     int n = 0;
-    while (n < 1){ //eliminar
+    while (n < 10){ //eliminar
         n++;//eliminar
     //Asigno la ciudad de origen
     string origen;
@@ -82,6 +82,18 @@ int main(int argc, char* argv[]) {
     int precioMin = 10, precioMax = 100;
     //Calculamos un valor aleatorio entre el min y el max
     int precio = rand () % (precioMax - precioMin + 1) + precioMin;
+    //aumento numero de lecturas                                ---------------------------
+        //declaro la tupla de control lecturas
+        Tupla peticionesEscritura("PeticionesEscritura","?X");
+        //cojo la tupla de control del total de tuplas
+        pizarra.RN(peticionesEscritura,peticionesEscritura);
+        //extraigo el numero de tuplas actuales
+        numeroTuplas = stoi(peticionesEscritura.get(1));
+        //aumento en 1 con la publicada
+        numeroTuplas = numeroTuplas + 1;
+        peticionesEscritura.set(1,to_string(numeroTuplas));
+        pizarra.PN(peticionesEscritura);
+    //                                                          ---------------------------
     //declaro la tupla de control
     Tupla totalTuplas("TotalTuplas","?X");
     //cojo la tupla de control del total de tuplas
