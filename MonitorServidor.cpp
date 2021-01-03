@@ -221,8 +221,7 @@ void MonitorServidor::buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numCo
                     if (p2.size() == tuplaTemp2.size()) { // Si la tupla obtenida es de tamaño distinto a p2, se salta
                         if (numComodinesComunes == 0) { // si no hay índices comunes
                             if (p1.match(tuplaTemp1) && p2.match(tuplaTemp2)) {
-                                p1.igual(
-                                        tuplaTemp1);                                                                         // FIXME: Esto es horrendo
+                                p1.igual(tuplaTemp1);
                                 p2.igual(tuplaTemp2);
                                 encontrado = true;
                                 itr2 = almacen.end();
