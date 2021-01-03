@@ -92,36 +92,36 @@ int main(int numArg, char *args[]) {
     //Ejecutar con ./MainServidor IP1 IP2 IP3 PUERTO1 PUERTO2 PUERTO3 puertoServerDespliegue
 
 
-    /*                                                                                      Realizar un mejor control de er
+                                                                                          //Realizar un mejor control de er
     if(numArg != 8){
         cerr << "Numero de parametros introducios incorrecto:" + string(strerror(errno)) + "\n";
         exit(1);
     }
-     */
-    /*
+
+
     string ip1 = args[1];
     string ip2 = args[2];
     string ip3 = args[3];
     int puerto1 = stoi(args[4]);
     int puerto2 = stoi(args[5]);
     int puerto3 = stoi(args[6]);
-    */
-    string ip1="localhost";
-    string ip2="localhost";
-    string ip3="localhost";
-    int puerto1 = 2023;
-    int puerto2 = 2024;
-    int puerto3 = 2025;
+
+    //string ip1="localhost";
+    //string ip2="localhost";
+    //string ip3="localhost";
+    //int puerto1 = 2023;
+    //int puerto2 = 2024;
+    //int puerto3 = 2025;
 
     //total de conexiones;
-    const int N = 1000;                      //INTENTAR MIRAR PARA NO LIMITAR
+    const int N = 5000;                      //INTENTAR MIRAR PARA NO LIMITAR
 
     thread cliente[N];
     int client_fd[N];
 
     // Puerto donde escucha el proceso servidor
-    //int SERVER_PORT = atoi(args[7]);
-    int SERVER_PORT = 2022;
+    int SERVER_PORT = atoi(args[7]);
+    //int SERVER_PORT = 2022;
 
     // Creación del socket con el que se llevará a cabo
     // la comunicación con el servidor.
