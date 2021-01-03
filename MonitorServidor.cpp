@@ -69,11 +69,12 @@ void MonitorServidor::RdN(Tupla &tupla) {
                 resultado.from_string(tmp.to_string());
                 bandera = true;
             }
-            cout << "Paso "<< tmp.to_string()<<"\n";
             itr++;
+            cout << "Paso "<< tmp.to_string()<<"\n";
             if(bandera){
                 itr = almacen.end();
             }
+
         }
         if (!bandera) {
             cout << "Operacion RdN bloqueada\n";

@@ -11,6 +11,7 @@ CLIENTE_PUBLICADOR=MainPublicador
 CLIENTE_BUSCADOR=MainBuscador
 CLIENTE_BUSCADORCOMBINADO=MainBuscadorCombinado
 INIT_TUPLAS=InitTuplas
+SERVIDOR_MONITORIZACION=ServidorMonitorizacion
 PRUEBAS=pruebas
 CLIENTE_CARGA=clienteCarga
 SERVER_REGISTRO=MainServerDespliegue
@@ -22,12 +23,14 @@ CPPFLAGS=-I. -I${SOCKET_DIR} -O2 -std=c++11 -lsockets # Flags compilacion
 LDFLAGS=-pthread # Flags linkado threads
 
 
-all: ${SERVER_REGISTRO} ${SERVER_LINDA} ${CLIENTE_PUBLICADOR} ${CLIENTE_BUSCADOR} ${INIT_TUPLAS} ${CLIENTE_BUSCADORCOMBINADO}
+all: ${SERVER_REGISTRO} ${SERVER_LINDA} ${CLIENTE_PUBLICADOR} ${CLIENTE_BUSCADOR} ${INIT_TUPLAS} ${CLIENTE_BUSCADORCOMBINADO} ${SERVIDOR_MONITORIZACION}
 
 
 server_registro: ${SERVER_REGISTRO}
 
 server_linda: ${SERVER_LINDA}
+
+servidor_monitorizacion: ${SERVIDOR_MONITORIZACION}
 
 cliente_publicador: ${CLIENTE_PUBLICADOR}
 
@@ -59,6 +62,15 @@ ${TUPLA}.o: ${TUPLA}.hpp ${TUPLA}.cpp
 # LINDA_DRIVER
 ${LINDA_DRIVER}.o: ${LINDA_DRIVER}.cpp ${LINDA_DRIVER}.hpp
 	${CC} -c ${CPPFLAGS} ${LINDA_DRIVER}.cpp -o ${LINDA_DRIVER}.o
+
+#-----------------------------------------------------------
+
+#-----------------------------------------------------------
+${SERVIDOR_MONITORIZACION}.o: ${SERVIDOR_MONITORIZACION}.cpp
+	${CC} -c ${CPPFLAGS} ${SERVIDOR_MONITORIZACION}.cpp
+# Linkado
+${SERVIDOR_MONITORIZACION}: ${MONITOR_LINDA}.o ${LINDA_DRIVER}.o ${TUPLA}.o ${SOCKET}.o ${SERVIDOR_MONITORIZACION}.o
+	${CC} ${LDFLAGS} ${MONITOR_LINDA}.o ${LINDA_DRIVER}.o ${TUPLA}.o ${SOCKET}.o ${SERVIDOR_MONITORIZACION}.o -o ${SERVIDOR_MONITORIZACION} ${SOCKETSFLAGS}
 
 #-----------------------------------------------------------
 # CLIENTES
