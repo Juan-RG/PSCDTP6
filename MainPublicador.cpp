@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
     //extraeremos la tupla de RN['totalTuplas',?totalTuplas]
     srand(time(NULL)); //reseteamos la semilla
     int n = 0;
-    while (n < 100){ //eliminar
+    while (n < 1){ //eliminar
         n++;//eliminar
     //Asigno la ciudad de origen
     string origen;

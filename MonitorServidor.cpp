@@ -33,13 +33,13 @@ void MonitorServidor::PN(Tupla tupla) {
     cout << "operacion PN llamada" << endl; //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
 
-    /*unordered_multiset<Tupla, TuplaHash> :: iterator itr;
+    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     Tupla tuplaTemp1("");
     for (itr = almacen.begin(); itr != almacen.end(); ++itr) {     //FIXME ESTE FOR PARA PRUEBAS, MÁTAME POR FAVOR
         Tupla tmp(*itr);
         tuplaTemp1.from_string(tmp.to_string());
         cout << tuplaTemp1.to_string() <<"paso\n";
-    }*/
+    }
 
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
 }
