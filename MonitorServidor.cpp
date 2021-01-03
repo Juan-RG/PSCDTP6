@@ -66,7 +66,8 @@ void MonitorServidor::RdN(Tupla &tupla) {
             Tupla tmp(*itr);
 
             if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) { //TODO: si op1 es false, no se evalua op2, no destroza el coste.
-                resultado.igual(tmp);
+                //resultado.igual(tmp);
+                resultado.from_string(tmp.to_string());
                 bandera = true;
             }
         }
@@ -75,8 +76,8 @@ void MonitorServidor::RdN(Tupla &tupla) {
             enEspera.wait(lck);
         }
     }
-
-    tupla.igual(resultado);
+    tupla.from_string(resultado.to_string());
+    //tupla.igual(resultado);
     cout << "Finaliza la función RdN\n";                      //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
 }
 
@@ -109,8 +110,8 @@ void MonitorServidor::RN(Tupla &tupla) {
             enEspera.wait(lck);
         }
     }
-
-    tupla.igual(resultado);
+    tupla.from_string(resultado.to_string());
+    //tupla.igual(resultado);
     almacen.erase(almacen.equal_range(resultado).first);
     cout << "Finaliza la función RN\n";                      //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
 }
@@ -221,8 +222,10 @@ void MonitorServidor::buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numCo
                     if (p2.size() == tuplaTemp2.size()) { // Si la tupla obtenida es de tamaño distinto a p2, se salta
                         if (numComodinesComunes == 0) { // si no hay índices comunes
                             if (p1.match(tuplaTemp1) && p2.match(tuplaTemp2)) {
-                                p1.igual(tuplaTemp1);
-                                p2.igual(tuplaTemp2);
+                                //p1.igual(tuplaTemp1);
+                                //p2.igual(tuplaTemp2);
+                                p1.from_string(tuplaTemp1.to_string());
+                                p2.from_string(tuplaTemp2.to_string());
                                 encontrado = true;
                                 itr2 = almacen.end();
                             } else {
@@ -244,9 +247,11 @@ void MonitorServidor::buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numCo
                             if (sigueLocal) { // si todos los pares de posiciones son iguales
                                 // las hemos encontrado
                                 if (p1.match(tuplaTemp1) && p2.match(tuplaTemp2)) {
-                                    p1.igual(
-                                            tuplaTemp1);                                                                         // FIXME: Esto es horrendo
-                                    p2.igual(tuplaTemp2);
+                                    //p1.igual(tuplaTemp1);                                                                         // FIXME: Esto es horrendo
+                                    //p2.igual(tuplaTemp2);
+
+                                    p1.from_string(tuplaTemp1.to_string());
+                                    p2.from_string(tuplaTemp2.to_string());
                                     encontrado = true;
                                     itr2 = almacen.end();
                                 }
