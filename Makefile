@@ -12,7 +12,7 @@ CLIENTE_BUSCADOR=MainBuscador
 CLIENTE_BUSCADORCOMBINADO=MainBuscadorCombinado
 INIT_TUPLAS=InitTuplas
 PRUEBAS=pruebas
-
+CLIENTE_CARGA=clienteCarga
 SERVER_REGISTRO=MainServerDespliegue
 
 SERVER_LINDA=ServidorLinda
@@ -22,7 +22,7 @@ CPPFLAGS=-I. -I${SOCKET_DIR} -O2 -std=c++11 -lsockets # Flags compilacion
 LDFLAGS=-pthread # Flags linkado threads
 
 
-all: ${SERVER_REGISTRO} ${SERVER_LINDA} ${CLIENTE_PUBLICADOR} ${CLIENTE_BUSCADOR} ${INIT_TUPLAS} ${CLIENTE_BUSCADORCOMBINADO} ${PRUEBAS}
+all: ${SERVER_REGISTRO} ${SERVER_LINDA} ${CLIENTE_PUBLICADOR} ${CLIENTE_BUSCADOR} ${INIT_TUPLAS} ${CLIENTE_BUSCADORCOMBINADO}
 
 
 server_registro: ${SERVER_REGISTRO}
@@ -39,11 +39,12 @@ init_tuplas: ${INIT_TUPLAS}
 
 clientes: ${CLIENTE_PUBLICADOR} ${CLIENTE_BUSCADOR} ${INIT_TUPLAS}
 
+clientes_pruebas: ${CLIENTE_CARGA} ${PRUEBAS}
+
 #----------------------------------------------------------------------------
 #Descomentar la siguiente línea para compilar en hendrix
 #SOCKETSFLAGS=-lsocket -lnsl
 #----------------------------------------------------------------------------
-
 #-----------------------------------------------------------
 # SOCKET
 ${SOCKET}.o: ${SOCKET}.hpp ${SOCKET}.cpp
@@ -94,7 +95,11 @@ ${PRUEBAS}: ${MONITOR_LINDA}.o ${LINDA_DRIVER}.o ${TUPLA}.o ${SOCKET}.o ${PRUEBA
 	${CC} ${LDFLAGS} ${MONITOR_LINDA}.o ${LINDA_DRIVER}.o ${TUPLA}.o ${SOCKET}.o ${PRUEBAS}.o -o ${PRUEBAS} ${SOCKETSFLAGS}
 
 
-
+${CLIENTE_CARGA}.o: ${CLIENTE_CARGA}.cpp
+	${CC} -c ${CPPFLAGS} ${CLIENTE_CARGA}.cpp
+# Linkado
+${CLIENTE_CARGA}: ${MONITOR_LINDA}.o ${LINDA_DRIVER}.o ${TUPLA}.o ${SOCKET}.o ${CLIENTE_CARGA}.o
+	${CC} ${LDFLAGS} ${MONITOR_LINDA}.o ${LINDA_DRIVER}.o ${TUPLA}.o ${SOCKET}.o ${CLIENTE_CARGA}.o -o ${CLIENTE_CARGA} ${SOCKETSFLAGS}
 #-----------------------------------------------------------
 # SERVIDOR DE REGISTRO
 # Compilacion
@@ -133,3 +138,6 @@ clean:
 	$(RM) ${SERVER_LINDA} ${SERVER_LINDA}.o
 	$(RM) ${PRUEBAS} ${PRUEBAS}.o
 	$(RM) ${INIT_TUPLAS} ${INIT_TUPLAS}.o
+	$(RM) ${CLIENTE_BUSCADORCOMBINADO} ${CLIENTE_BUSCADORCOMBINADO}.o
+	$(RM) ${PRUEBAS} ${PRUEBAS}.o
+	$(RM) ${CLIENTE_CARGA} ${CLIENTE_CARGA}.o
