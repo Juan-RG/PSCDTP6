@@ -65,7 +65,8 @@ void MonitorServidor::RdN(Tupla &tupla) {
         for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
             Tupla tmp(*itr);
             if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) { //TODO: si op1 es false, no se evalua op2, no destroza el coste.
-                resultado.igual(tmp);
+                //resultado.igual(tmp);
+                resultado.from_string(tmp.to_string());
                 bandera = true;
             }
         }
