@@ -78,6 +78,8 @@ Tupla::Tupla(const Tupla &t) {
 }
 
 void Tupla::igual(Tupla &t) {
+    cout<< t.to_string()<<"\n";
+    cout << this->to_string()<< "\n";
     for (int i = 0; i < t.data->size(); i++) {
         data->at(i) = t.data->at(i);
     }
