@@ -60,14 +60,19 @@ void MonitorServidor::RdN(Tupla &tupla) {
     Tupla resultado("");
     unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     bool bandera = false;
+    bool final = false
 
     while (!bandera) {
-        for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
+        for (itr = almacen.begin(); final; ++itr) {
             Tupla tmp(*itr);
 
             if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) { //TODO: si op1 es false, no se evalua op2, no destroza el coste.
                 resultado.igual(tmp);
                 bandera = true;
+                final = true;
+            }
+            if(itr == almacen.end()) {
+                final = true;
             }
         }
         if (!bandera) {
@@ -96,12 +101,16 @@ void MonitorServidor::RN(Tupla &tupla) {
     bool bandera = false;
 
     while (!bandera) {
-        for (itr = almacen.begin(); itr != almacen.end(); ++itr) { //FIXME: ++itr, itr++ hace exactamente lo mismo (probado).
+        for (itr = almacen.begin(); final; ++itr) { //FIXME: ++itr, itr++ hace exactamente lo mismo (probado).
             Tupla tmp(*itr);
 
             if( (tmp.size() == tupla.size()) && (tupla.match(tmp)) ) { //TODO: si op1 es false, no se evalua op2, no destroza el coste.
                 resultado.from_string(tmp.to_string());
                 bandera = true;
+                final = true;
+            }
+            if(itr == almacen.end()) {
+                final = true;
             }
         }
         if (!bandera) {
