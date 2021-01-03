@@ -8,15 +8,16 @@ using namespace std;
 int main(int argc, char* argv[]) {
 
     //comprobacion de los datos
-    /*
+
     if(argc != 3){
         cerr << "Numero de parametros introducios incorrecto:" + string(strerror(errno)) + "\n";
         exit(1);
-    }*/
-    // string ipServidorDespliegue = argv[1];
-    //int puerto = stoi(argv[2]);
-    //pasarlo los datos por el constructor
-    LindaDriver pizarra("localhost",2022);
+    }
+    string ipServidorDespliegue = argv[1];
+    int puerto = stoi(argv[2]);
+
+    //pasar los datos por el constructor
+    LindaDriver pizarra(ipServidorDespliegue, puerto);
     //Genero la tupla de testigo
     Tupla tuplaControl("BUSCADOR");
     //cojo el testigo de la pizarra
