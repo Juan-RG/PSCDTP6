@@ -31,7 +31,7 @@ MonitorServidor::~MonitorServidor() {}
 //       Una vez insertada, desbloquea a cualquier otro proceso bloqueado en espera de una nueva tupla.
 void MonitorServidor::PN(Tupla tupla) {
     unique_lock<mutex> lck(mtx);
-    cout << "operacion PN llamada" << endl; //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
+    cout << "Operacion PN llamada" << endl;
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
 
     unordered_multiset<Tupla, TuplaHash> :: iterator itr;
@@ -56,28 +56,29 @@ void MonitorServidor::PN(Tupla tupla) {
 
 void MonitorServidor::RdN(Tupla &tupla) {
     unique_lock<mutex> lck(mtx);
-    cout << "operacion RdN llamada" << endl; //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
+    cout << "Operacion RdN llamada" << endl; //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
     Tupla resultado("");
     unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     bool bandera = false;
 
     while (!bandera) {
-        for (itr = almacen.begin(); itr != almacen.end(); ++itr) {
+        itr = almacen.begin();
+        while((itr != almacen.end()) || (!bandera)){
             Tupla tmp(*itr);
-            if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) { //TODO: si op1 es false, no se evalua op2, no destroza el coste.
-                //resultado.igual(tmp);
+
+            if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) {
                 resultado.from_string(tmp.to_string());
                 bandera = true;
             }
+            ++itr;
         }
         if (!bandera) {
-            cout << "bloqueado\n";
+            cout << "Operacion RdN bloqueada\n";
             enEspera.wait(lck);
         }
     }
 
-    tupla.igual(resultado);
-    cout << "Finaliza la función RdN\n";                      //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
+    tupla.from_string(resultado.to_string());
 }
 
 // Pre:  Existe un MonitorServidor y una tupla pasada como argumento.
@@ -90,29 +91,29 @@ void MonitorServidor::RdN(Tupla &tupla) {
 //
 void MonitorServidor::RN(Tupla &tupla) {
     unique_lock<mutex> lck(mtx);
-    cout << "operacion RN llamada" << endl;                     //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
+    cout << "Operacion RN llamada" << endl;                     //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
     Tupla resultado("");
     unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     bool bandera = false;
 
     while (!bandera) {
-        for (itr = almacen.begin(); itr != almacen.end(); ++itr) { //FIXME: ++itr, itr++ hace exactamente lo mismo (probado).
+        itr = almacen.begin();
+        while((itr != almacen.end()) || (!bandera)){
             Tupla tmp(*itr);
-
-            if( (tmp.size() == tupla.size()) && (tupla.match(tmp)) ) { //TODO: si op1 es false, no se evalua op2, no destroza el coste.
+            if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) {
                 resultado.from_string(tmp.to_string());
                 bandera = true;
             }
+            ++itr;
         }
         if (!bandera) {
-            cout << "bloqueado\n";
+            cout << "Operacion RdN bloqueada\n";
             enEspera.wait(lck);
         }
     }
 
-    tupla.igual(resultado);
+    tupla.from_string(resultado.to_string());
     almacen.erase(almacen.equal_range(resultado).first);
-    cout << "Finaliza la función RN\n";                      //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
 }
 
 // Pre:  Existe un MonitorServidor.
