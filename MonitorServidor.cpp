@@ -34,12 +34,14 @@ void MonitorServidor::PN(Tupla tupla) {
     cout << "Operacion PN llamada" << endl;
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
 
-    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
-    Tupla tuplaTemp1("");
+    unordered_multiset<Tupla, TuplaHash>::iterator itr;
+    Tupla tuplaTemp1(tupla);
     for (itr = almacen.begin(); itr != almacen.end(); ++itr) {     //FIXME ESTE FOR PARA PRUEBAS, MÁTAME POR FAVOR
         Tupla tmp(*itr);
-        tuplaTemp1.from_string(tmp.to_string());
-        cout << tuplaTemp1.to_string() <<"paso\n";
+        if (tmp.size() == tupla.size()) {
+            tuplaTemp1.igual(tmp);
+            cout << tuplaTemp1.to_string() << "paso\n";
+        }
     }
 
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
@@ -81,7 +83,6 @@ void MonitorServidor::RdN(Tupla &tupla) {
             enEspera.wait(lck);
         }
     }
-
     tupla.from_string(resultado.to_string());
 }
 
@@ -96,8 +97,8 @@ void MonitorServidor::RdN(Tupla &tupla) {
 void MonitorServidor::RN(Tupla &tupla) {
     unique_lock<mutex> lck(mtx);
     cout << "Operacion RN llamada" << endl;                     //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
-    Tupla resultado("");
-    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
+    Tupla resultado(tupla);
+    unordered_multiset<Tupla, TuplaHash>::iterator itr;
     bool bandera = false;
 
     while (!bandera) {
@@ -115,7 +116,7 @@ void MonitorServidor::RN(Tupla &tupla) {
             }
         }
         if (!bandera) {
-            cout << "Operacion RdN bloqueada\n";
+            cout << "Operacion RN bloqueada\n";
             enEspera.wait(lck);
         }
     }
@@ -232,8 +233,8 @@ void MonitorServidor::buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numCo
                             if (p1.match(tuplaTemp1) && p2.match(tuplaTemp2)) {
                                 //p1.igual(tuplaTemp1);
                                 //p2.igual(tuplaTemp2);
-                                p1.from_string(tuplaTemp1.to_string());
-                                p2.from_string(tuplaTemp2.to_string());
+                                p1.igual(tuplaTemp1);
+                                p2.igual(tuplaTemp2);
                                 encontrado = true;
                                 itr2 = almacen.end();
                             } else {
@@ -258,8 +259,8 @@ void MonitorServidor::buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numCo
                                     //p1.igual(tuplaTemp1);                                                                         // FIXME: Esto es horrendo
                                     //p2.igual(tuplaTemp2);
 
-                                    p1.from_string(tuplaTemp1.to_string());
-                                    p2.from_string(tuplaTemp2.to_string());
+                                    p1.igual(tuplaTemp1);
+                                    p2.igual(tuplaTemp2);
                                     encontrado = true;
                                     itr2 = almacen.end();
                                 }
