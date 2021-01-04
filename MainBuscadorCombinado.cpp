@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
     pizarra.RN(tuplaControl,tuplaControl);
     //creo las 2 tuplas para la busqueda doble
     Tupla primeraOferta("?A","?B","?C","?D");
-    Tupla segundaOferta("?E","?C","?F","?G");
+   Tupla segundaOferta("?E","?C","?F","?G");
 
     for (int i = 0;i < 5; i++){
         Tupla primeraOfertaLocal(4);

@@ -48,7 +48,6 @@ void asignarCiudad(string *ciudad) {
     }
 }
 
-
 int main(int argc, char* argv[]) {
     //comprobacion de los datos
 
@@ -64,6 +63,7 @@ int main(int argc, char* argv[]) {
     //extraeremos la tupla de RN['totalTuplas',?totalTuplas]
     srand(time(NULL)); //reseteamos la semilla
     int n = 0;
+
     while (n < 10){ //eliminar
         n++;//eliminar
     //Asigno la ciudad de origen

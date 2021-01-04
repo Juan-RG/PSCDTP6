@@ -49,7 +49,7 @@ public:
     struct comodines;
     struct comodinesComunes;
 
-    void comodines_comunes(comodines arrayComodinesp1[], comodines arrayComodinesp2[],
+    void proceso_comodines_comunes(comodines arrayComodinesp1[], comodines arrayComodinesp2[],
                            comodinesComunes arrayComodinesComunes[], int &numComodinesComunes, int numComodinesp1,
                            int numComodinesp2);
 

@@ -34,16 +34,6 @@ void MonitorServidor::PN(Tupla tupla) {
     cout << "Operacion PN llamada" << endl;
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
 
-    unordered_multiset<Tupla, TuplaHash>::iterator itr;
-    Tupla tuplaTemp1(tupla);
-    for (itr = almacen.begin(); itr != almacen.end(); ++itr) {     //FIXME ESTE FOR PARA PRUEBAS, MÁTAME POR FAVOR
-        Tupla tmp(*itr);
-        if (tmp.size() == tupla.size()) {
-            tuplaTemp1.igual(tmp);
-            cout << tuplaTemp1.to_string() << "paso\n";
-        }
-    }
-
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
 }
 
@@ -63,6 +53,8 @@ void MonitorServidor::RdN(Tupla &tupla) {
     unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     bool bandera = false;
 
+    cout << "Buscamos para copiar la tupla: " << tupla.to_string() << endl;
+
     while (!bandera) {
         itr = almacen.begin();
         while((itr != almacen.end())){
@@ -71,7 +63,6 @@ void MonitorServidor::RdN(Tupla &tupla) {
                 resultado.from_string(tmp.to_string());
                 bandera = true;
             }
-            cout << "Paso "<< tmp.to_string()<<"\n";
             itr++;
             if(bandera){
                 itr = almacen.end();
@@ -82,6 +73,8 @@ void MonitorServidor::RdN(Tupla &tupla) {
             enEspera.wait(lck);
         }
     }
+    cout << "Hemos encontrado la tupla: " << resultado.to_string() << endl;
+
     tupla.from_string(resultado.to_string());
 }
 
@@ -100,6 +93,8 @@ void MonitorServidor::RN(Tupla &tupla) {
     unordered_multiset<Tupla, TuplaHash>::iterator itr;
     bool bandera = false;
 
+    cout << "Buscamos para sacar la tupla: " << tupla.to_string() << endl;
+
     while (!bandera) {
         itr = almacen.begin();
         while((itr != almacen.end())){
@@ -109,7 +104,6 @@ void MonitorServidor::RN(Tupla &tupla) {
                 bandera = true;
             }
             itr++;
-            cout << "Paso "<< tmp.to_string()<<"\n";
             if(bandera){
                 itr = almacen.end();
             }
@@ -120,8 +114,12 @@ void MonitorServidor::RN(Tupla &tupla) {
         }
     }
 
+    cout << "Hemos encontrado la tupla: " << resultado.to_string() << endl;
+
     tupla.from_string(resultado.to_string());
     almacen.erase(almacen.equal_range(resultado).first);
+
+    cout << "Y la borramos." << endl;
 }
 
 // Pre:  Existe un MonitorServidor.
@@ -182,7 +180,7 @@ void MonitorServidor::proceso_comodines(Tupla p, comodines arrayComodinesp[], in
 // Post: Compara los comodines de los arrays y los devuelve  los que coinciden mediante un array de comodinesComunes
 //       y el numero de comodines comunes en numComodinesComunes
 //
-void MonitorServidor::comodines_comunes(comodines arrayComodinesp1[], comodines arrayComodinesp2[],
+void MonitorServidor::proceso_comodines_comunes(comodines arrayComodinesp1[], comodines arrayComodinesp2[],
                                         comodinesComunes arrayComodinesComunes[], int &numComodinesComunes,
                                         int numComodinesp1, int numComodinesp2) {
     // Se juntan los comodines de ambas en el vector de estructuras de
@@ -221,7 +219,7 @@ void MonitorServidor::buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numCo
     bool sigueLocal = true;
     for (itr = almacen.begin(); itr != almacen.end();) {
         Tupla tuplaTemp1(*itr);         // FIXME: Tiene que haber una forma mejor de hacerlo
-        cout << "iter1" << endl;
+
         if (p1.size() == tuplaTemp1.size()) { // Si la tupla obtenida es de tamaño distinto a p1, se salta
             for (itr2 = almacen.begin(); itr2 != almacen.end();) {
                 if (itr != itr2) { // si el objeto al que apuntan ambos iteradores es el mismo, se descarta
@@ -294,6 +292,11 @@ void MonitorServidor::buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numCo
 void MonitorServidor::RdN_2(Tupla &p1,
                             Tupla &p2) {                                                                     // TODO: Desarrollar
     unique_lock <mutex> lck(mtx);
+
+    cout << "Operacion RdN_2 llamada" << endl;
+    cout << "Tupla 1 a buscar: " << p1.to_string() << endl;
+    cout << "Tupla 2 a buscar: " <<p2.to_string() << endl;
+
     bool encontrado = false;
     if (p1.size() == p2.size()) {
         // Tuplas a sobreescribir con el resultado, de momento son copias de p1 y p2
@@ -324,7 +327,7 @@ void MonitorServidor::RdN_2(Tupla &p1,
         proceso_comodines(p1, arrayComodinesp1, numComodinesp1);
         int numComodinesp2 = 0;
         proceso_comodines(p2, arrayComodinesp2, numComodinesp2);
-        comodines_comunes(arrayComodinesp1, arrayComodinesp2, arrayComodinesComunes, numComodinesComunes,
+        proceso_comodines_comunes(arrayComodinesp1, arrayComodinesp2, arrayComodinesComunes, numComodinesComunes,
                           numComodinesp1, numComodinesp2);
         while (!encontrado) {
 
@@ -344,7 +347,6 @@ void MonitorServidor::RdN_2(Tupla &p1,
         cout << "Tuplas de tamaños diferentes, mal!"
              << endl;                                                               // TODO: quitar esto, es solo para comprobar
     }
-
 }
 
 // Pre:  Existe un MonitorServidor y dos tuplas pasadas como argumentos.
@@ -358,6 +360,11 @@ void MonitorServidor::RdN_2(Tupla &p1,
 void MonitorServidor::RN_2(Tupla &p1,
                            Tupla &p2) {                                                                     // TODO: Desarrollar
     unique_lock <mutex> lck(mtx);
+
+    cout << "Operacion RN_2 llamada" << endl;
+    cout << "Tupla 1 a buscar: " << p1.to_string() << endl;
+    cout << "Tupla 2 a buscar: " <<p2.to_string() << endl;
+
     bool encontrado = false;
     if (p1.size() == p2.size()) {
         // Tuplas a sobreescribir con el resultado, de momento son copias de p1 y p2
@@ -389,7 +396,7 @@ void MonitorServidor::RN_2(Tupla &p1,
         proceso_comodines(p1, arrayComodinesp1, numComodinesp1);
         int numComodinesp2 = 0;
         proceso_comodines(p2, arrayComodinesp2, numComodinesp2);
-        comodines_comunes(arrayComodinesp1, arrayComodinesp2, arrayComodinesComunes, numComodinesComunes,
+        proceso_comodines_comunes(arrayComodinesp1, arrayComodinesp2, arrayComodinesComunes, numComodinesComunes,
                           numComodinesp1, numComodinesp2);
         while (!encontrado) {
             buscando(p1, p2, encontrado, numComodinesComunes, arrayComodinesComunes);
