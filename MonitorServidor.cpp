@@ -29,7 +29,7 @@ MonitorServidor::~MonitorServidor() {}
 //
 // Post: Inserta la tupla pasada como argumento en el almacen.
 //       Una vez insertada, desbloquea a cualquier otro proceso bloqueado en espera de una nueva tupla.
-void MonitorServidor::PN(Tupla tupla) {
+void MonitorServidor::PN(Tupla &tupla) {
     unique_lock<mutex> lck(mtx);
     cout << "Operacion PN llamada" << endl;
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
