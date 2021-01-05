@@ -40,7 +40,6 @@ void MonitorServidor::PN(Tupla tupla) {
         Tupla tmp(*itr);
         if (tmp.size() == tupla.size()) {
             tuplaTemp1.igual(tmp);
-            cout << tuplaTemp1.to_string() << "paso\n";
         }
     }
 
@@ -71,7 +70,6 @@ void MonitorServidor::RdN(Tupla &tupla) {
                 resultado.from_string(tmp.to_string());
                 bandera = true;
             }
-            cout << "Paso "<< tmp.to_string()<<"\n";
             itr++;
             if(bandera){
                 itr = almacen.end();
@@ -109,7 +107,6 @@ void MonitorServidor::RN(Tupla &tupla) {
                 bandera = true;
             }
             itr++;
-            cout << "Paso "<< tmp.to_string()<<"\n";
             if(bandera){
                 itr = almacen.end();
             }
@@ -221,7 +218,6 @@ void MonitorServidor::buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numCo
     bool sigueLocal = true;
     for (itr = almacen.begin(); itr != almacen.end();) {
         Tupla tuplaTemp1(*itr);         // FIXME: Tiene que haber una forma mejor de hacerlo
-        cout << "iter1" << endl;
         if (p1.size() == tuplaTemp1.size()) { // Si la tupla obtenida es de tamaño distinto a p1, se salta
             for (itr2 = almacen.begin(); itr2 != almacen.end();) {
                 if (itr != itr2) { // si el objeto al que apuntan ambos iteradores es el mismo, se descarta
@@ -330,21 +326,12 @@ void MonitorServidor::RdN_2(Tupla &p1,
 
             buscando(p1, p2, encontrado, numComodinesComunes, arrayComodinesComunes);
             if (!encontrado) {
-                cout << "bloqueo\n";
+                cout << "Operacion RDN_2 bloqueada\n";
                 enEspera.wait(lck);
             }
         }
-        if (encontrado) {
-            cout << "ENCONTRADO!" << endl;
-        } else {
-            cout << "NO ENCONTRADO!" << endl;
-        }
         // devolvemos las tuplas
-    } else {
-        cout << "Tuplas de tamaños diferentes, mal!"
-             << endl;                                                               // TODO: quitar esto, es solo para comprobar
     }
-
 }
 
 // Pre:  Existe un MonitorServidor y dos tuplas pasadas como argumentos.
@@ -371,7 +358,7 @@ void MonitorServidor::RN_2(Tupla &p1,
         for (int i = 0; i < p1.size(); ++i) {
             arrayComodinesp1[i].numIndices = 0;
         }
-        //cout<< "inicializo "<< arrayComodinesp1->numIndices << " a s "<< arrayComodinesp1->valor << " asd "<< arrayComodinesp1->indices[1]<<"\n";
+
         comodines arrayComodinesp2[p2.size()];
         for (int i = 0; i < p2.size(); ++i) {
             arrayComodinesp2[i].numIndices = 0;
@@ -394,21 +381,15 @@ void MonitorServidor::RN_2(Tupla &p1,
         while (!encontrado) {
             buscando(p1, p2, encontrado, numComodinesComunes, arrayComodinesComunes);
             if (!encontrado) {
-                cout << "bloqueo\n";
+                cout << "Operacion RN_2 bloqueada\n";
                 enEspera.wait(lck);
             }
         }
         if (encontrado) {
-            cout << "ENCONTRADO!" << endl;
             almacen.erase(almacen.equal_range(p1).first);
             almacen.erase(almacen.equal_range(p2).first);
-        } else {
-            cout << "NO ENCONTRADO!" << endl;
         }
         // devolvemos las tuplas
-    } else {
-        cout << "Tuplas de tamaños diferentes, mal!" << endl;                                                               // TODO: quitar esto, es solo para comprobar
     }
-
 }
 
