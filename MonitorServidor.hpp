@@ -20,7 +20,7 @@ using namespace std; //mutex, condition_variable, etc.
 
 class MonitorServidor {
 	private:
-		mutex mtx; //para la ejecución de procs en exclusión mutua
+    mutex mtx; //para la ejecución de procs en exclusión mutua
 
     condition_variable enEspera;
 
@@ -36,7 +36,7 @@ public:
 
     //Los "r" serán los recursos que se quieren reservar o liberar.
     //Pre:
-    void PN(Tupla tupla);
+    void PN(Tupla &tupla);
 
     void RdN(Tupla &tupla);
 
