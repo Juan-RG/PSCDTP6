@@ -49,6 +49,7 @@ void asignarCiudad(string *ciudad) {
 }
 
 int main(int argc, char* argv[]) {
+
     //comprobacion de los datos
     unsigned t0, t1;
     //pasar los datos por el constructor
@@ -61,11 +62,12 @@ int main(int argc, char* argv[]) {
         //precio minimo y maximo de las ofertas
         int precioMin = 1, precioMax = 2;
 
-        if(n < 5){
-            Tupla nuevaTupla("0","teruel","zaragoza","50");
+        if(n < 500){
+            cout<<n<<"\n";
+            Tupla nuevaTupla("0","teruel","zaragoza","10");
             pizarra.PN(nuevaTupla);
         }else{
-            Tupla nuevaTupla("0","zaragoza","ok","50");
+            Tupla nuevaTupla("1","zaragoza","ok","120");
             pizarra.PN(nuevaTupla);
         }
         n++;
@@ -74,17 +76,22 @@ int main(int argc, char* argv[]) {
     Tupla primeraOferta("?A","?B","?C","?D");
     Tupla segundaOferta("?E","?C","?F","?G");
 
-    t0=clock();
+    auto start = std::chrono::system_clock::now();
+
     while (n < 1000){ //eliminar
+        cout<<"paso "<<n<<"\n";
         Tupla primeraOfertaLocal(4);
         Tupla segundaOfertaLocal(4);
-        pizarra.RDN_2(primeraOferta,segundaOferta,primeraOfertaLocal,segundaOfertaLocal);
+        pizarra.RN_2(primeraOferta,segundaOferta,primeraOfertaLocal,segundaOfertaLocal);
 
         n++;
     }
-    t1 = clock();
-    double time = (double(t1-t0)/CLOCKS_PER_SEC);
-    cout << "Execution Time: " << time << endl;
+
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+    std::cout << "finished computation at " << std::ctime(&end_time)
+              << "Execution time: " << elapsed_seconds.count() << "s\n";
     /*
     if(argc != 3){
         cerr << "Numero de parametros introducios incorrecto:" + string(strerror(errno)) + "\n";
