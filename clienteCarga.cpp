@@ -32,6 +32,42 @@ void errorInvocacion() {
 }
 //-----------------------------------------------------
 int main(int argc, char* argv[]) {
+    unsigned t0, t1;
+    //pasar los datos por el constructor
+    LindaDriver pizarra("localhost", 2022);
+    int numeroTuplas;
+    //extraeremos la tupla de RN['totalTuplas',?totalTuplas]
+    srand(time(NULL)); //reseteamos la semilla
+    int n = 0;
+    while (n < 10){ //eliminar
+        //precio minimo y maximo de las ofertas
+        int precioMin = 1, precioMax = 2;
+
+        if(n < 5){
+            Tupla nuevaTupla("0","teruel","zaragoza","50");
+            pizarra.PN(nuevaTupla);
+        }else{
+            Tupla nuevaTupla("0","zaragoza","ok","50");
+            pizarra.PN(nuevaTupla);
+        }
+     n++;
+    }
+    n = 0;
+    Tupla primeraOferta("?A","?B","?C","?D");
+    Tupla segundaOferta("?E","?C","?F","?G");
+
+    t0=clock();
+    while (n < 10){ //eliminar
+        Tupla primeraOfertaLocal(4);
+        Tupla segundaOfertaLocal(4);
+        pizarra.RDN_2(primeraOferta,segundaOferta,primeraOfertaLocal,segundaOfertaLocal);
+
+        n++;
+    }
+    t1 = clock();
+    double time = (double(t1-t0)/CLOCKS_PER_SEC);
+    cout << "Execution Time: " << time << endl;
+    /*
     const int MAX_LENGTH = 6; //máx longitud tuplas
     //faltan argumentos en la invocación?
     if (argc < 4 ) {
@@ -100,4 +136,5 @@ int main(int argc, char* argv[]) {
         delete tuplas[i];
     }
     //-----------------------------------------------------
+*/
 }

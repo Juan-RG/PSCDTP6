@@ -50,8 +50,6 @@ void asignarCiudad(string *ciudad) {
 
 
 int main(int argc, char* argv[]) {
-    //comprobacion de los datos
-
     if(argc != 3){
         cerr << "Numero de parametros introducios incorrecto:" + string(strerror(errno)) + "\n";
         exit(1);
@@ -99,6 +97,7 @@ int main(int argc, char* argv[]) {
     pizarra.RN(totalTuplas,totalTuplas);
     //extraigo el numero de tuplas actuales
     numeroTuplas = stoi(totalTuplas.get(1));
+    cout<<numeroTuplas<<"\n";
     //aumento en 1 con la publicada
     numeroTuplas = numeroTuplas + 1;
     //Genero la nueva tupla con los datos

@@ -1,7 +1,9 @@
 #include <iostream>
 #include <unordered_set>
+#include <thread>
 #include "Tupla.hpp"
 #include "TuplaHash.cpp"
+#include "set"
 
 
 
@@ -49,6 +51,7 @@ void asignarCiudad(string *ciudad) {
 int main() {
     unordered_multiset<int>::iterator itr2;
     unordered_multiset<int> almacen;
+
 
     almacen.insert(1);
     almacen.insert(2);

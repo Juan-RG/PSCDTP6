@@ -57,6 +57,7 @@ void MonitorServidor::PN(Tupla tupla) {
 //
 
 void MonitorServidor::RdN(Tupla &tupla) {
+    /*
     unique_lock<mutex> lck(mtx);
     cout << "Operacion RdN llamada" << endl; //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
     Tupla resultado("");
@@ -84,6 +85,33 @@ void MonitorServidor::RdN(Tupla &tupla) {
         }
     }
     tupla.from_string(resultado.to_string());
+    */
+    unique_lock<mutex> lck(mtx);
+    cout << "Operacion RdN llamada" << endl; //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
+    Tupla resultado(tupla);
+    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
+    bool bandera = false;
+
+    while (!bandera) {
+        itr = almacen.begin();
+        while((itr != almacen.end())){
+            Tupla tmp(*itr);
+            if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) {
+                resultado.igual(tmp);
+                bandera = true;
+            }
+            cout << "Paso "<< tmp.to_string()<<"\n";
+            itr++;
+            if(bandera){
+                itr = almacen.end();
+            }
+        }
+        if (!bandera) {
+            cout << "Operacion RdN bloqueada\n";
+            enEspera.wait(lck);
+        }
+    }
+    tupla.igual(resultado);
 }
 
 // Pre:  Existe un MonitorServidor y una tupla pasada como argumento.

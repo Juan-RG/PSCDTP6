@@ -83,7 +83,7 @@ void Tupla::igual(Tupla &t) {
     }
 }
 
-bool Tupla::operator<(const Tupla b) const {
+bool Tupla::operator<(const Tupla b) const {    //FIxme :eliminar
     return (this->data->at(0) <= b.data->at(0));
     //if (this->data->at(0) == b.data->at(0)){
     //    return false;

@@ -61,6 +61,7 @@ void troceaTuplaDoble(string s, string &t1, string &t2) {
     t2 = token;
 }
 
+
 //-------------------------------------------------------------
 
 // Pre:  Funcion usada en cada hilo para cada cliente que recibe el socket, el numero de cliente y el monitor por referencia
@@ -69,6 +70,7 @@ void troceaTuplaDoble(string s, string &t1, string &t2) {
 //       del monitor u otra (PN, RN, RdN, RN_2, RdN_2). Si es PN, envia mensaje de OK y si es RN o RdN (de una o dos tuplas),
 //       envia la tupla encontrada. Finalizara cuando reciba mensaje de desconexion ("DESCONEXION").
 void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
+
 	// Buffer para recibir el mensaje
     int length = 100;
     string buffer;
@@ -173,12 +175,17 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 	}
 }
 
+
+
 int main(int argc, char *argv[]) {
     if (argc != 2) {
         cerr << "Número de parámetros incorrecto \n";
         cerr << "Introduce ./ServidorLinda, puerto del servidor para hacer bind\n";
         exit(1); // finaliza el programa indicando salida incorrecta (1)
     }
+
+
+
     const int N = 5000;                                                                                                    // FIXME: AUMENTAR O HACER INFINITO
 	//Creamos el tipo de set que vamos a usar (donde guardamos las tuplas)
     unordered_multiset<Tupla, TuplaHash> almacen;
@@ -221,6 +228,7 @@ int main(int argc, char *argv[]) {
 
     for (int i = 0; i < max_connections; i++) {
         cliente[i].join();
+
     }
 
     // Cerramos el socket del servidor
