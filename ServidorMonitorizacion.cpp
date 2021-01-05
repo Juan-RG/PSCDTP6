@@ -9,16 +9,16 @@ using namespace std;
 int main(int argc, char* argv[]) {
 
     //comprobacion de los datos
-    /*
+
     if(argc != 3){
         cerr << "Numero de parametros introducios incorrecto:" + string(strerror(errno)) + "\n";
         exit(1);
-    }*/
-    // string ipServidorDespliegue = argv[1];
-    //int puerto = stoi(argv[2]);
-    //pasarlo los datos por el constructor
+    }
+    string ipServidorDespliegue = argv[1];
+    int puerto = stoi(argv[2]);
 
-    LindaDriver pizarra("localhost",2022);
+    //pasarlo los datos por el constructor
+    LindaDriver pizarra(ipServidorDespliegue, puerto);
     //tuplas de valores
     Tupla peticionesLectura("PeticionesLectura","?X");
     Tupla peticionesEscritura("PeticionesEscritura","?X");
