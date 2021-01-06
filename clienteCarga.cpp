@@ -19,7 +19,7 @@
 #include <string>
 
 #include "LindaDriver.hpp"
-#include "Tupla.hpp"
+#include "Tupla/Tupla.hpp"
 
 using namespace std;
 //-----------------------------------------------------

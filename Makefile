@@ -8,7 +8,8 @@ CC=g++
 SOCKET_DIR=Socket
 SOCKET=${SOCKET_DIR}/Socket
 
-TUPLA=Tupla
+TUPLA_DIR=Tupla
+TUPLA=${TUPLA_DIR}/Tupla
 
 LINDA_DRIVER=LindaDriver
 

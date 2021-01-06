@@ -7,7 +7,7 @@
 
 #include "Socket/Socket.hpp"
 #include "MonitorServidor.hpp"
-#include "Tupla.hpp"
+#include "Tupla/Tupla.hpp"
 
 #include <iostream>
 #include <thread>

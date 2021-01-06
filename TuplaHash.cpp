@@ -1,5 +1,5 @@
 // Clase auxiliar para implementar la función de Hash del contenedor (unordered_multiset) de Tuplas
-#include "Tupla.hpp"
+#include "Tupla/Tupla.hpp"
 using namespace std;
 
 class TuplaHash {

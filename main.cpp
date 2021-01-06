@@ -1,7 +1,7 @@
 #include <iostream>
 #include <unordered_set>
 #include <thread>
-#include "Tupla.hpp"
+#include "Tupla/Tupla.hpp"
 #include "TuplaHash.cpp"
 #include "set"
 
