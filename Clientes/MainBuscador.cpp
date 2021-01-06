@@ -30,7 +30,7 @@ int main(int argc, char* argv[]) {
         int numeroAleatorio = rand () % (max - min + 1) + min;
         int idTupla;
         //Genero la tupla a buscar
-        Tupla oferta("8","?Y","?Z","?R");
+        Tupla oferta("?X","?Y","?Z","?R");
         for(int j = 0; j < numeroAleatorio; j++){
             //Si es la primera busqueda obtengo la tupla si no cojo el siguiente ID
             //---------------------------------------------------------
@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
             //_-------------------------------------------------------
             if(j == 0){
                 //cojo la tupla y extraigo el ID
-               pizarra.RN(oferta,oferta);
+               pizarra.RDN(oferta,oferta);
                idTupla = stoi(oferta.get(0));
             }else{
                 //incremento el id

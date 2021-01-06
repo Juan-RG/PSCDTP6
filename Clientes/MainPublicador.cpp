@@ -49,7 +49,7 @@ void asignarCiudad(string *ciudad) {
 }
 
 int main(int argc, char* argv[]) {
-
+/*                                                                          ///eliminarrr
     //comprobacion de los datos
     unsigned t0, t1;
     //pasar los datos por el constructor
@@ -80,9 +80,9 @@ int main(int argc, char* argv[]) {
         pizarra.RN(primeraOferta,primeraOfertaLocal);
         n++;
     }
+*/
 
 
-    /*
     if(argc != 3){
         cerr << "Numero de parametros introducios incorrecto:" + string(strerror(errno)) + "\n";
         exit(1);
@@ -142,7 +142,7 @@ int main(int argc, char* argv[]) {
     totalTuplas.set(1,to_string(numeroTuplas));
     pizarra.PN(totalTuplas);
     }
-*/
+
     return 0;
 
 }
