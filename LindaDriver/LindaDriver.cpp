@@ -9,7 +9,7 @@
 #include <string>
 #include "LindaDriver.hpp"
 
-#include "Socket/Socket.hpp"
+#include "../Socket/Socket.hpp"
 #include <iostream> // mensajes de error
 #include <sstream>  // stringstream para reemplazar sscanf
 #include <regex>    // regex para reconocer mensajes del servidor de registro

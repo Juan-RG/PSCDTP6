@@ -5,7 +5,7 @@
 // Coms:   Ejemplo de servidor multicliente con comunicación síncrona mediante sockets
 //*****************************************************************
 
-#include "Socket/Socket.hpp" //añadir
+#include "../Socket/Socket.hpp" //añadir
 #include <iostream>
 #include <thread>
 #include <cstdlib>

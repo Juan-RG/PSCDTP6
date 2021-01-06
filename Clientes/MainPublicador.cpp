@@ -1,7 +1,7 @@
 
 #include <iostream>
 #include <chrono>
-#include "LindaDriver.hpp"
+#include "../LindaDriver/LindaDriver.hpp"
 
 using namespace std;
 

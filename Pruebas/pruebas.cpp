@@ -2,8 +2,8 @@
 // Pruebas de LindaDriver, ejecutar sin ningún otro cliente y servidores sin tuplas almacenadas.
 //
 #include <iostream>
-#include "LindaDriver.hpp"
-#include "Tupla/Tupla.hpp"
+#include "../LindaDriver/LindaDriver.hpp"
+#include "../Tupla/Tupla.hpp"
 #include <regex>
 
 using namespace std;

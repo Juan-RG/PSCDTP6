@@ -7,7 +7,7 @@
 
 #include "MonitorServidor.hpp"
 #include <iostream>
-#include "Tupla/Tupla.hpp"
+#include "../Tupla/Tupla.hpp"
 #include <regex>
 
 //------------------------- constructor

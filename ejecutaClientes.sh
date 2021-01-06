@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-./InitTuplas localhost 2020&
-./MainPublicador localhost 2020&
-./MainBuscador localhost 2020&
-./MainBuscadorCombinado localhost 2020&
+./Clientes/InitTuplas localhost 2020&
+./Clientes/MainPublicador localhost 2020&
+./Clientes/MainBuscador localhost 2020&
+./Clientes/MainBuscadorCombinado localhost 2020&

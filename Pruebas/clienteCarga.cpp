@@ -18,8 +18,8 @@
 #include <cstdlib>
 #include <string>
 
-#include "LindaDriver.hpp"
-#include "Tupla/Tupla.hpp"
+#include "../LindaDriver/LindaDriver.hpp"
+#include "../Tupla/Tupla.hpp"
 
 using namespace std;
 //-----------------------------------------------------
