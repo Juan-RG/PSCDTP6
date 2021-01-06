@@ -1,3 +1,8 @@
+#----------------------------------------------------------------------------
+#Descomentar la siguiente línea para compilar en hendrix
+#SOCKETSFLAGS=-lsocket -lnsl
+#----------------------------------------------------------------------------
+
 CC=g++
 
 SOCKET_DIR=Socket
@@ -44,10 +49,7 @@ clientes: ${CLIENTE_PUBLICADOR} ${CLIENTE_BUSCADOR} ${INIT_TUPLAS}
 
 clientes_pruebas: ${CLIENTE_CARGA} ${PRUEBAS}
 
-#----------------------------------------------------------------------------
-#Descomentar la siguiente línea para compilar en hendrix
-#SOCKETSFLAGS=-lsocket -lnsl
-#----------------------------------------------------------------------------
+
 #-----------------------------------------------------------
 # SOCKET
 ${SOCKET}.o: ${SOCKET}.hpp ${SOCKET}.cpp
