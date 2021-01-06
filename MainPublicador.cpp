@@ -58,40 +58,30 @@ int main(int argc, char* argv[]) {
     //extraeremos la tupla de RN['totalTuplas',?totalTuplas]
     srand(time(NULL)); //reseteamos la semilla
     int n = 0;
-    while (n < 1000){ //eliminar
-        //precio minimo y maximo de las ofertas
-        int precioMin = 1, precioMax = 2;
-
-        if(n < 500){
-            cout<<n<<"\n";
-            Tupla nuevaTupla("0","teruel","zaragoza","10");
-            pizarra.PN(nuevaTupla);
-        }else{
-            Tupla nuevaTupla("1","zaragoza","ok","120");
-            pizarra.PN(nuevaTupla);
-        }
-        n++;
-    }
-    n = 0;
-    Tupla primeraOferta("?A","?B","?C","?D");
-    Tupla segundaOferta("?E","?C","?F","?G");
-
     auto start = std::chrono::system_clock::now();
-
     while (n < 1000){ //eliminar
-        cout<<"paso "<<n<<"\n";
-        Tupla primeraOfertaLocal(4);
-        Tupla segundaOfertaLocal(4);
-        pizarra.RN_2(primeraOferta,segundaOferta,primeraOfertaLocal,segundaOfertaLocal);
-
+            Tupla nuevaTupla("1"+to_string(n),"zaragoza","ok","120");
+            pizarra.PN(nuevaTupla);
         n++;
     }
-
     auto end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end-start;
     std::time_t end_time = std::chrono::system_clock::to_time_t(end);
     std::cout << "finished computation at " << std::ctime(&end_time)
               << "Execution time: " << elapsed_seconds.count() << "s\n";
+    n = 0;
+    Tupla primeraOferta("?A","?B","?C","?D");
+
+
+    while (n < 10){ //eliminar
+        cout<<"paso "<<n<<"\n";
+        Tupla primeraOfertaLocal(4);
+        Tupla segundaOfertaLocal(4);
+        pizarra.RN(primeraOferta,primeraOfertaLocal);
+        n++;
+    }
+
+
     /*
     if(argc != 3){
         cerr << "Numero de parametros introducios incorrecto:" + string(strerror(errno)) + "\n";
