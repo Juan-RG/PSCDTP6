@@ -9,9 +9,9 @@
 #define LINDA_DRIVER
 #include <iostream>
 #include <string>
-#include "Tupla.hpp"
+#include "../Tupla/Tupla.hpp"
 
-#include "Socket/Socket.hpp" // añadido, para tener sockets en lindaDriver
+#include "../Socket/Socket.hpp" // añadido, para tener sockets en lindaDriver
 
 using namespace std;
 
