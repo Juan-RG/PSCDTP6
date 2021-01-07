@@ -348,7 +348,6 @@ void LindaDriver::mandarMensaje(Socket& chan, const int& socket_fd, const string
 
     if(send_bytes == -1) {
         std::cerr << "Error al enviar datos: " << strerror(errno) << std::endl;
-        string mensaje = MENSAJE_DESCONEXION;
         // Cierra los sockets
         chanServer1.Close(fdChanServer1);
         chanServer2.Close(fdChanServer2);
