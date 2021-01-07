@@ -96,7 +96,7 @@ int main(int argc, char* argv[]) {
     srand(time(NULL)); //reseteamos la semilla
     int n = 0;
 
-    while (n < 10){ //eliminar
+    while (n < 2000){ //eliminar
         n++;//eliminar
     //Asigno la ciudad de origen
     string origen;
@@ -114,6 +114,7 @@ int main(int argc, char* argv[]) {
     //Calculamos un valor aleatorio entre el min y el max
     int precio = rand () % (precioMax - precioMin + 1) + precioMin;
     //aumento numero de lecturas                                ---------------------------
+    /*
         //declaro la tupla de control lecturas
         Tupla peticionesEscritura("PeticionesEscritura","?X");
         //cojo la tupla de control del total de tuplas
@@ -124,23 +125,31 @@ int main(int argc, char* argv[]) {
         numeroTuplas = numeroTuplas + 1;
         peticionesEscritura.set(1,to_string(numeroTuplas));
         pizarra.PN(peticionesEscritura);
+        */
     //                                                          ---------------------------
     //declaro la tupla de control
     Tupla totalTuplas("TotalTuplas","?X");
     //cojo la tupla de control del total de tuplas
-    pizarra.RN(totalTuplas,totalTuplas);
+    cout<<"Cliente envia "<<totalTuplas.to_string()<<"\n";
+    Tupla totalTuplasB(2);
+    pizarra.RN(totalTuplas,totalTuplasB);
+    cout<<"Cliente recibe "<<totalTuplasB.to_string()<<"\n";
     //extraigo el numero de tuplas actuales
-    numeroTuplas = stoi(totalTuplas.get(1));
+    numeroTuplas = stoi(totalTuplasB.get(1));
     cout<<numeroTuplas<<"\n";
     //aumento en 1 con la publicada
     numeroTuplas = numeroTuplas + 1;
     //Genero la nueva tupla con los datos
     Tupla nuevaTupla(to_string(numeroTuplas),origen,destino,to_string(precio));
     //escribo la Tupla
+
     pizarra.PN(nuevaTupla);
     //actualizo el valor y lo escribo en la pizarra
-    totalTuplas.set(1,to_string(numeroTuplas));
-    pizarra.PN(totalTuplas);
+    totalTuplasB.set(1,to_string(numeroTuplas));
+    cout<<"cliente escribe en pizarra "<<totalTuplasB.to_string()<<"\n";
+    pizarra.PN(totalTuplasB);
+    cout<<to_string(n)+"\n";
+    usleep(5);
     }
 
     return 0;

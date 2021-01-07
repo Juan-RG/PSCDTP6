@@ -33,8 +33,15 @@ void MonitorServidor::PN(Tupla &tupla) {
     unique_lock<mutex> lck(mtx);
     cout << "Operacion PN llamada" << endl;
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
-
+    unordered_multiset<Tupla, TuplaHash> :: iterator itr2;
+    cout<<"-------------------------------\n";
+    for (itr2 = almacen.begin(); itr2 != almacen.end();itr2++) {
+        Tupla tmp(*itr2);
+        cout<<"T: "<<tmp.to_string()<<"\n";
+    }
+   // cout<<"------------------------\n";
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
+   // cout<<"---descartarcosas--\n";
 }
 
 // Pre:  Existe un MonitorServidor y una tupla pasada como argumento.
@@ -112,34 +119,53 @@ void MonitorServidor::RdN(Tupla &tupla) {
 //       PostNote, y procederá a buscar de nuevo la tupla en el almacén.
 //       Este ciclo se repite hasta encontrar una coincidencia.
 //
-void MonitorServidor::RN(Tupla &tupla) {
+void MonitorServidor::RN(Tupla &tupla,int i) {
     unique_lock<mutex> lck(mtx);
-    cout << "Operacion RN llamada" << endl;                     //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
-    Tupla resultado(tupla);
+    cout << "Operacion RN llamada"+ tupla.to_string()+" "+to_string(i)+ "\n" ;                     //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
+    //Tupla resultado(tupla);
+    Tupla resultado("");
+    resultado.from_string(tupla.to_string());
     unordered_multiset<Tupla, TuplaHash>::iterator itr;
     bool bandera = false;
-
+    //cout<<"entro RN\n";
     while (!bandera) {
+        //cout<<"entro while 1\n";
         itr = almacen.begin();
         while((itr != almacen.end())){
+            cout<<"entro while 2\n";
             Tupla tmp(*itr);
-            if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) {
+            bool  c1 = ( tmp.size() == tupla.size() );
+            bool  c2 = ( tupla.match(tmp) ) ;
+            cout << "D y m"+ tupla.to_string()+" "+to_string(i)+ "\n" ;
+            //cout<<"paso m y s \n";
+            //if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) {
+            if( (c1) && ( c2 )) {
+                cout<<"Busco: "+tmp.to_string()+" --- "+tmp.to_string() +"\n";
+                //cout<<"entro if 1\n";
                 resultado.from_string(tmp.to_string());
                 bandera = true;
             }
             itr++;
             if(bandera){
+                cout<<"entro if 2\n";
                 itr = almacen.end();
             }
         }
         if (!bandera) {
             cout << "Operacion RN bloqueada\n";
             enEspera.wait(lck);
+            cout<<"despierto " + to_string(i)+"\n";
         }
     }
-
-    tupla.from_string(resultado.to_string());
+    unordered_multiset<Tupla, TuplaHash> :: iterator itr2;
+    cout<<"----------Antes de eliminar-------------------\n";
+    for (itr2 = almacen.begin(); itr2 != almacen.end();itr2++) {
+        Tupla tmp(*itr2);
+        cout<<"T: "<<tmp.to_string()<<"\n";
+    }
+    //cout<<"------------------------\n";
     almacen.erase(almacen.equal_range(resultado).first);
+    tupla.from_string(resultado.to_string());
 }
 
 // Pre:  Existe un MonitorServidor.

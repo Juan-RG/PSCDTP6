@@ -23,7 +23,7 @@ int main(int argc, char* argv[]) {
     //colocamos la tupla para contear las tuplas
     Tupla numeroTuplas("TotalTuplas","0");
     pizarra.PN(numeroTuplas);
-
+/*
     //Escribo las tuplas de monitorizacion de lectura y escritura
     Tupla numeroEscrituras("PeticionesEscritura","0");
     pizarra.PN(numeroEscrituras);
@@ -35,5 +35,6 @@ int main(int argc, char* argv[]) {
     for (int i = 0; i < 8 ; ++i) {
         pizarra.PN(tuplaControl);
     }
+*/
     return 0;
 }

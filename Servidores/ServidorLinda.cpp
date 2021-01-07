@@ -14,6 +14,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <string>
+#include <sstream>  // stringstream para reemplazar sscanf
 
 using namespace std;
 
@@ -32,15 +33,24 @@ static const string RECIBIDO = "OK";
 // Pre:  Recibimos tres strings, la cadena a trocear (s), y dos variables (t1 y t2) por referencia.
 // Post: Trocea la cadena s y guarda en t1 los caracteres antes de llegar a una "," y el resto lo guarda en t2
 void trocea(string s, string &t1, string &t2) {
+    /*
     const char delim[] = ","; //los separadores aquí son ","
     char *token;
     char *copia = strdup(s.c_str()); //trabajaremos sobre una copia
-
+    cout<<"llego "+ s+"\n";
     token = strtok(copia, delim);    //hasta el primer ','
     t1 = token;
-
+    cout<<"token 1 "+ t1 +"\n";
     token = strtok(nullptr, "\n");
     t2 = token;
+    cout<<"token 2 "+ t2 +"\n";
+*/
+    stringstream s_stream(s);
+    string substr;
+    getline(s_stream, substr, ',');
+    t1 = substr;
+    getline(s_stream, substr, '\n');
+    t2 = substr;
 }
 
 // Pre:  Recibimos tres strings, la cadena a trocear (s), y dos variables (t1 y t2) por referencia.
@@ -69,10 +79,10 @@ void troceaTuplaDoble(string s, string &t1, string &t2) {
 // Post: Se encarga de recibir la tupla, trocearla y dependiendo de que operacion a realizar recibe, llamara a una funcion
 //       del monitor u otra (PN, RN, RdN, RN_2, RdN_2). Si es PN, envia mensaje de OK y si es RN o RdN (de una o dos tuplas),
 //       envia la tupla encontrada. Finalizara cuando reciba mensaje de desconexion ("DESCONEXION").
-void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
+void servCliente(Socket& soc, int client_fd, MonitorServidor& mS,int i) {
 
 	// Buffer para recibir el mensaje
-    int length = 100;
+    int length = 10000;
     string buffer;
 
 	int rcv_bytes;
@@ -92,7 +102,7 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 	while(!out) {
 		// Recibimos el mensaje del cliente
 		rcv_bytes = soc.Recv(client_fd,buffer,length);
-
+       // cout<<"mensaje "+buffer+"\n";
 		if (rcv_bytes == -1) {
 			cerr << "Error al recibir datos: " + string(strerror(errno)) + "\n";
 			soc.Close(client_fd); // Cerramos los sockets.
@@ -100,18 +110,23 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
 		}
 
         if (buffer == MENSAJE_DESCONEXION){  //Salimos del bucle
+            //cout<<"salgo1\n";
             out = true;
         } else if(buffer == MENSAJE_CERRAR) {
-            cout << "Recibido mensaje de cierre del servidor, terminando la ejecución..." << endl;
+            cout << "Recibido mensaje de cierre del servidor, terminando la ejecución...\n";
             exit(0);
         } else {
             trocea(buffer, operacion, tupla);			//Separamos la orden de la tupla (son strings)
 
             string tuplaDobleString;
             if(operacion == MENSAJE_PN) {  //postnote, mete algo en memoria
-                tuplaTemp1.from_string(tupla);	        //pasamos la tupla tipo string a tipo "tupla"
+                Tupla tuplaTempPN("");
+                tuplaTempPN.from_string(tupla);	        //pasamos la tupla tipo string a tipo "tupla"
+                cout<<"CLiente: "+to_string(i)+" operacion "+operacion+"\n";
+                cout<<"CLiente: "+to_string(i)+"Server recibe :"+ tuplaTempPN.to_string()+"\n";
 
-                mS.PN(tuplaTemp1);    //Guardamos en la coleccion la tupla que nos han pasado (llamamos al monitor)
+
+                mS.PN(tuplaTempPN);    //Guardamos en la coleccion la tupla que nos han pasado (llamamos al monitor)
 
                 send_bytes = soc.Send(client_fd, RECIBIDO);
                 if(send_bytes == -1) {
@@ -131,11 +146,13 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
                     std::terminate();
                 }
             } else if(operacion == MENSAJE_RN){  //Busca tupla y la borra
-                tuplaTemp1.from_string(tupla);	//pasamos la tupla tipo string a tipo "tupla"
-
-                mS.RN(tuplaTemp1);   //Buscamos en la coleccion la tupla que nos han pasado y la eliminamos (monitor)
-
-                send_bytes = soc.Send(client_fd, tuplaTemp1.to_string());    //Enviamos la tupla encontrada
+                Tupla tuplaTempAux("");
+                tuplaTempAux.from_string(tupla);	//pasamos la tupla tipo string a tipo "tupla"
+                cout<<"CLiente: "+to_string(i)+" operacion "+operacion+"\n";
+                cout<<"CLiente: "+to_string(i)+"Server recibe :"+ tuplaTempAux.to_string()+"\n";
+                mS.RN(tuplaTempAux,i);   //Buscamos en la coleccion la tupla que nos han pasado y la eliminamos (monitor)
+                cout<<"CLiente: "+to_string(i)+"Server devuelve :"+ tuplaTempAux.to_string()+"\n";
+                send_bytes = soc.Send(client_fd, tuplaTempAux.to_string());    //Enviamos la tupla encontrada
                 if(send_bytes == -1) {
                     cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                     soc.Close(client_fd); // Cerramos los sockets.
@@ -226,7 +243,7 @@ int main(int argc, char *argv[]) {
             chan.Close(socket_fd); // Cerramos el socket.
             exit(1);
         }
-        cliente[i] = thread(&servCliente, ref(chan), client_fd[i], ref(mS));
+        cliente[i] = thread(&servCliente, ref(chan), client_fd[i], ref(mS),i);
     }
 
     for (int i = 0; i < max_connections; i++) {

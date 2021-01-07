@@ -49,7 +49,7 @@ public:
 
     void RdN(Tupla &tupla);
 
-    void RN(Tupla &tupla);
+    void RN(Tupla &tupla,int n);
 
     void RdN_2(Tupla &t1, Tupla &t2);
 
