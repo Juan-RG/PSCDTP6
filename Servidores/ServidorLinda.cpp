@@ -22,8 +22,8 @@ static const string MENSAJE_RN = "RN";
 static const string MENSAJE_RDN = "RDN";
 static const string MENSAJE_RN_2 = "RN_2";
 static const string MENSAJE_RDN_2 = "RDN_2";
-
 static const string MENSAJE_DESCONEXION = "DESCONEXION";
+static const string MENSAJE_CERRAR = "CERRAR";
 static const string RECIBIDO = "OK";
 
 //-------------------------------------------------------------
@@ -99,8 +99,11 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS) {
             std::terminate();
 		}
 
-        if(buffer == MENSAJE_DESCONEXION){  //Salimos del bucle
+        if (buffer == MENSAJE_DESCONEXION){  //Salimos del bucle
             out = true;
+        } else if(buffer == MENSAJE_CERRAR) {
+            cout << "Recibido mensaje de cierre del servidor, terminando la ejecución..." << endl;
+            exit(0);
         } else {
             trocea(buffer, operacion, tupla);			//Separamos la orden de la tupla (son strings)
 

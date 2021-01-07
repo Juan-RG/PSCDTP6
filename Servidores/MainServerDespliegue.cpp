@@ -12,8 +12,8 @@
 
 using namespace std;
 
-const string MENSAJE = "PETICION_DATOS"; // Todo: escribir mensaje que me diga samu
-
+static const string MENSAJE = "PETICION_DATOS";
+static const string MENSAJE_CERRAR = "CERRAR";
 const int tamanioBufferMensaje = 100;
 
 void comprobarErrorRecepcion(Socket &soc, int client_fd, int rcv_bytes);
@@ -44,12 +44,16 @@ void servCliente(Socket &soc, int client_fd, const string ip1, const string ip2,
     rcv_bytes = soc.Recv(client_fd,buffer,length);
     comprobarErrorRecepcion(soc, client_fd, rcv_bytes);
     cout << "Mensaje del cliente recibido : " + buffer + "\n";
+
     if(buffer == MENSAJE){
         string datosConexion = ip1+","+ip2+","+ip3+","+to_string(puerto1)+","+to_string(puerto2)+","+to_string(puerto3);
         /*******************************************************************            ENVIO DATOS */
         int send_bytes = soc.Send(client_fd, datosConexion);
         comprobarErrorEnvio(soc, client_fd, send_bytes);
-    }else{
+    } else if(buffer == MENSAJE_CERRAR) {
+        cout << "Recibido mensaje de cierre del servidor, terminando la ejecución..." << endl;
+        exit(0);
+    } else{
         //si mensaje erroneo cerramos conexion
         cerr << "Mensaje incorrecto del cliente recibido : " + buffer + "\n";
         //cerrar
