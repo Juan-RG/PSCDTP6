@@ -62,9 +62,6 @@ public:
     //Post: ¿Se emparejan "this" y "p"?
     bool match(Tupla p) const;
 
-    //Pre: "t" es un patron
-    //Post: "this" = "p"
-    void igual(Tupla &t);
 
     void trocear(string elem[], int strings, string s);
 

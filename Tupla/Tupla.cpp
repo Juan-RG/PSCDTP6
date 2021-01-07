@@ -77,12 +77,6 @@ Tupla::Tupla(const Tupla &t) {
     }
 }
 
-void Tupla::igual(Tupla &t) {
-    for (int i = 0; i < t.data->size(); i++) {
-        data->at(i) = t.data->at(i);
-    }
-}
-
 // Operador iguales para el unordered multiset, devuelve true si y solo si las dos tuplas tienen el mismo tamaño y contenido
 bool Tupla::operator ==(const Tupla& b) const {
     if (data->size() != b.size()) {
@@ -133,8 +127,7 @@ void Tupla::trocear(string elem[],int strings, string s) {
     }
     getline(s_stream, substr, ']');
     elem[i]=substr;
-    for (int j = 0; j < elem->size() ; ++j) {
-    }
+
 }
 
 void Tupla::from_string(string s) {
@@ -142,8 +135,8 @@ void Tupla::from_string(string s) {
     int strings = 1;
     string elem[6];
 
-    for(int i = 0; i<s.length();i++){                                                       //controlar en un futuro que si tupla.size() de 2 y el string sea de 4
-                                                                                            //controlar o error o new de tupla. con el nuevo tamaño
+    for(int i = 0; i<s.length();i++){
+
         if(s[i]==','){
             strings++;
         }
@@ -162,9 +155,9 @@ bool Tupla::match(Tupla p) const{
     if (p.size() != data->size()) { // si las tuplas tienen dif tamaño
         return false;
     }
-    bool rep = false;
+    bool rep;
     int w = 0;
-    string palabra = " ";
+    string cadena = " ";
 
     struct comodines{
 	    string valor; 	    
@@ -179,9 +172,9 @@ bool Tupla::match(Tupla p) const{
     for(int i=0;i<p.size();i++) {
         //std::cout << "iter" << i << std::endl;
 	    rep = false;
-        palabra = data->at(i);
+        cadena = data->at(i);
 
-	    if(regex_match(palabra, e)){//if1
+	    if(regex_match(cadena, e)){//if1
 	        for(int j = 0;j < w; j++) {
                 if(data->at(i) == Comodin[j].valor){
 		            if(p.get(i) != Comodin[j].palabra){
@@ -198,8 +191,8 @@ bool Tupla::match(Tupla p) const{
 	    } else{
             string stringTemp1 = data->at(i);
             string stringTemp2 = p.get(i);
-            if((stringTemp1).compare(stringTemp2) != 0) {//if6
-                return false;//
+            if((stringTemp1).compare(stringTemp2) != 0) {
+                return false;
 	        }
 	    }
     }
