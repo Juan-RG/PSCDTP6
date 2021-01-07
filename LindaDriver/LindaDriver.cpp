@@ -243,7 +243,7 @@ void LindaDriver::RDN(const Tupla p, Tupla& t) {
     //std::cout << "LindaDriver(RDN): Mando..." << mensaje << ", tamaño de la tupla: " << p.size();
 
     if (p.size() < 4) { // tam. 1 a 3, va al servidor 1
-        std::cout << " , se manda al servidor 1" << std::endl;
+        //std::cout << " , se manda al servidor 1" << std::endl;
 
         mandarMensaje(chanServer1, fdChanServer1, mensaje);
         // Espera a obtener la tupla resultado
