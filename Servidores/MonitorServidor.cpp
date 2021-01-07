@@ -54,9 +54,7 @@ void MonitorServidor::PN(Tupla &tupla) {
 //
 
 void MonitorServidor::RdN(Tupla &tupla) {
-    /*
     unique_lock<mutex> lck(mtx);
-    cout << "Operacion RdN llamada" << endl; //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
     Tupla resultado("");
     unordered_multiset<Tupla, TuplaHash> :: iterator itr;
     bool bandera = false;
@@ -82,33 +80,6 @@ void MonitorServidor::RdN(Tupla &tupla) {
         }
     }
     tupla.from_string(resultado.to_string());
-    */
-    unique_lock<mutex> lck(mtx);
-    cout << "Operacion RdN llamada" << endl; //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
-    Tupla resultado(tupla);
-    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
-    bool bandera = false;
-
-    while (!bandera) {
-        itr = almacen.begin();
-        while((itr != almacen.end())){
-            Tupla tmp(*itr);
-            if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) {
-                resultado.igual(tmp);
-                bandera = true;
-            }
-            cout << "Paso "<< tmp.to_string()<<"\n";
-            itr++;
-            if(bandera){
-                itr = almacen.end();
-            }
-        }
-        if (!bandera) {
-            cout << "Operacion RdN bloqueada\n";
-            enEspera.wait(lck);
-        }
-    }
-    tupla.igual(resultado);
 }
 
 // Pre:  Existe un MonitorServidor y una tupla pasada como argumento.
@@ -125,6 +96,7 @@ void MonitorServidor::RN(Tupla &tupla,int i) {
     //Tupla resultado(tupla);
     Tupla resultado("");
     resultado.from_string(tupla.to_string());
+
     unordered_multiset<Tupla, TuplaHash>::iterator itr;
     bool bandera = false;
     //cout<<"entro RN\n";
@@ -264,19 +236,16 @@ void MonitorServidor::buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numCo
     unordered_multiset<Tupla, TuplaHash>::iterator itr2;
     bool sigueLocal = true;
     for (itr = almacen.begin(); itr != almacen.end();) {
-        Tupla tuplaTemp1(*itr);         // FIXME: Tiene que haber una forma mejor de hacerlo
+        Tupla tuplaTemp1(*itr);
         if (p1.size() == tuplaTemp1.size()) { // Si la tupla obtenida es de tamaño distinto a p1, se salta
             for (itr2 = almacen.begin(); itr2 != almacen.end();) {
                 if (itr != itr2) { // si el objeto al que apuntan ambos iteradores es el mismo, se descarta
                     Tupla tuplaTemp2(*itr2);
-                    // FIXME: Tiene que haber una forma mejor de hacerlo
                     if (p2.size() == tuplaTemp2.size()) { // Si la tupla obtenida es de tamaño distinto a p2, se salta
                         if (numComodinesComunes == 0) { // si no hay índices comunes
                             if (p1.match(tuplaTemp1) && p2.match(tuplaTemp2)) {
-                                //p1.igual(tuplaTemp1);
-                                //p2.igual(tuplaTemp2);
-                                p1.igual(tuplaTemp1);
-                                p2.igual(tuplaTemp2);
+                                p1.from_string(tuplaTemp1.to_string());
+                                p2.from_string(tuplaTemp2.to_string());
                                 encontrado = true;
                                 itr2 = almacen.end();
                             } else {
@@ -298,11 +267,8 @@ void MonitorServidor::buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numCo
                             if (sigueLocal) { // si todos los pares de posiciones son iguales
                                 // las hemos encontrado
                                 if (p1.match(tuplaTemp1) && p2.match(tuplaTemp2)) {
-                                    //p1.igual(tuplaTemp1);                                                                         // FIXME: Esto es horrendo
-                                    //p2.igual(tuplaTemp2);
-
-                                    p1.igual(tuplaTemp1);
-                                    p2.igual(tuplaTemp2);
+                                    p1.from_string(tuplaTemp1.to_string());
+                                    p2.from_string(tuplaTemp2.to_string());
                                     encontrado = true;
                                     itr2 = almacen.end();
                                 }
@@ -334,16 +300,13 @@ void MonitorServidor::buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numCo
 //       PostNote, y procederá a buscarlas de nuevo las tuplas en el almacén.
 //       Este ciclo se repite hasta encontrar una coincidencia.
 //
-void MonitorServidor::RdN_2(Tupla &p1,
-                            Tupla &p2) {                                                                     // TODO: Desarrollar
+void MonitorServidor::RdN_2(Tupla &p1,Tupla &p2) {
     unique_lock <mutex> lck(mtx);
     bool encontrado = false;
     if (p1.size() == p2.size()) {
         // Tuplas a sobreescribir con el resultado, de momento son copias de p1 y p2
         Tupla tuplaTemp1(p1);
         Tupla tuplaTemp2(p2);
-        bool parar = false;
-        int lengthArrayComodines;
         int numComodinesComunes = 0;
 
         // acotados a los tamaños de cada una de las tuplas
@@ -389,8 +352,7 @@ void MonitorServidor::RdN_2(Tupla &p1,
 //       PostNote, y procederá a buscar de nuevo las tuplas en el almacén.
 //       Este ciclo se repite hasta encontrar una coincidencia.
 //
-void MonitorServidor::RN_2(Tupla &p1,
-                           Tupla &p2) {                                                                     // TODO: Desarrollar
+void MonitorServidor::RN_2(Tupla &p1,Tupla &p2) {
     unique_lock <mutex> lck(mtx);
     bool encontrado = false;
     if (p1.size() == p2.size()) {
