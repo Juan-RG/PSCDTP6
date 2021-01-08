@@ -63,6 +63,7 @@ int main(int argc, char *argv[]) {
     Tupla publicadores("Publicadores", "?X");
     Tupla buscadores("Buscadores", "?X");
     Tupla buscadoresCombinados("BuscadoresCombinados", "?X");
+
     while (continuar) {
         Tupla peticionesLecturaTmp("", "");
         Tupla peticionesEscrituraTmp("", "");
@@ -81,12 +82,13 @@ int main(int argc, char *argv[]) {
         pizarra.RDN(buscadores, buscadoresTmp);
         pizarra.RDN(buscadoresCombinados, buscadoresCombinadosTmp);
 
-        cout << "Peticiones de lectura: " + peticionesLecturaTmp.get(1) + "\n";
-        cout << "Peticiones de escritura: " + peticionesEscrituraTmp.get(1) + "\n";
-        cout << "Total de tuplas: " + totalTuplasTmp.get(1) + "\n";
-        cout << "Publicadores en el sistema: " + publicadoresTmp.get(1) + "\n";
-        cout << "Buscadores en el sistema: " + buscadoresTmp.get(1) + "\n";
-        cout << "Buscadores Combinados en el sistema: " + buscadoresCombinadosTmp.get(1) + "\n";
+
+        cout << "\rPeticiones de lectura: " + peticionesLecturaTmp.get(1) + "\r\n";
+        cout << "\rPeticiones de escritura: " + peticionesEscrituraTmp.get(1) + "\r\n";
+        cout << "\rTotal de tuplas: " + totalTuplasTmp.get(1) + "\r\n";
+        cout << "\rPublicadores en el sistema: " + publicadoresTmp.get(1) + "\r\n";
+        cout << "\rBuscadores en el sistema: " + buscadoresTmp.get(1) + "\r\n";
+        cout << "\rBuscadores Combinados en el sistema: " + buscadoresCombinadosTmp.get(1) + "\r\n";
 
         if (numeroTuplasPasado != stoi(totalTuplasTmp.get(1))) {
             numeroTuplasPasado = stoi(totalTuplasTmp.get(1));
