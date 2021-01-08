@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
         pizarra.RDN(publicadores, publicadoresTmp);
         pizarra.RDN(buscadores, buscadoresTmp);
         pizarra.RDN(buscadoresCombinados, buscadoresCombinadosTmp);
-        
+
         // Secuencia de escape ANSI: La primera parte (\033[2J) vacía la terminal (J) de arriba a abajo(2).
         // La segunda parte (\033[1;1H) pone el cursor en la fila 1 y columna 1.
         cout << "\033[2J\033[1;1H";
@@ -96,8 +96,8 @@ int main(int argc, char *argv[]) {
              << "Buscadores en el sistema: " + buscadoresTmp.get(1) + "\n"
              << "Buscadores Combinados en el sistema: " + buscadoresCombinadosTmp.get(1) + "\n";
 
-        sleep(1);           //tiempo de refresco de los datos
-        //usleep(120);
+        //sleep(1);           //tiempo de refresco de los datos
+        usleep(120);
     }
 
     ESPERAR.notify_one(); //notifico al hilo de control que puede cerrar los servers
@@ -154,9 +154,10 @@ void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServe
         if (stoi(publicadoresTmp.get(1)) == 0 && stoi(buscadoresTmp.get(1)) == 0 &&
             stoi(buscadoresCombinadosTmp.get(1)) == 0
             && !nuevasTuplas) {
-
+            cerr<<"Sistema sin clientes, ni modificaciones\n";
             contador++;
             if (contador == 3) {
+                cerr<<"Cerramos conexion con Servidores\n";
                 continuar = false;
                 ESPERAR.wait(lck);
                 mandarMensaje(chanServer1, fdChanServer1, MENSAJE_CERRAR);
