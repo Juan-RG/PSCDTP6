@@ -39,7 +39,7 @@ LindaDriver::LindaDriver(string ipServerRegistro, int puertoServerRegistro) {
 
     // y cierra el socket
     chan.Close(socket_fd);
-    std::cout << "socket con server de registro cerrado" << std::endl;
+   //std::cout << "socket con server de registro cerrado" << std::endl;
 
     // Parsea los datos recibidos del servidor de registro: ip1","ip2","ip3","puerto1","puerto2","puerto3
     stringstream s_stream(buffer); // Crea un stringstream a partir del buffer
@@ -61,7 +61,7 @@ LindaDriver::LindaDriver(string ipServerRegistro, int puertoServerRegistro) {
     chanServer1.CambiaDetallesServidor(ip_server_1, stoi(puerto_server_1));
     chanServer2.CambiaDetallesServidor(ip_server_2, stoi(puerto_server_2));
     chanServer3.CambiaDetallesServidor(ip_server_3, stoi(puerto_server_3));
-    std::cout   << "Datos de los servidores:\n"
+   std::cout   << "Datos de los servidores:\n"
                 << "Server 1(tam. 1 a 3): '"    << this->ip_server_1 << "':'"  << this->puerto_server_1 << "'\n"
                 << "Server 2(tam. 4 a 5): '"    << this->ip_server_2 << "':'"  << this->puerto_server_2 << "'\n"
                 << "Server 3(tam. 6): '"        << this->ip_server_3 << "':'"  << this->puerto_server_3 << "'" << std::endl;
@@ -71,7 +71,7 @@ LindaDriver::LindaDriver(string ipServerRegistro, int puertoServerRegistro) {
     conectar(chanServer2, fdChanServer2);
     conectar(chanServer3, fdChanServer3);
 
-    std::cout << "Conexión realizada con todos los servidores" << std::endl;
+   //std::cout << "Conexión realizada con todos los servidores" << std::endl;
 }
 
 //destructor -----------------------------
@@ -89,7 +89,7 @@ LindaDriver::~LindaDriver() {
     chanServer2.Close(fdChanServer2);
     chanServer3.Close(fdChanServer3);
 
-    std::cout << "Conexión terminada con todos los servidores Destructor" << std::endl;
+   std::cerr << "Conexión terminada con todos los servidores Destructor" << std::endl;
 }
 
 //operadores ----------------------------
@@ -105,35 +105,35 @@ void LindaDriver::PN(const Tupla t) {
 
     // mandará la orden PN concatenada a la tupla convertida a string
     mensaje = MENSAJE_PN + t.to_string();
-    std::cout << "LindaDriver(PN): Mando..." << mensaje << ", tamaño de la tupla: " << t.size();
+   //std::cout << "LindaDriver(PN): Mando..." << mensaje << ", tamaño de la tupla: " << t.size();
 
     if (t.size() < 4) { // tam. 1 a 3, va al servidor 1
-        std::cout << " , se manda al servidor 1" << std::endl;
+       //std::cout << " , se manda al servidor 1" << std::endl;
 
         mandarMensaje(chanServer1, fdChanServer1, mensaje);
 
         // Espera a recibir una confirmación
-        std::cout << "LindaDriver(PN): espero a la confirmación del servidor 1" << std::endl;
+       //std::cout << "LindaDriver(PN): espero a la confirmación del servidor 1" << std::endl;
         recibirMensaje(chanServer1, fdChanServer1, buffer);
-        std::cout << "LindaDriver(PN): recibo " << buffer << ", acabo." << std::endl;
+       //std::cout << "LindaDriver(PN): recibo " << buffer << ", acabo." << std::endl;
     }
     else if (t.size() < 6) { // tam. 4 a 5, va al servidor 2
-        std::cout << " , se manda al servidor 2" << std::endl;
+       //std::cout << " , se manda al servidor 2" << std::endl;
 
         mandarMensaje(chanServer2, fdChanServer2, mensaje);
         // Espera a recibir una confirmación
-        std::cout << "LindaDriver(PN): espero a la confirmación del servidor 2" << std::endl;
+       //std::cout << "LindaDriver(PN): espero a la confirmación del servidor 2" << std::endl;
         recibirMensaje(chanServer2, fdChanServer2, buffer);
-        std::cout << "LindaDriver(PN): recibo " << buffer << ", acabo." << std::endl;
+       //std::cout << "LindaDriver(PN): recibo " << buffer << ", acabo." << std::endl;
     }
     else { // tam. 6, va al servidor 3
-        std::cout << "LindaDriver: mando al server 3" << std::endl;
+       //std::cout << "LindaDriver: mando al server 3" << std::endl;
 
         mandarMensaje(chanServer3, fdChanServer3, mensaje);
         // Espera a recibir una confirmación
-        std::cout << "LindaDriver(PN): espero a la confirmación del servidor 3" << std::endl;
+       //std::cout << "LindaDriver(PN): espero a la confirmación del servidor 3" << std::endl;
         recibirMensaje(chanServer3, fdChanServer3, buffer);
-        std::cout << "LindaDriver(PN): recibo " << buffer << ", acabo." << std::endl;
+       //std::cout << "LindaDriver(PN): recibo " << buffer << ", acabo." << std::endl;
     }
 
     if (buffer != RESPUESTA_CONFIRMACION) {
@@ -152,31 +152,31 @@ void LindaDriver::RN(const Tupla p, Tupla& t) {
 
     // mandará la orden RN concatenada a la tupla convertida a string
     mensaje = MENSAJE_RN + p.to_string();
-    std::cout << "LindaDriver(RN): Mando..." << mensaje << ", tamaño de la tupla: " << p.size();
+   //std::cout << "LindaDriver(RN): Mando..." << mensaje << ", tamaño de la tupla: " << p.size();
 
     if (p.size() < 4) { // tam. 1 a 3, va al servidor 1
-        std::cout << " , se manda al servidor 1" << std::endl;
+       //std::cout << " , se manda al servidor 1" << std::endl;
 
         mandarMensaje(chanServer1, fdChanServer1, mensaje);
         // Espera a obtener la tupla resultado
         recibirMensaje(chanServer1, fdChanServer1, buffer);
     }
     else if (p.size() < 6) { // tam. 4 a 5, va al servidor 2
-        std::cout << " , se manda al servidor 2" << std::endl;
+       //std::cout << " , se manda al servidor 2" << std::endl;
 
         mandarMensaje(chanServer2, fdChanServer2, mensaje);
         // Espera a obtener la tupla resultado
         recibirMensaje(chanServer2, fdChanServer2, buffer);
     }
     else { // tam. 6, va al servidor 3
-        std::cout << " , se manda al servidor 3" << std::endl;
+       //std::cout << " , se manda al servidor 3" << std::endl;
 
         mandarMensaje(chanServer3, fdChanServer3, mensaje);
         // Espera a obtener la tupla resultado
         recibirMensaje(chanServer3, fdChanServer3, buffer);
     }
 
-    std::cout << "LindaDriver(RN): recibo " << buffer << ", acabo." << std::endl;
+   //std::cout << "LindaDriver(RN): recibo " << buffer << ", acabo." << std::endl;
     // escribe los datos de la tupla obtenida
     t.from_string(buffer);
 }
@@ -190,33 +190,33 @@ void LindaDriver::RN_2(const Tupla p1, const Tupla p2, Tupla& t1, Tupla& t2) {
     string buffer;
 
     // mandará la orden RN_2 concatenada a las dos tuplas convertidas a string
-    mensaje = MENSAJE_RN_2 + p1.to_string() + "," + p2.to_string();
-    std::cout << "LindaDriver(RN_2): Mando..." << mensaje << ", tamaño de las tuplas: " << p1.size();
+    mensaje = MENSAJE_RN_2 + p1.to_string() + ";" + p2.to_string();
+   //std::cout << "LindaDriver(RN_2): Mando..." << mensaje << ", tamaño de las tuplas: " << p1.size();
     if ((p1.size() == p2.size()) && (t1.size() == t2.size()) && (p1.size() == t2.size())) { // Si las tuplas son de diferente tamaño,
                                                                                             // no las vamos a enviar (requisito)
         if (p1.size() < 4) { // tam. 1 a 3, va al servidor 1
-            std::cout << " , se manda al servidor 1" << std::endl;
+           //std::cout << " , se manda al servidor 1" << std::endl;
 
             mandarMensaje(chanServer1, fdChanServer1, mensaje);
             // Espera a obtener la tupla resultado
             recibirMensaje(chanServer1, fdChanServer1, buffer);
         }
         else if (p1.size() < 6) { // tam. 4 a 5, va al servidor 2
-            std::cout << " , se manda al servidor 2" << std::endl;
+           //std::cout << " , se manda al servidor 2" << std::endl;
 
             mandarMensaje(chanServer2, fdChanServer2, mensaje);
             // Espera a obtener la tupla resultado
             recibirMensaje(chanServer2, fdChanServer2, buffer);
         }
         else { // tam. 6, va al servidor 3
-            std::cout << " , se manda al servidor 3" << std::endl;
+           //std::cout << " , se manda al servidor 3" << std::endl;
 
             mandarMensaje(chanServer3, fdChanServer3, mensaje);
             // Espera a obtener la tupla resultado
             recibirMensaje(chanServer3, fdChanServer3, buffer);
         }
 
-        std::cout << "LindaDriver(RN_2): recibo " << buffer << ", acabo." << std::endl;
+       //std::cout << "LindaDriver(RN_2): recibo " << buffer << ", acabo." << std::endl;
         // escribe los datos de las tuplas obtenidas
         stringstream s_stream(buffer);
         string substr;
@@ -225,8 +225,8 @@ void LindaDriver::RN_2(const Tupla p1, const Tupla p2, Tupla& t1, Tupla& t2) {
         getline(s_stream, substr, ';');
         t2.from_string(substr);
     } else {
-        std::cout << std::endl;
-        std::cout << "LindaDriver(RN_2): Los tamaños de las tuplas no coinciden, acabo." << std::endl;
+       //std::cout << std::endl;
+       std::cerr << "LindaDriver(RN_2): Los tamaños de las tuplas no coinciden, acabo." << std::endl;
     }
 }
 
@@ -240,31 +240,31 @@ void LindaDriver::RDN(const Tupla p, Tupla& t) {
 
     // mandará la orden RDN concatenada a la tupla convertida a string
     mensaje = MENSAJE_RDN + p.to_string();
-    std::cout << "LindaDriver(RDN): Mando..." << mensaje << ", tamaño de la tupla: " << p.size();
+   //std::cout << "LindaDriver(RDN): Mando..." << mensaje << ", tamaño de la tupla: " << p.size();
 
     if (p.size() < 4) { // tam. 1 a 3, va al servidor 1
-        std::cout << " , se manda al servidor 1" << std::endl;
+       //std::cout << " , se manda al servidor 1" << std::endl;
 
         mandarMensaje(chanServer1, fdChanServer1, mensaje);
         // Espera a obtener la tupla resultado
         recibirMensaje(chanServer1, fdChanServer1, buffer);
     }
     else if (p.size() < 6) { // tam. 4 a 5, va al servidor 2
-        std::cout << " , se manda al servidor 2" << std::endl;
+       //std::cout << " , se manda al servidor 2" << std::endl;
 
         mandarMensaje(chanServer2, fdChanServer2, mensaje);
         // Espera a obtener la tupla resultado
         recibirMensaje(chanServer2, fdChanServer2, buffer);
     }
     else { // tam. 6, va al servidor 3
-        std::cout << " , se manda al servidor 3" << std::endl;
+       //std::cout << " , se manda al servidor 3" << std::endl;
 
         mandarMensaje(chanServer3, fdChanServer3, mensaje);
         // Espera a obtener la tupla resultado
         recibirMensaje(chanServer3, fdChanServer3, buffer);
     }
 
-    std::cout << "LindaDriver(RDN): recibo " << buffer << ", acabo." << std::endl;
+   //std::cout << "LindaDriver(RDN): recibo " << buffer << ", acabo." << std::endl;
     // escribe los datos de la tupla obtenida
     t.from_string(buffer);
 }
@@ -278,34 +278,34 @@ void LindaDriver::RDN_2(const Tupla p1, const Tupla p2, Tupla& t1, Tupla& t2) { 
     string buffer;
 
     // mandará la orden RDN_2 concatenada a las dos tuplas convertidas a string
-    mensaje = MENSAJE_RDN_2 + p1.to_string() + "," + p2.to_string();
-    std::cout << "LindaDriver(RDN_2): Mando..." << mensaje << ", tamaño de las tuplas: " << p1.size();
+    mensaje = MENSAJE_RDN_2 + p1.to_string() + ";" + p2.to_string();
+   //std::cout << "LindaDriver(RDN_2): Mando..." << mensaje << ", tamaño de las tuplas: " << p1.size();
 
     if ((p1.size() == p2.size()) && (t1.size() == t2.size()) && (p1.size() == t2.size())) { // Si las tuplas son de diferente tamaño,
                                                                                             // no las vamos a enviar (requisito)
         if (p1.size() < 4) { // tam. 1 a 3, va al servidor 1
-            std::cout << " , se manda al servidor 1" << std::endl;
+           //std::cout << " , se manda al servidor 1" << std::endl;
 
             mandarMensaje(chanServer1, fdChanServer1, mensaje);
             // Espera a obtener la tupla resultado
             recibirMensaje(chanServer1, fdChanServer1, buffer);
         }
         else if (p1.size() < 6) { // tam. 4 a 5, va al servidor 2
-            std::cout << " , se manda al servidor 2" << std::endl;
+           //std::cout << " , se manda al servidor 2" << std::endl;
 
             mandarMensaje(chanServer2, fdChanServer2, mensaje);
             // Espera a obtener la tupla resultado
             recibirMensaje(chanServer2, fdChanServer2, buffer);
         }
         else { // tam. 6, va al servidor 3
-            std::cout << " , se manda al servidor 3" << std::endl;
+           //std::cout << " , se manda al servidor 3" << std::endl;
 
             mandarMensaje(chanServer3, fdChanServer3, mensaje);
             // Espera a obtener la tupla resultado
             recibirMensaje(chanServer3, fdChanServer3, buffer);
         }
 
-        std::cout << "LindaDriver(RDN_2): recibo " << buffer << ", acabo." << std::endl;
+       //std::cout << "LindaDriver(RDN_2): recibo " << buffer << ", acabo." << std::endl;
         // escribe los datos de las tuplas obtenidas
         stringstream s_stream(buffer);
         string substr;
@@ -314,8 +314,8 @@ void LindaDriver::RDN_2(const Tupla p1, const Tupla p2, Tupla& t1, Tupla& t2) { 
         getline(s_stream, substr, ';');
         t2.from_string(substr);
     } else {
-        std::cout << std::endl;
-        std::cout << "LindaDriver(RDN_2): Los tamaños de las tuplas no coinciden, acabo." << std::endl;
+       //std::cout << std::endl;
+        std::cerr << "LindaDriver(RDN_2): Los tamaños de las tuplas no coinciden, acabo." << std::endl;
     }
 }
 
@@ -353,7 +353,7 @@ void LindaDriver::mandarMensaje(Socket& chan, const int& socket_fd, const string
         chanServer2.Close(fdChanServer2);
         chanServer3.Close(fdChanServer3);
 
-        std::cout << "Conexión terminada con todos los servidores Mandar mensaje" << std::endl;
+        std::cerr << "Conexión terminada con todos los servidores Mandar mensaje" << std::endl;
         std::terminate();
     }
 }
@@ -370,7 +370,7 @@ void LindaDriver::recibirMensaje(Socket& chan, const int& socket_fd, string& buf
         chanServer2.Close(fdChanServer2);
         chanServer3.Close(fdChanServer3);
 
-        std::cout << "Conexión terminada con todos los servidores Recibo" << std::endl;
+        std::cerr << "Conexión terminada con todos los servidores Recibo" << std::endl;
         std::terminate();
     }
 

@@ -38,13 +38,14 @@ int main(int argc, char* argv[]) {
     conectarConServidores(ipServidorDespliegue, puerto, chanServer1, chanServer2, chanServer3,
                           chanRegistro, fdChanServer1, fdChanServer2, fdChanServer3, fdRegistro);
 
+    /*
     // EJEMPLO PARA MATAR A LOS 4 SERVIDORES:
     cout << "morid!" << endl;
     mandarMensaje(chanServer1, fdChanServer1, MENSAJE_CERRAR);
     mandarMensaje(chanServer2, fdChanServer2, MENSAJE_CERRAR);
     mandarMensaje(chanServer3, fdChanServer3, MENSAJE_CERRAR);
     mandarMensaje(chanRegistro, fdRegistro, MENSAJE_CERRAR);
-
+*/
     // Se instancia el LindaDriver
     LindaDriver pizarra(ipServidorDespliegue, puerto);
 

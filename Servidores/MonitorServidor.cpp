@@ -31,17 +31,9 @@ MonitorServidor::~MonitorServidor() {}
 //       Una vez insertada, desbloquea a cualquier otro proceso bloqueado en espera de una nueva tupla.
 void MonitorServidor::PN(Tupla &tupla) {
     unique_lock<mutex> lck(mtx);
-    cout << "Operacion PN llamada" << endl;
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
-    unordered_multiset<Tupla, TuplaHash> :: iterator itr2;
-    cout<<"-------------------------------\n";
-    for (itr2 = almacen.begin(); itr2 != almacen.end();itr2++) {
-        Tupla tmp(*itr2);
-        cout<<"T: "<<tmp.to_string()<<"\n";
-    }
-   // cout<<"------------------------\n";
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
-   // cout<<"---descartarcosas--\n";
+
 }
 
 // Pre:  Existe un MonitorServidor y una tupla pasada como argumento.
@@ -92,10 +84,11 @@ void MonitorServidor::RdN(Tupla &tupla) {
 //
 void MonitorServidor::RN(Tupla &tupla,int i) {
     unique_lock<mutex> lck(mtx);
-    cout << "Operacion RN llamada"+ tupla.to_string()+" "+to_string(i)+ "\n" ;                     //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
-    //Tupla resultado(tupla);
-    Tupla resultado("");
-    resultado.from_string(tupla.to_string());
+    //cout << "Operacion RN llamada"+ tupla.to_string()+" "+to_string(i)+ "\n" ;                     //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
+    Tupla resultado(tupla);
+
+    //Tupla resultado("");
+    //resultado.from_string(tupla.to_string());
 
     unordered_multiset<Tupla, TuplaHash>::iterator itr;
     bool bandera = false;
@@ -104,38 +97,32 @@ void MonitorServidor::RN(Tupla &tupla,int i) {
         //cout<<"entro while 1\n";
         itr = almacen.begin();
         while((itr != almacen.end())){
-            cout<<"entro while 2\n";
+            //cout<<"entro while 2\n";
             Tupla tmp(*itr);
             bool  c1 = ( tmp.size() == tupla.size() );
             bool  c2 = ( tupla.match(tmp) ) ;
-            cout << "D y m"+ tupla.to_string()+" "+to_string(i)+ "\n" ;
+            //cout << "D y m"+ tupla.to_string()+" "+to_string(i)+ "\n" ;
             //cout<<"paso m y s \n";
             //if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) {
             if( (c1) && ( c2 )) {
-                cout<<"Busco: "+tmp.to_string()+" --- "+tmp.to_string() +"\n";
+                //cout<<"Busco: "+tmp.to_string()+" --- "+tmp.to_string() +"\n";
                 //cout<<"entro if 1\n";
                 resultado.from_string(tmp.to_string());
                 bandera = true;
             }
             itr++;
             if(bandera){
-                cout<<"entro if 2\n";
+                //cout<<"entro if 2\n";
                 itr = almacen.end();
             }
         }
         if (!bandera) {
             cout << "Operacion RN bloqueada\n";
             enEspera.wait(lck);
-            cout<<"despierto " + to_string(i)+"\n";
+            //cout<<"despierto " + to_string(i)+"\n";
         }
     }
-    unordered_multiset<Tupla, TuplaHash> :: iterator itr2;
-    cout<<"----------Antes de eliminar-------------------\n";
-    for (itr2 = almacen.begin(); itr2 != almacen.end();itr2++) {
-        Tupla tmp(*itr2);
-        cout<<"T: "<<tmp.to_string()<<"\n";
-    }
-    //cout<<"------------------------\n";
+
     almacen.erase(almacen.equal_range(resultado).first);
     tupla.from_string(resultado.to_string());
 }
