@@ -40,7 +40,6 @@ int main(int argc, char *argv[]) {
     //cojo la tupla de control de total buscadores
     pizarra.RDN(totalTuplas, totalTuplas);
 
-    cout<<"valores "+ totalTuplas.get(1)+ " "+ totalTuplas.get(1)+"\n";
     if (stoi(totalTuplas.get(1)) != 0 || stoi(totalTuplas.get(1)) != 0) {
 
         //genero la tupla de testigo

@@ -34,11 +34,6 @@ void MonitorServidor::PN(Tupla &tupla) {
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
     unordered_multiset<Tupla, TuplaHash>::iterator itr;
 
-    cout<<"----------------------------\n";
-    for (itr = almacen.begin(); itr != almacen.end();itr++) {
-        Tupla tuplaTemp1(*itr);
-        cout<<"t: "+ tuplaTemp1.to_string()+"\n";
-    }
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
 
 }
