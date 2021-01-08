@@ -82,13 +82,15 @@ int main(int argc, char *argv[]) {
         pizarra.RDN(buscadores, buscadoresTmp);
         pizarra.RDN(buscadoresCombinados, buscadoresCombinadosTmp);
 
-
-        cout << "\rPeticiones de lectura: " + peticionesLecturaTmp.get(1) + "\r\n";
-        cout << "\rPeticiones de escritura: " + peticionesEscrituraTmp.get(1) + "\r\n";
-        cout << "\rTotal de tuplas: " + totalTuplasTmp.get(1) + "\r\n";
-        cout << "\rPublicadores en el sistema: " + publicadoresTmp.get(1) + "\r\n";
-        cout << "\rBuscadores en el sistema: " + buscadoresTmp.get(1) + "\r\n";
-        cout << "\rBuscadores Combinados en el sistema: " + buscadoresCombinadosTmp.get(1) + "\r\n";
+        // Secuencia de escape ANSI: La primera parte (\033[2J) vacía la terminal (J) de arriba a abajo(2).
+        // La segunda parte (\033[1;1H) pone el cursor en la fila 1 y columna 1.
+        cout << "\033[2J\033[1;1H";
+        cout << "\r" << "Peticiones de lectura: " + peticionesLecturaTmp.get(1) + "\n"
+             << "Peticiones de escritura: " + peticionesEscrituraTmp.get(1) + "\n"
+             << "Total de tuplas: " + totalTuplasTmp.get(1) + "\r\n"
+             << "Publicadores en el sistema: " + publicadoresTmp.get(1) + "\n"
+             << "Buscadores en el sistema: " + buscadoresTmp.get(1) + "\n"
+             << "Buscadores Combinados en el sistema: " + buscadoresCombinadosTmp.get(1) + "\n";
 
         if (numeroTuplasPasado != stoi(totalTuplasTmp.get(1))) {
             numeroTuplasPasado = stoi(totalTuplasTmp.get(1));
@@ -100,7 +102,7 @@ int main(int argc, char *argv[]) {
         if (stoi(publicadoresTmp.get(1)) == 0 && stoi(buscadoresTmp.get(1)) == 0 &&
             stoi(buscadoresCombinadosTmp.get(1)) == 0
             && !nuevasTuplas) {
-            cout << "if1 " + to_string(contador) + "\n";
+            //cout << "if1 " + to_string(contador) + "\n";
             contador++;
             if (contador == 3) {
 
@@ -112,7 +114,7 @@ int main(int argc, char *argv[]) {
             }
 
         } else {
-            cout << "paso else\n";
+            //cout << "paso else\n";
             contador = 0;
         }
         sleep(2);
