@@ -23,6 +23,18 @@ int main(int argc, char *argv[]) {
     Tupla numeroTuplas("TotalTuplas", "0");
     pizarra.PN(numeroTuplas);
 
+    //colocamos tuplas de numero de publicadores para controlar los publicadores
+    Tupla numeroPublicadores("Publicadores", "0");
+    pizarra.PN(numeroPublicadores);
+
+    //colocamos tuplas de numero de buscadores para controlar buscadores
+    Tupla numeroBuscadores("Buscadores", "0");
+    pizarra.PN(numeroBuscadores);
+
+    //colocamos tuplas de numero de buscadoresCombinados para controlar buscadores combinados
+    Tupla numeroBuscadoresCombinados("buscadoresCombinados", "0");
+    pizarra.PN(numeroBuscadoresCombinados);
+
     //Escribo las tuplas de monitorizacion de lectura y escritura
     Tupla numeroEscrituras("PeticionesEscritura", "0");
     pizarra.PN(numeroEscrituras);

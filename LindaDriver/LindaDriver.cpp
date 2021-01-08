@@ -61,11 +61,12 @@ LindaDriver::LindaDriver(string ipServerRegistro, int puertoServerRegistro) {
     chanServer1.CambiaDetallesServidor(ip_server_1, stoi(puerto_server_1));
     chanServer2.CambiaDetallesServidor(ip_server_2, stoi(puerto_server_2));
     chanServer3.CambiaDetallesServidor(ip_server_3, stoi(puerto_server_3));
+    /*
     std::cout << "Datos de los servidores:\n"
               << "Server 1(tam. 1 a 3): '" << this->ip_server_1 << "':'" << this->puerto_server_1 << "'\n"
               << "Server 2(tam. 4 a 5): '" << this->ip_server_2 << "':'" << this->puerto_server_2 << "'\n"
               << "Server 3(tam. 6): '" << this->ip_server_3 << "':'" << this->puerto_server_3 << "'" << std::endl;
-
+    */
     // Conexiones con los servidores Linda
     conectar(chanServer1, fdChanServer1);
     conectar(chanServer2, fdChanServer2);
@@ -89,7 +90,7 @@ LindaDriver::~LindaDriver() {
     chanServer2.Close(fdChanServer2);
     chanServer3.Close(fdChanServer3);
 
-    std::cerr << "Conexión terminada con todos los servidores Destructor" << std::endl;
+    //std::cerr << "Conexión terminada con todos los servidores Destructor" << std::endl;
 }
 
 //operadores ----------------------------
