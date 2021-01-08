@@ -85,14 +85,16 @@ int main(int argc, char *argv[]) {
         pizarra.RDN(publicadores, publicadoresTmp);
         pizarra.RDN(buscadores, buscadoresTmp);
         pizarra.RDN(buscadoresCombinados, buscadoresCombinadosTmp);
-
-
-        cout << "Peticiones de lectura: " + peticionesLecturaTmp.get(1) + "\n";
-        cout << "Peticiones de escritura: " + peticionesEscrituraTmp.get(1) + "\n";
-        cout << "Total de tuplas: " + totalTuplasTmp.get(1) + "\n";
-        cout << "Publicadores en el sistema: " + publicadoresTmp.get(1) + "\n";
-        cout << "Buscadores en el sistema: " + buscadoresTmp.get(1) + "\n";
-        cout << "Buscadores Combinados en el sistema: " + buscadoresCombinadosTmp.get(1) + "\n";
+        
+        // Secuencia de escape ANSI: La primera parte (\033[2J) vacía la terminal (J) de arriba a abajo(2).
+        // La segunda parte (\033[1;1H) pone el cursor en la fila 1 y columna 1.
+        cout << "\033[2J\033[1;1H";
+        cout << "\r" << "Peticiones de lectura: " + peticionesLecturaTmp.get(1) + "\n"
+             << "Peticiones de escritura: " + peticionesEscrituraTmp.get(1) + "\n"
+             << "Total de tuplas: " + totalTuplasTmp.get(1) + "\r\n"
+             << "Publicadores en el sistema: " + publicadoresTmp.get(1) + "\n"
+             << "Buscadores en el sistema: " + buscadoresTmp.get(1) + "\n"
+             << "Buscadores Combinados en el sistema: " + buscadoresCombinadosTmp.get(1) + "\n";
 
         sleep(1);           //tiempo de refresco de los datos
         //usleep(120);
@@ -141,6 +143,7 @@ void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServe
         pizarra.RDN(buscadores, buscadoresTmp);
         pizarra.RDN(buscadoresCombinados, buscadoresCombinadosTmp);
 
+
         if (numeroTuplasPasado != stoi(totalTuplasTmp.get(1))) {
             numeroTuplasPasado = stoi(totalTuplasTmp.get(1));
             nuevasTuplas = true;
@@ -151,6 +154,7 @@ void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServe
         if (stoi(publicadoresTmp.get(1)) == 0 && stoi(buscadoresTmp.get(1)) == 0 &&
             stoi(buscadoresCombinadosTmp.get(1)) == 0
             && !nuevasTuplas) {
+
             contador++;
             if (contador == 3) {
                 continuar = false;
@@ -163,6 +167,7 @@ void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServe
             }
 
         } else {
+
             contador = 0;
         }
         sleep(5);   //tiempo de comprobacion para acabar el sistema
