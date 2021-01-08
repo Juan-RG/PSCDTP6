@@ -38,7 +38,6 @@ public:
 
     // Destructor -----------------------------
     ~LindaDriver();
-
     // Operadores -----------------------------
 
     // PostNote

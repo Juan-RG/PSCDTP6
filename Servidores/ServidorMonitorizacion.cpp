@@ -52,7 +52,7 @@ int main(int argc, char *argv[]) {
     // Se instancia el LindaDriver
     LindaDriver pizarra(ipServidorDespliegue, puerto);
 
-    bool acabar = true;
+    bool continuar = true;
     int contador = 0;
     int numeroTuplasPasado = -1;
     bool nuevasTuplas = true;
@@ -63,7 +63,7 @@ int main(int argc, char *argv[]) {
     Tupla publicadores("Publicadores", "?X");
     Tupla buscadores("Buscadores", "?X");
     Tupla buscadoresCombinados("BuscadoresCombinados", "?X");
-    while (acabar) {
+    while (continuar) {
         Tupla peticionesLecturaTmp("", "");
         Tupla peticionesEscrituraTmp("", "");
         Tupla totalTuplasTmp("", "");
@@ -84,34 +84,42 @@ int main(int argc, char *argv[]) {
         cout << "Peticiones de lectura: " + peticionesLecturaTmp.get(1) + "\n";
         cout << "Peticiones de escritura: " + peticionesEscrituraTmp.get(1) + "\n";
         cout << "Total de tuplas: " + totalTuplasTmp.get(1) + "\n";
-        cout << "Publicadores en el sistema: " + publicadoresTmp.get(1)  + "\n";
-        cout << "Buscadores en el sistema: " + buscadoresTmp.get(1)  + "\n";
-        cout << "Buscadores Combinados en el sistema: " + buscadoresCombinadosTmp.get(1)  + "\n";
+        cout << "Publicadores en el sistema: " + publicadoresTmp.get(1) + "\n";
+        cout << "Buscadores en el sistema: " + buscadoresTmp.get(1) + "\n";
+        cout << "Buscadores Combinados en el sistema: " + buscadoresCombinadosTmp.get(1) + "\n";
 
-        if(numeroTuplasPasado != stoi(totalTuplasTmp.get(1))){
+        if (numeroTuplasPasado != stoi(totalTuplasTmp.get(1))) {
             numeroTuplasPasado = stoi(totalTuplasTmp.get(1));
             nuevasTuplas = true;
-        }else{
+        } else {
             nuevasTuplas = false;
         }
 
-        if(stoi(publicadoresTmp.get(1)) == 0 && stoi(buscadoresTmp.get(1)) == 0 && stoi(buscadoresCombinadosTmp.get(1)) == 0
-        && !nuevasTuplas){
+        if (stoi(publicadoresTmp.get(1)) == 0 && stoi(buscadoresTmp.get(1)) == 0 &&
+            stoi(buscadoresCombinadosTmp.get(1)) == 0
+            && !nuevasTuplas) {
+            cout << "if1 " + to_string(contador) + "\n";
             contador++;
-            if (contador == 3){
+            if (contador == 3) {
+
                 mandarMensaje(chanServer1, fdChanServer1, MENSAJE_CERRAR);
                 mandarMensaje(chanServer2, fdChanServer2, MENSAJE_CERRAR);
                 mandarMensaje(chanServer3, fdChanServer3, MENSAJE_CERRAR);
                 mandarMensaje(chanRegistro, fdRegistro, MENSAJE_CERRAR);
-                acabar = false;
+                continuar = false;
             }
 
-        } else{
+        } else {
+            cout << "paso else\n";
             contador = 0;
         }
-        sleep(60);
+        sleep(2);
     }
-    return 0;
+    cout << "acabo\n";
+    sleep(10);
+
+
+    //return 0;
 }
 
 
@@ -195,7 +203,6 @@ void conectar(Socket &chan, int &socket_fd) {
 // Post: Manda "mensaje" por el socket con fd indicados, tratando los errores
 void mandarMensaje(Socket &chan, const int &socket_fd, const string &mensaje) {
     int send_bytes = chan.Send(socket_fd, mensaje);
-
     if (send_bytes == -1) {
         std::cerr << "Error al enviar el mensaje de cierre a los servidores: " << strerror(errno) << std::endl;
         std::terminate();
