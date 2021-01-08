@@ -7,17 +7,20 @@
 using namespace std;
 
 // Funciones auxiliares para mandar el mensaje de cierre a los servidores
-void conectarConServidores(string ipServerRegistro, int puertoServerRegistro, Socket& chanServer1,
-        Socket& chanServer2, Socket& chanServer3, Socket& chanRegistro, int& fdChanServer1,
-        int& fdChanServer2, int& fdChanServer3, int& fdRegistro);
-void conectar(Socket& chan, int& socket_fd);
-void mandarMensaje(Socket& chan, const int& socket_fd, const string& mensaje);
-void recibirMensaje(Socket& chan, const int& socket_fd, string& buffer);
+void conectarConServidores(string ipServerRegistro, int puertoServerRegistro, Socket &chanServer1,
+                           Socket &chanServer2, Socket &chanServer3, Socket &chanRegistro, int &fdChanServer1,
+                           int &fdChanServer2, int &fdChanServer3, int &fdRegistro);
+
+void conectar(Socket &chan, int &socket_fd);
+
+void mandarMensaje(Socket &chan, const int &socket_fd, const string &mensaje);
+
+void recibirMensaje(Socket &chan, const int &socket_fd, string &buffer);
 
 static const string MENSAJE_CERRAR = "CERRAR";
 
-int main(int argc, char* argv[]) {
-    if(argc != 3){
+int main(int argc, char *argv[]) {
+    if (argc != 3) {
         cerr << "Numero de parametros introducios incorrecto:" + string(strerror(errno)) + "\n";
         exit(1);
     }
@@ -50,21 +53,21 @@ int main(int argc, char* argv[]) {
     LindaDriver pizarra(ipServidorDespliegue, puerto);
 
     //tuplas de valores
-    Tupla peticionesLectura("PeticionesLectura","?X");
-    Tupla peticionesEscritura("PeticionesEscritura","?X");
-    Tupla totalTuplas("TotalTuplas","?X");
-    while (true){
-        Tupla peticionesLecturaTmp("","");
-        Tupla peticionesEscrituraTmp("","");
-        Tupla totalTuplasTmp("","");
+    Tupla peticionesLectura("PeticionesLectura", "?X");
+    Tupla peticionesEscritura("PeticionesEscritura", "?X");
+    Tupla totalTuplas("TotalTuplas", "?X");
+    while (true) {
+        Tupla peticionesLecturaTmp("", "");
+        Tupla peticionesEscrituraTmp("", "");
+        Tupla totalTuplasTmp("", "");
 
-        pizarra.RDN(peticionesLectura,peticionesLecturaTmp);
-        pizarra.RDN(peticionesEscritura,peticionesEscrituraTmp);
-        pizarra.RDN(totalTuplas,totalTuplasTmp);
+        pizarra.RDN(peticionesLectura, peticionesLecturaTmp);
+        pizarra.RDN(peticionesEscritura, peticionesEscrituraTmp);
+        pizarra.RDN(totalTuplas, totalTuplasTmp);
 
-        cout<< "Peticiones de lectura: " + peticionesLecturaTmp.get(1)<<"\n";
-        cout<< "Peticiones de escritura: " + peticionesEscrituraTmp.get(1)<<"\n";
-        cout<< "Total de tuplas: " + totalTuplasTmp.get(1)<<"\n";
+        cout << "Peticiones de lectura: " + peticionesLecturaTmp.get(1) << "\n";
+        cout << "Peticiones de escritura: " + peticionesEscrituraTmp.get(1) << "\n";
+        cout << "Total de tuplas: " + totalTuplasTmp.get(1) << "\n";
 
         sleep(60);
     }
@@ -72,9 +75,9 @@ int main(int argc, char* argv[]) {
 }
 
 
-void conectarConServidores(string ipServerRegistro, int puertoServerRegistro, Socket& chanServer1,
-                           Socket& chanServer2, Socket& chanServer3, Socket& chanRegistro, int& fdChanServer1,
-                           int& fdChanServer2, int& fdChanServer3, int& fdRegistro) {
+void conectarConServidores(string ipServerRegistro, int puertoServerRegistro, Socket &chanServer1,
+                           Socket &chanServer2, Socket &chanServer3, Socket &chanRegistro, int &fdChanServer1,
+                           int &fdChanServer2, int &fdChanServer3, int &fdRegistro) {
     Socket chan(ipServerRegistro, puertoServerRegistro);
     int socket_fd;
 
@@ -95,7 +98,7 @@ void conectarConServidores(string ipServerRegistro, int puertoServerRegistro, So
 
     // y cierra el socket
     chan.Close(socket_fd);
-    std::cout << "socket con server de registro cerrado" << std::endl;
+    //std::cout << "socket con server de registro cerrado" << std::endl;
 
     // Parsea los datos recibidos del servidor de registro: ip1","ip2","ip3","puerto1","puerto2","puerto3
     stringstream s_stream(buffer); // Crea un stringstream a partir del buffer
@@ -126,7 +129,7 @@ void conectarConServidores(string ipServerRegistro, int puertoServerRegistro, So
 }
 
 
-void conectar(Socket& chan, int& socket_fd) {
+void conectar(Socket &chan, int &socket_fd) {
     const int NUM_MAX_INTENTOS = 10;
     int count = 0;
     do {
@@ -135,13 +138,13 @@ void conectar(Socket& chan, int& socket_fd) {
         count++;
 
         // Si error --> esperamos 1 segundo para reconectar
-        if(socket_fd == -1) {
+        if (socket_fd == -1) {
             sleep(1);
         }
-    } while(socket_fd == -1 && count < NUM_MAX_INTENTOS);
+    } while (socket_fd == -1 && count < NUM_MAX_INTENTOS);
 
     // Nos aseguramos de que se ha realizado la conexión
-    if(socket_fd == -1) {
+    if (socket_fd == -1) {
         std::cerr << "No se ha podido contactar con el servidor" << std::endl;
         std::terminate();
     }
@@ -150,20 +153,20 @@ void conectar(Socket& chan, int& socket_fd) {
 
 // Pre: --
 // Post: Manda "mensaje" por el socket con fd indicados, tratando los errores
-void mandarMensaje(Socket& chan, const int& socket_fd, const string& mensaje) {
+void mandarMensaje(Socket &chan, const int &socket_fd, const string &mensaje) {
     int send_bytes = chan.Send(socket_fd, mensaje);
 
-    if(send_bytes == -1) {
+    if (send_bytes == -1) {
         std::cerr << "Error al enviar el mensaje de cierre a los servidores: " << strerror(errno) << std::endl;
         std::terminate();
     }
 }
 
 
-void recibirMensaje(Socket& chan, const int& socket_fd, string& buffer) {
+void recibirMensaje(Socket &chan, const int &socket_fd, string &buffer) {
     int read_bytes = chan.Recv(socket_fd, buffer, MESSAGE_SIZE);
 
-    if(read_bytes == -1) {
+    if (read_bytes == -1) {
         std::cerr << "Error al recibir datos de los servidores Linda: " << strerror(errno) << std::endl;
         std::terminate();
     }

@@ -60,19 +60,19 @@ void troceaTuplaDoble(string s, string &t1, string &t2) {
 // Post: Se encarga de recibir la tupla, trocearla y dependiendo de que operacion a realizar recibe, llamara a una funcion
 //       del monitor u otra (PN, RN, RdN, RN_2, RdN_2). Si es PN, envia mensaje de OK y si es RN o RdN (de una o dos tuplas),
 //       envia la tupla encontrada. Finalizara cuando reciba mensaje de desconexion ("DESCONEXION").
-void servCliente(Socket& soc, int client_fd, MonitorServidor& mS,int i) {
+void servCliente(Socket &soc, int client_fd, MonitorServidor &mS) {
 
-	// Buffer para recibir el mensaje
+    // Buffer para recibir el mensaje
     int length = 10000;
     string buffer;
 
-	int rcv_bytes;
-	int send_bytes;
+    int rcv_bytes;
+    int send_bytes;
 
-	string operacion;                       //Operacion a realizar en el servidor (RN, PN...)
-	string tupla;                           //Guardamos la tupla recibida
+    string operacion;                       //Operacion a realizar en el servidor (RN, PN...)
+    string tupla;                           //Guardamos la tupla recibida
 
-	Tupla tuplaTemp1("");                   //Para buscar la tupla en la memoria
+    Tupla tuplaTemp1("");                   //Para buscar la tupla en la memoria
     Tupla tuplaTemp2("");                   //Para buscar la tupla en la memoria para operaciones "2".
 
     string tuplaString1 = "";               //Variable que almacena la primera tupla si pide operaciones dobles
@@ -80,104 +80,95 @@ void servCliente(Socket& soc, int client_fd, MonitorServidor& mS,int i) {
 
     bool out = false;                       // Inicialmente no salir del bucle
 
-	while(!out) {
-		// Recibimos el mensaje del cliente
-		rcv_bytes = soc.Recv(client_fd,buffer,length);
-       // cout<<"mensaje "+buffer+"\n";
-		if (rcv_bytes == -1) {
-			cerr << "Error al recibir datos: " + string(strerror(errno)) + "\n";
-			soc.Close(client_fd); // Cerramos los sockets.
+    while (!out) {
+        // Recibimos el mensaje del cliente
+        rcv_bytes = soc.Recv(client_fd, buffer, length);
+        if (rcv_bytes == -1) {
+            cerr << "Error al recibir datos: " + string(strerror(errno)) + "\n";
+            soc.Close(client_fd); // Cerramos los sockets.
             std::terminate();
-		}
+        }
 
-        if (buffer == MENSAJE_DESCONEXION){  //Salimos del bucle
-            //cout<<"salgo1\n";
+        if (buffer == MENSAJE_DESCONEXION) {  //Salimos del bucle
             out = true;
-        } else if(buffer == MENSAJE_CERRAR) {
+        } else if (buffer == MENSAJE_CERRAR) {
             cout << "Recibido mensaje de cierre del servidor, terminando la ejecución...\n";
             exit(0);
         } else {
-            trocea(buffer, operacion, tupla);			//Separamos la orden de la tupla (son strings)
+            trocea(buffer, operacion, tupla);            //Separamos la orden de la tupla (son strings)
 
             string tuplaDobleString;
-            if(operacion == MENSAJE_PN) {  //postnote, mete algo en memoria
-                tuplaTemp1.from_string(tupla);
-                //Tupla tuplaTempPN("");
-                //tuplaTempPN.from_string(tupla);	        //pasamos la tupla tipo string a tipo "tupla"
-                //cout<<"CLiente: "+to_string(i)+" operacion "+operacion+"\n";
-                //cout<<"CLiente: "+to_string(i)+"Server recibe :"+ tuplaTemp1.to_string()+"\n";
-
+            if (operacion == MENSAJE_PN) {  //postnote, mete algo en memoria
+                tuplaTemp1.from_string(tupla);  //pasamos la tupla 1 tipo string a tipo "tupla"
 
                 mS.PN(tuplaTemp1);    //Guardamos en la coleccion la tupla que nos han pasado (llamamos al monitor)
 
                 send_bytes = soc.Send(client_fd, RECIBIDO);
-                if(send_bytes == -1) {
+                if (send_bytes == -1) {
                     cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                     soc.Close(client_fd); // Cerramos los sockets.
                     std::terminate();
                 }
-            } else if(operacion == MENSAJE_RDN) {//lee tupla y la copia
-                tuplaTemp1.from_string(tupla);	//pasamos la tupla tipo string a tipo "tupla"
+            } else if (operacion == MENSAJE_RDN) {//lee tupla y la copia
+                tuplaTemp1.from_string(tupla);    //pasamos la tupla tipo string a tipo "tupla"
 
                 mS.RdN(tuplaTemp1);    //Buscamos en la coleccion la tupla que nos han pasado (llamamos al monitor)
 
                 send_bytes = soc.Send(client_fd, tuplaTemp1.to_string());    //Enviamos la tupla encontrada
-                if(send_bytes == -1) {
+                if (send_bytes == -1) {
                     cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                     soc.Close(client_fd); // Cerramos los sockets.
                     std::terminate();
                 }
-            } else if(operacion == MENSAJE_RN){  //Busca tupla y la borra
-                //Tupla tuplaTempAux("");
-                //tuplaTempAux.from_string(tupla);	//pasamos la tupla tipo string a tipo "tupla"
-                //cout<<"CLiente: "+to_string(i)+" operacion "+operacion+"\n";
-                tuplaTemp1.from_string(tupla);
-                //cout<<"CLiente: "+to_string(i)+"Server recibe :"+ tuplaTemp1.to_string()+"\n";
-                mS.RN(tuplaTemp1,i);   //Buscamos en la coleccion la tupla que nos han pasado y la eliminamos (monitor)
-                //cout<<"CLiente: "+to_string(i)+"Server devuelve :"+ tuplaTemp1.to_string()+"\n";
+            } else if (operacion == MENSAJE_RN) {  //Busca tupla y la borra
+                tuplaTemp1.from_string(tupla);  //pasamos la tupla 1 tipo string a tipo "tupla"
+
+                mS.RN(tuplaTemp1);   //Buscamos en la coleccion la tupla que nos han pasado y la eliminamos (monitor)
+
                 send_bytes = soc.Send(client_fd, tuplaTemp1.to_string());    //Enviamos la tupla encontrada
-                if(send_bytes == -1) {
+                if (send_bytes == -1) {
                     cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                     soc.Close(client_fd); // Cerramos los sockets.
                     std::terminate();
                 }
-            } else if(operacion == MENSAJE_RDN_2){  //lee tupla doble y la copia
+            } else if (operacion == MENSAJE_RDN_2) {  //lee tupla doble y la copia
                 troceaTuplaDoble(tupla, tuplaString1, tuplaString2);   //Separamos la tupla doble para guardarla en dos
 
-                tuplaTemp1.from_string(tuplaString1);		    //pasamos la tupla 1 tipo string a tipo "tupla"
-                tuplaTemp2.from_string(tuplaString2);			//pasamos la tupla 1 tipo string a tipo "tupla"
+                tuplaTemp1.from_string(tuplaString1);            //pasamos la tupla 1 tipo string a tipo "tupla"
+                tuplaTemp2.from_string(tuplaString2);            //pasamos la tupla 1 tipo string a tipo "tupla"
 
                 mS.RdN_2(tuplaTemp1, tuplaTemp2);         //Llamamos a la operacion de servidor
 
-                tuplaDobleString = tuplaTemp1.to_string() + ";" + tuplaTemp2.to_string(); //Juntamos las dos tuplas para enviarlas
+                tuplaDobleString =
+                        tuplaTemp1.to_string() + ";" + tuplaTemp2.to_string(); //Juntamos las dos tuplas para enviarlas
 
                 send_bytes = soc.Send(client_fd, tuplaDobleString);   //Enviamos la Tupla.
-                if(send_bytes == -1) {
+                if (send_bytes == -1) {
                     cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                     soc.Close(client_fd); // Cerramos los sockets.
                     std::terminate();
                 }
-            } else if(operacion == MENSAJE_RN_2){  //lee tupla doble y se la "lleva" (la borra de la coleccion)
+            } else if (operacion == MENSAJE_RN_2) {  //lee tupla doble y se la "lleva" (la borra de la coleccion)
                 troceaTuplaDoble(tupla, tuplaString1, tuplaString2);   //Separamos la tupla doble para guardarla en dos
 
-                tuplaTemp1.from_string(tuplaString1);		    //pasamos la tupla 1 tipo string a tipo "tupla"
-                tuplaTemp2.from_string(tuplaString2);			//pasamos la tupla 1 tipo string a tipo "tupla"
+                tuplaTemp1.from_string(tuplaString1);            //pasamos la tupla 1 tipo string a tipo "tupla"
+                tuplaTemp2.from_string(tuplaString2);            //pasamos la tupla 1 tipo string a tipo "tupla"
 
                 mS.RN_2(tuplaTemp1, tuplaTemp2);         //Llamamos a la operacion de servidor
 
-                tuplaDobleString = tuplaTemp1.to_string() + ";" + tuplaTemp2.to_string(); //Juntamos las dos tuplas para enviarlas
+                tuplaDobleString =
+                        tuplaTemp1.to_string() + ";" + tuplaTemp2.to_string(); //Juntamos las dos tuplas para enviarlas
 
                 send_bytes = soc.Send(client_fd, tuplaDobleString);   //Enviamos la Tupla.
-                if(send_bytes == -1) {
+                if (send_bytes == -1) {
                     cerr << "Error al enviar confirmacion: " + string(strerror(errno)) + "\n";
                     soc.Close(client_fd); // Cerramos los sockets.
                     std::terminate();
                 }
             }
         }
-	}
+    }
 }
-
 
 
 int main(int argc, char *argv[]) {
@@ -188,9 +179,8 @@ int main(int argc, char *argv[]) {
     }
 
 
-
     const int N = 5000;                                                                                                    // FIXME: AUMENTAR O HACER INFINITO
-	//Creamos el tipo de set que vamos a usar (donde guardamos las tuplas)
+    //Creamos el tipo de set que vamos a usar (donde guardamos las tuplas)
     unordered_multiset<Tupla, TuplaHash> almacen;
     MonitorServidor mS(&almacen);
 
@@ -221,12 +211,12 @@ int main(int argc, char *argv[]) {
         // Accept
         client_fd[i] = chan.Accept();
 
-        if(client_fd[i] == -1) {
+        if (client_fd[i] == -1) {
             cerr << "Error en el accept: " + string(strerror(errno)) + "\n";
             chan.Close(socket_fd); // Cerramos el socket.
             exit(1);
         }
-        cliente[i] = thread(&servCliente, ref(chan), client_fd[i], ref(mS),i);
+        cliente[i] = thread(&servCliente, ref(chan), client_fd[i], ref(mS));
     }
 
     for (int i = 0; i < max_connections; i++) {

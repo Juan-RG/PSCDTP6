@@ -24,7 +24,7 @@ private:
 
     condition_variable enEspera;
 
-    unordered_multiset <Tupla, TuplaHash> almacen;
+    unordered_multiset<Tupla, TuplaHash> almacen;
 
     // Estructuras y funciones auxiliares a RDN_2 y RN_2
     struct comodines;
@@ -34,13 +34,14 @@ private:
                            comodinesComunes arrayComodinesComunes[], int &numComodinesComunes, int numComodinesp1,
                            int numComodinesp2);
 
-    void buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numComodinesComunes, comodinesComunes arrayComodinesComunes[]);
+    void
+    buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numComodinesComunes, comodinesComunes arrayComodinesComunes[]);
 
     void proceso_comodines(Tupla p, comodines arrayComodinesp[], int &numComodinesp);
 
 public:
     //------------------------- constructor
-    MonitorServidor(unordered_multiset <Tupla, TuplaHash> *almacen);
+    MonitorServidor(unordered_multiset<Tupla, TuplaHash> *almacen);
 
     //------------------------- destructor
     ~MonitorServidor();
@@ -49,10 +50,11 @@ public:
 
     void RdN(Tupla &tupla);
 
-    void RN(Tupla &tupla,int n);
+    void RN(Tupla &tupla);
 
     void RdN_2(Tupla &t1, Tupla &t2);
 
     void RN_2(Tupla &t1, Tupla &t2);
 };
+
 #endif

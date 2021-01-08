@@ -14,15 +14,15 @@
 #include <regex>
 
 Tupla::Tupla(int n) {
-    data = new vector<string>(n,"");
+    data = new vector<string>(n, "");
 }
 
 Tupla::Tupla(string s1) {
-    data = new vector<string>(1,s1);
+    data = new vector<string>(1, s1);
 }
 
 Tupla::Tupla(string s1, string s2) {
-    data = new vector<string>(2,"");
+    data = new vector<string>(2, "");
     data->at(0) = s1;
     data->at(1) = s2;
     //alternativamente se podía haber hecho como
@@ -30,14 +30,14 @@ Tupla::Tupla(string s1, string s2) {
 }
 
 Tupla::Tupla(string s1, string s2, string s3) {
-    data = new vector<string>(3,"");
+    data = new vector<string>(3, "");
     data->at(0) = s1;
     data->at(1) = s2;
     data->at(2) = s3;
 }
 
 Tupla::Tupla(string s1, string s2, string s3, string s4) {
-    data = new vector<string>(4,"");
+    data = new vector<string>(4, "");
     data->at(0) = s1;
     data->at(1) = s2;
     data->at(2) = s3;
@@ -45,7 +45,7 @@ Tupla::Tupla(string s1, string s2, string s3, string s4) {
 }
 
 Tupla::Tupla(string s1, string s2, string s3, string s4, string s5) {
-    data = new vector<string>(5,"");
+    data = new vector<string>(5, "");
     data->at(0) = s1;
     data->at(1) = s2;
     data->at(2) = s3;
@@ -54,7 +54,7 @@ Tupla::Tupla(string s1, string s2, string s3, string s4, string s5) {
 }
 
 Tupla::Tupla(string s1, string s2, string s3, string s4, string s5, string s6) {
-    data = new vector<string>(6,"");
+    data = new vector<string>(6, "");
     data->at(0) = s1;
     data->at(1) = s2;
     data->at(2) = s3;
@@ -63,9 +63,9 @@ Tupla::Tupla(string s1, string s2, string s3, string s4, string s5, string s6) {
     data->at(5) = s6;
 }
 
-Tupla::Tupla(Tupla& t) {
-    data = new vector<string>(t.size(),"");
-    for(int i = 0;i<t.size();i++){
+Tupla::Tupla(Tupla &t) {
+    data = new vector<string>(t.size(), "");
+    for (int i = 0; i < t.size(); i++) {
         data->at(i) = t.get(i);
     }
 }
@@ -78,7 +78,7 @@ Tupla::Tupla(const Tupla &t) {
 }
 
 // Operador iguales para el unordered multiset, devuelve true si y solo si las dos tuplas tienen el mismo tamaño y contenido
-bool Tupla::operator ==(const Tupla& b) const {
+bool Tupla::operator==(const Tupla &b) const {
     if (data->size() != b.size()) {
         return false; // ya sabemos que no son iguales
     } else {
@@ -95,20 +95,20 @@ Tupla::~Tupla() {
     delete data;
 }
 
-int Tupla::size() const{
+int Tupla::size() const {
     return data->size();
 }
 
-string Tupla::to_string() const{
+string Tupla::to_string() const {
     string res = "[";
-    for (int i=0; i<data->size()-1; i++) {
+    for (int i = 0; i < data->size() - 1; i++) {
         res = res + data->at(i) + ",";
     }
-    res = res + data->at(data->size()-1) + "]";
+    res = res + data->at(data->size() - 1) + "]";
     return res;
 }
 
-string Tupla::get(int pos) const{
+string Tupla::get(int pos) const {
     return data->at(pos);
 }
 
@@ -116,42 +116,42 @@ void Tupla::set(int pos, string value) {
     data->at(pos) = value;
 }
 
-void Tupla::trocear(string elem[],int strings, string s) {
+void Tupla::trocear(string elem[], int strings, string s) {
     stringstream s_stream(s); //create string stream from the string
     string substr;
     int i;
     getline(s_stream, substr, '['); //get first string delimited by comma
-    for(i = 0; i < strings-1; i++){
+    for (i = 0; i < strings - 1; i++) {
         getline(s_stream, substr, ','); //get first string delimited by comma
-        elem[i]=substr;
+        elem[i] = substr;
     }
     getline(s_stream, substr, ']');
-    elem[i]=substr;
+    elem[i] = substr;
 
 }
 
 void Tupla::from_string(string s) {
-    assert(s.length()>2 && s[0]=='[' && s[s.length()-1]==']');
+    assert(s.length() > 2 && s[0] == '[' && s[s.length() - 1] == ']');
     int strings = 1;
     string elem[6];
 
-    for(int i = 0; i<s.length();i++){
+    for (int i = 0; i < s.length(); i++) {
 
-        if(s[i]==','){
+        if (s[i] == ',') {
             strings++;
         }
     }
     delete data;
-    data = new vector<string>(strings,"");
-    trocear(elem,strings,s);
+    data = new vector<string>(strings, "");
+    trocear(elem, strings, s);
 
-    for(int i = 0; i < strings; i++){
-        set(i,elem[i]);
+    for (int i = 0; i < strings; i++) {
+        set(i, elem[i]);
     }
 
 }
 
-bool Tupla::match(Tupla p) const{
+bool Tupla::match(Tupla p) const {
     if (p.size() != data->size()) { // si las tuplas tienen dif tamaño
         return false;
     }
@@ -159,9 +159,9 @@ bool Tupla::match(Tupla p) const{
     int w = 0;
     string cadena = " ";
 
-    struct comodines{
-	    string valor; 	    
-        string palabra; 	
+    struct comodines {
+        string valor;
+        string palabra;
     };
 
     comodines Comodin[p.size()];
@@ -169,32 +169,31 @@ bool Tupla::match(Tupla p) const{
     // Regex para matchear con comodines
     regex e("\\?[A-Z]");
 
-    for(int i=0;i<p.size();i++) {
-        //std::cout << "iter" << i << std::endl;
-	    rep = false;
+    for (int i = 0; i < p.size(); i++) {
+        rep = false;
         cadena = data->at(i);
 
-	    if(regex_match(cadena, e)){//if1
-	        for(int j = 0;j < w; j++) {
-                if(data->at(i) == Comodin[j].valor){
-		            if(p.get(i) != Comodin[j].palabra){
-			            return false;
+        if (regex_match(cadena, e)) {//if1
+            for (int j = 0; j < w; j++) {
+                if (data->at(i) == Comodin[j].valor) {
+                    if (p.get(i) != Comodin[j].palabra) {
+                        return false;
                     }
-	                rep = true;
+                    rep = true;
                 }
-            } 
-            if(!rep) {
-	            Comodin[w].valor = data->at(i);
-	            Comodin[w].palabra = p.get(i);
-	            w++;
             }
-	    } else{
+            if (!rep) {
+                Comodin[w].valor = data->at(i);
+                Comodin[w].palabra = p.get(i);
+                w++;
+            }
+        } else {
             string stringTemp1 = data->at(i);
             string stringTemp2 = p.get(i);
-            if((stringTemp1).compare(stringTemp2) != 0) {
+            if ((stringTemp1).compare(stringTemp2) != 0) {
                 return false;
-	        }
-	    }
+            }
+        }
     }
     return true;
 }

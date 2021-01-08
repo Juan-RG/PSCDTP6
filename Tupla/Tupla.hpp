@@ -17,33 +17,41 @@ using namespace std;
 
 class Tupla {
 public:
-	//constructores -----------------------------
-	//Pre:  1<=n<=6
-	//Post: Crea una tupla con n componentes ""
-	Tupla(int n);
-	//las siguientes crean e inicializan una tupla a partir de los parámetros
-	Tupla(string s1);
-	Tupla(string s1, string s2);
-	Tupla(string s1, string s2, string s3);
-	Tupla(string s1, string s2, string s3, string s4);
-	Tupla(string s1, string s2, string s3, string s4, string s5);
-	Tupla(string s1, string s2, string s3, string s4, string s5, string s6);
-	//Creo una tupla a partir de otra. Se trata de un duplicado
-	Tupla(Tupla& t);
-    Tupla(const Tupla& t);
-	
-	//destructor -----------------------------
-	~Tupla();
+    //constructores -----------------------------
+    //Pre:  1<=n<=6
+    //Post: Crea una tupla con n componentes ""
+    Tupla(int n);
 
-	//operadores -----------------------------
-	//Pre:
-	//Post: devuelve el tamaño de la tupla
-	int size() const;
+    //las siguientes crean e inicializan una tupla a partir de los parámetros
+    Tupla(string s1);
 
-	//Pre:
-	//Post: devuelve la representación de la tupla como un string.
-	//Com:  Ver ejemplos en mainLindaDriver.cpp
-	string to_string() const;
+    Tupla(string s1, string s2);
+
+    Tupla(string s1, string s2, string s3);
+
+    Tupla(string s1, string s2, string s3, string s4);
+
+    Tupla(string s1, string s2, string s3, string s4, string s5);
+
+    Tupla(string s1, string s2, string s3, string s4, string s5, string s6);
+
+    //Creo una tupla a partir de otra. Se trata de un duplicado
+    Tupla(Tupla &t);
+
+    Tupla(const Tupla &t);
+
+    //destructor -----------------------------
+    ~Tupla();
+
+    //operadores -----------------------------
+    //Pre:
+    //Post: devuelve el tamaño de la tupla
+    int size() const;
+
+    //Pre:
+    //Post: devuelve la representación de la tupla como un string.
+    //Com:  Ver ejemplos en mainLindaDriver.cpp
+    string to_string() const;
 
     //Pre:  "s" tiene el formato adecuado para una tupla: "[val1,val2,..]"
     //      correspondiente al tamaño de "this"
@@ -75,6 +83,7 @@ private:
     //"data" como un puntero para el que se reservará memoria en el constructor,
     //momento en el que conocerá el tamaño. No olvidar liberar la memoria en 
     //el destructor
-    vector <string> *data;
+    vector<string> *data;
 };
+
 #endif

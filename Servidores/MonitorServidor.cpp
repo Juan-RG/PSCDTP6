@@ -15,7 +15,7 @@
 //
 // Post: Crea un MonitorServidor con el almacen pasado por el argumento.
 MonitorServidor::MonitorServidor(unordered_multiset<Tupla, TuplaHash> *almacen) {
-	this->almacen = *almacen;
+    this->almacen = *almacen;
 }
 
 //------------------------- destructor
@@ -48,20 +48,20 @@ void MonitorServidor::PN(Tupla &tupla) {
 void MonitorServidor::RdN(Tupla &tupla) {
     unique_lock<mutex> lck(mtx);
     Tupla resultado("");
-    unordered_multiset<Tupla, TuplaHash> :: iterator itr;
+    unordered_multiset<Tupla, TuplaHash>::iterator itr;
     bool bandera = false;
 
     while (!bandera) {
         itr = almacen.begin();
-        while((itr != almacen.end())){
+        while ((itr != almacen.end())) {
             Tupla tmp(*itr);
-            if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) {
+            if ((tmp.size() == tupla.size()) && (tupla.match(tmp))) {
                 resultado.from_string(tmp.to_string());
                 bandera = true;
             }
             itr++;
-            cout << "Paso "<< tmp.to_string()<<"\n";
-            if(bandera){
+
+            if (bandera) {
                 itr = almacen.end();
             }
 
@@ -82,44 +82,30 @@ void MonitorServidor::RdN(Tupla &tupla) {
 //       PostNote, y procederá a buscar de nuevo la tupla en el almacén.
 //       Este ciclo se repite hasta encontrar una coincidencia.
 //
-void MonitorServidor::RN(Tupla &tupla,int i) {
+void MonitorServidor::RN(Tupla &tupla) {
     unique_lock<mutex> lck(mtx);
-    //cout << "Operacion RN llamada"+ tupla.to_string()+" "+to_string(i)+ "\n" ;                     //FIXME ¿QUITAR EN LA VERSIÓN FINAL?
     Tupla resultado(tupla);
-
-    //Tupla resultado("");
-    //resultado.from_string(tupla.to_string());
 
     unordered_multiset<Tupla, TuplaHash>::iterator itr;
     bool bandera = false;
-    //cout<<"entro RN\n";
+
     while (!bandera) {
-        //cout<<"entro while 1\n";
         itr = almacen.begin();
-        while((itr != almacen.end())){
-            //cout<<"entro while 2\n";
+        while ((itr != almacen.end())) {
             Tupla tmp(*itr);
-            bool  c1 = ( tmp.size() == tupla.size() );
-            bool  c2 = ( tupla.match(tmp) ) ;
-            //cout << "D y m"+ tupla.to_string()+" "+to_string(i)+ "\n" ;
-            //cout<<"paso m y s \n";
-            //if( ( tmp.size() == tupla.size() ) && ( tupla.match(tmp) ) ) {
-            if( (c1) && ( c2 )) {
-                //cout<<"Busco: "+tmp.to_string()+" --- "+tmp.to_string() +"\n";
-                //cout<<"entro if 1\n";
+
+            if ((tmp.size() == tupla.size()) && (tupla.match(tmp))) {
                 resultado.from_string(tmp.to_string());
                 bandera = true;
             }
             itr++;
-            if(bandera){
-                //cout<<"entro if 2\n";
+            if (bandera) {
                 itr = almacen.end();
             }
         }
         if (!bandera) {
             cout << "Operacion RN bloqueada\n";
             enEspera.wait(lck);
-            //cout<<"despierto " + to_string(i)+"\n";
         }
     }
 
@@ -287,8 +273,8 @@ void MonitorServidor::buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numCo
 //       PostNote, y procederá a buscarlas de nuevo las tuplas en el almacén.
 //       Este ciclo se repite hasta encontrar una coincidencia.
 //
-void MonitorServidor::RdN_2(Tupla &p1,Tupla &p2) {
-    unique_lock <mutex> lck(mtx);
+void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {
+    unique_lock<mutex> lck(mtx);
     bool encontrado = false;
     if (p1.size() == p2.size()) {
         // Tuplas a sobreescribir con el resultado, de momento son copias de p1 y p2
@@ -339,8 +325,8 @@ void MonitorServidor::RdN_2(Tupla &p1,Tupla &p2) {
 //       PostNote, y procederá a buscar de nuevo las tuplas en el almacén.
 //       Este ciclo se repite hasta encontrar una coincidencia.
 //
-void MonitorServidor::RN_2(Tupla &p1,Tupla &p2) {
-    unique_lock <mutex> lck(mtx);
+void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {
+    unique_lock<mutex> lck(mtx);
     bool encontrado = false;
     if (p1.size() == p2.size()) {
         // Tuplas a sobreescribir con el resultado, de momento son copias de p1 y p2
