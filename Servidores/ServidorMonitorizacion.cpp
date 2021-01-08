@@ -52,23 +52,63 @@ int main(int argc, char *argv[]) {
     // Se instancia el LindaDriver
     LindaDriver pizarra(ipServidorDespliegue, puerto);
 
+    bool acabar = true;
+    int contador = 0;
+    int numeroTuplasPasado = -1;
+    bool nuevasTuplas = true;
     //tuplas de valores
     Tupla peticionesLectura("PeticionesLectura", "?X");
     Tupla peticionesEscritura("PeticionesEscritura", "?X");
     Tupla totalTuplas("TotalTuplas", "?X");
-    while (true) {
+    Tupla publicadores("Publicadores", "?X");
+    Tupla buscadores("Buscadores", "?X");
+    Tupla buscadoresCombinados("BuscadoresCombinados", "?X");
+    while (acabar) {
         Tupla peticionesLecturaTmp("", "");
         Tupla peticionesEscrituraTmp("", "");
         Tupla totalTuplasTmp("", "");
+        Tupla publicadoresTmp("", "");
+        Tupla buscadoresTmp("", "");
+        Tupla buscadoresCombinadosTmp("", "");
 
+        //leer tuplas de estado
         pizarra.RDN(peticionesLectura, peticionesLecturaTmp);
         pizarra.RDN(peticionesEscritura, peticionesEscrituraTmp);
         pizarra.RDN(totalTuplas, totalTuplasTmp);
 
-        cout << "Peticiones de lectura: " + peticionesLecturaTmp.get(1) << "\n";
-        cout << "Peticiones de escritura: " + peticionesEscrituraTmp.get(1) << "\n";
-        cout << "Total de tuplas: " + totalTuplasTmp.get(1) << "\n";
+        //leer numero clientes
+        pizarra.RDN(publicadores, publicadoresTmp);
+        pizarra.RDN(buscadores, buscadoresTmp);
+        pizarra.RDN(buscadoresCombinados, buscadoresCombinadosTmp);
 
+        cout << "Peticiones de lectura: " + peticionesLecturaTmp.get(1) + "\n";
+        cout << "Peticiones de escritura: " + peticionesEscrituraTmp.get(1) + "\n";
+        cout << "Total de tuplas: " + totalTuplasTmp.get(1) + "\n";
+        cout << "Publicadores en el sistema: " + publicadoresTmp.get(1)  + "\n";
+        cout << "Buscadores en el sistema: " + buscadoresTmp.get(1)  + "\n";
+        cout << "Buscadores Combinados en el sistema: " + buscadoresCombinadosTmp.get(1)  + "\n";
+
+        if(numeroTuplasPasado != stoi(totalTuplasTmp.get(1))){
+            numeroTuplasPasado = stoi(totalTuplasTmp.get(1));
+            nuevasTuplas = true;
+        }else{
+            nuevasTuplas = false;
+        }
+
+        if(stoi(publicadoresTmp.get(1)) == 0 && stoi(buscadoresTmp.get(1)) == 0 && stoi(buscadoresCombinadosTmp.get(1)) == 0
+        && !nuevasTuplas){
+            contador++;
+            if (contador == 3){
+                mandarMensaje(chanServer1, fdChanServer1, MENSAJE_CERRAR);
+                mandarMensaje(chanServer2, fdChanServer2, MENSAJE_CERRAR);
+                mandarMensaje(chanServer3, fdChanServer3, MENSAJE_CERRAR);
+                mandarMensaje(chanRegistro, fdRegistro, MENSAJE_CERRAR);
+                acabar = false;
+            }
+
+        } else{
+            contador = 0;
+        }
         sleep(60);
     }
     return 0;

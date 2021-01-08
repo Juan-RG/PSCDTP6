@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
     pizarra.PN(numeroBuscadores);
 
     //colocamos tuplas de numero de buscadoresCombinados para controlar buscadores combinados
-    Tupla numeroBuscadoresCombinados("buscadoresCombinados", "0");
+    Tupla numeroBuscadoresCombinados("BuscadoresCombinados", "0");
     pizarra.PN(numeroBuscadoresCombinados);
 
     //Escribo las tuplas de monitorizacion de lectura y escritura

@@ -32,6 +32,7 @@ MonitorServidor::~MonitorServidor() {}
 void MonitorServidor::PN(Tupla &tupla) {
     unique_lock<mutex> lck(mtx);
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
+
     enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
 
 }
