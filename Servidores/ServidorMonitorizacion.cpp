@@ -1,6 +1,6 @@
 #include "../LindaDriver/LindaDriver.hpp"
 #include "../Tupla/Tupla.hpp"
-#include "Semaphore_V4/Semaphore_V4.cpp"
+#include "../Semaphore_V4/Semaphore_V4.cpp"
 
 #include <iostream>
 #include <sstream>  // stringstream
@@ -27,7 +27,9 @@ void recibirMensaje(Socket &chan, const int &socket_fd, string &buffer);
 
 static const string MENSAJE_CERRAR = "CERRAR";
 
-Semaphore semaforoMutex(1,""); // acceso en exclusión mutua a LindaDriver
+//Semaphore semaforoMutex(1,""); // acceso en exclusión mutua a LindaDriver
+
+Semaphore semaforoMutex(0,""); // acceso en exclusión mutua a LindaDriver
 
 int main(int argc, char *argv[]) {
     if (argc != 3) {
@@ -76,7 +78,7 @@ int main(int argc, char *argv[]) {
         Tupla buscadoresTmp("", "");
         Tupla buscadoresCombinadosTmp("", "");
 
-        semaforoMutex.wait(); // accede en exclusión mutua a LindaDriver
+        //semaforoMutex.wait(); // accede en exclusión mutua a LindaDriver
         if (continuar) { // el hilo puede haber cerrado las conexiones ya
             //leer tuplas de estado
             pizarra.RDN(peticionesLectura, peticionesLecturaTmp);
@@ -97,11 +99,11 @@ int main(int argc, char *argv[]) {
                  << "Buscadores en el sistema: " + buscadoresTmp.get(1) + "\n"
                  << "Buscadores Combinados en el sistema: " + buscadoresCombinadosTmp.get(1) + "\n";
         }
-        semaforoMutex.signal();
+        //semaforoMutex.signal();
 
         usleep(120);
     }
-
+    semaforoMutex.signal();
     controlDesconectar.join(); // espera al hilo
     exit(0);
 }
@@ -136,12 +138,12 @@ void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServe
         Tupla buscadoresTmp("", "");
         Tupla buscadoresCombinadosTmp("", "");
 
-        semaforoMutex.wait(); // accede en exclusión mutua a LindaDriver
+        //semaforoMutex.wait(); // accede en exclusión mutua a LindaDriver
         pizarra.RDN(totalTuplas, totalTuplasTmp);
         pizarra.RDN(publicadores, publicadoresTmp);
         pizarra.RDN(buscadores, buscadoresTmp);
         pizarra.RDN(buscadoresCombinados, buscadoresCombinadosTmp);
-        semaforoMutex.signal();
+        //semaforoMutex.signal();
 
         if (numeroTuplasPasado != stoi(totalTuplasTmp.get(1))) {
             numeroTuplasPasado = stoi(totalTuplasTmp.get(1));
@@ -163,7 +165,7 @@ void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServe
                 mandarMensaje(chanServer2, fdChanServer2, MENSAJE_CERRAR);
                 mandarMensaje(chanServer3, fdChanServer3, MENSAJE_CERRAR);
                 mandarMensaje(chanRegistro, fdRegistro, MENSAJE_CERRAR);
-                semaforoMutex.signal();
+                //semaforoMutex.signal();
 
                 cout << "\033[2J\033[1;1H";
                 cout<< "\rSistema sin clientes ni modificaciones realizadas." << endl;
