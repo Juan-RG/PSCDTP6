@@ -1,7 +1,8 @@
-
-#include <iostream>
 #include "../LindaDriver/LindaDriver.hpp"
 #include "../Tupla/Tupla.hpp"
+#include "Semaphore_V4/Semaphore_V4.cpp"
+
+#include <iostream>
 #include <sstream>  // stringstream
 #include <thread>
 
@@ -27,7 +28,7 @@ void recibirMensaje(Socket &chan, const int &socket_fd, string &buffer);
 
 static const string MENSAJE_CERRAR = "CERRAR";
 
-condition_variable ESPERAR; //Variable condicion para para el hilo de cierre y que el de refresco acabe.
+Semaphore semaforoMutex(1,""); // acceso en exclusión mutua a LindaDriver
 
 int main(int argc, char *argv[]) {
     if (argc != 3) {
@@ -76,35 +77,42 @@ int main(int argc, char *argv[]) {
         Tupla buscadoresTmp("", "");
         Tupla buscadoresCombinadosTmp("", "");
 
-        //leer tuplas de estado
-        pizarra.RDN(peticionesLectura, peticionesLecturaTmp);
-        pizarra.RDN(peticionesEscritura, peticionesEscrituraTmp);
-        pizarra.RDN(totalTuplas, totalTuplasTmp);
+        semaforoMutex.wait(); // accede en exclusión mutua a LindaDriver
+        if (continuar) { // el hilo puede haber cerrado las conexiones ya
+            //leer tuplas de estado
+            pizarra.RDN(peticionesLectura, peticionesLecturaTmp);
+            pizarra.RDN(peticionesEscritura, peticionesEscrituraTmp);
+            pizarra.RDN(totalTuplas, totalTuplasTmp);
 
-        //leer numero clientes
-        pizarra.RDN(publicadores, publicadoresTmp);
-        pizarra.RDN(buscadores, buscadoresTmp);
-        pizarra.RDN(buscadoresCombinados, buscadoresCombinadosTmp);
-
-        // Secuencia de escape ANSI: La primera parte (\033[2J) vacía la terminal (J) de arriba a abajo(2).
-        // La segunda parte (\033[1;1H) pone el cursor en la fila 1 y columna 1.
-        cout << "\033[2J\033[1;1H";
-        cout << "\r" << "Peticiones de lectura: " + peticionesLecturaTmp.get(1) + "\n"
-             << "Peticiones de escritura: " + peticionesEscrituraTmp.get(1) + "\n"
-             << "Total de tuplas: " + totalTuplasTmp.get(1) + "\r\n"
-             << "Publicadores en el sistema: " + publicadoresTmp.get(1) + "\n"
-             << "Buscadores en el sistema: " + buscadoresTmp.get(1) + "\n"
-             << "Buscadores Combinados en el sistema: " + buscadoresCombinadosTmp.get(1) + "\n";
-
+            //leer numero clientes
+            pizarra.RDN(publicadores, publicadoresTmp);
+            pizarra.RDN(buscadores, buscadoresTmp);
+            pizarra.RDN(buscadoresCombinados, buscadoresCombinadosTmp);
+            // Secuencia de escape ANSI: La primera parte (\033[2J) vacía la terminal (J) de arriba a abajo(2).
+            // La segunda parte (\033[1;1H) pone el cursor en la fila 1 y columna 1.
+            cout << "\033[2J\033[1;1H";
+            cout << "Peticiones de lectura: " + peticionesLecturaTmp.get(1) + "\n"
+                 << "Peticiones de escritura: " + peticionesEscrituraTmp.get(1) + "\n"
+                 << "Total de tuplas: " + totalTuplasTmp.get(1) + "\n"
+                 << "Publicadores en el sistema: " + publicadoresTmp.get(1) + "\n"
+                 << "Buscadores en el sistema: " + buscadoresTmp.get(1) + "\n"
+                 << "Buscadores Combinados en el sistema: " + buscadoresCombinadosTmp.get(1) + "\n";
+        }
+        semaforoMutex.signal();
         //sleep(1);           //tiempo de refresco de los datos
         usleep(120);
     }
 
-    ESPERAR.notify_one(); //notifico al hilo de control que puede cerrar los servers
+    //ESPERAR.notify_one(); //notifico al hilo de control que puede cerrar los servers
+    //esperaCierre.signal();
     controlDesconectar.join(); //espero a que acabe
-
-    return 0;
+    exit(0);
+    //cout << "\033[2J\033[1;1H";
+    //cout<< "\rSistema sin clientes, ni modificaciones" << endl;
+    //cout << "Se ha cerrado de forma segura el sistema" << endl;
 }
+
+
 /**
  * metodo que comprueba si hay publicadores buscadores o buscadores combinados y comprueba si se ha actualizado el numero de tuplas del servidor
  * Si en 3 iteraciones de x segundos esto no se cumple cierra todos los servidores y acaba
@@ -113,11 +121,10 @@ void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServe
                      const int &fdChanServer1, const int &fdChanServer2,
                      const int &fdChanServer3, const int &fdRegistro, string ipServidorDespliegue, int puerto,
                      bool &continuar) {
-    mutex mtx;  //mutex personal del hilo para frenarlo
-    unique_lock<mutex> lck(mtx);
+    //mutex mtx;  //mutex personal del hilo para frenarlo
+    //unique_lock<mutex> lck(mtx);
     // Se instancia el LindaDriver
     LindaDriver pizarra(ipServidorDespliegue, puerto);
-
 
     int contador = 0;
     int numeroTuplasPasado = -1;
@@ -135,14 +142,14 @@ void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServe
         Tupla buscadoresTmp("", "");
         Tupla buscadoresCombinadosTmp("", "");
 
-
+        semaforoMutex.wait(); // accede en exclusión mutua a LindaDriver
         pizarra.RDN(totalTuplas, totalTuplasTmp);
 
         //leer numero clientes
         pizarra.RDN(publicadores, publicadoresTmp);
         pizarra.RDN(buscadores, buscadoresTmp);
         pizarra.RDN(buscadoresCombinados, buscadoresCombinadosTmp);
-
+        semaforoMutex.signal();
 
         if (numeroTuplasPasado != stoi(totalTuplasTmp.get(1))) {
             numeroTuplasPasado = stoi(totalTuplasTmp.get(1));
@@ -152,23 +159,28 @@ void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServe
         }
 
         if (stoi(publicadoresTmp.get(1)) == 0 && stoi(buscadoresTmp.get(1)) == 0 &&
-            stoi(buscadoresCombinadosTmp.get(1)) == 0
-            && !nuevasTuplas) {
-            cerr<<"Sistema sin clientes, ni modificaciones\n";
+            stoi(buscadoresCombinadosTmp.get(1)) == 0 && !nuevasTuplas) {
             contador++;
             if (contador == 3) {
-                cerr<<"Cerramos conexion con Servidores\n";
                 continuar = false;
-                ESPERAR.wait(lck);
+                //ESPERAR.wait(lck);
+                //esperaCierre.wait();
+
+                semaforoMutex.wait(); // accede en exclusión mutua a la comunicación con los servidores y lo mantiene
                 mandarMensaje(chanServer1, fdChanServer1, MENSAJE_CERRAR);
                 mandarMensaje(chanServer2, fdChanServer2, MENSAJE_CERRAR);
                 mandarMensaje(chanServer3, fdChanServer3, MENSAJE_CERRAR);
                 mandarMensaje(chanRegistro, fdRegistro, MENSAJE_CERRAR);
+                semaforoMutex.signal();
+
+                cout << "\033[2J\033[1;1H";
+                cout<< "\rSistema sin clientes ni modificaciones realizadas." << endl;
+                cout << "Se ha cerrado de forma segura el sistema." << endl;
+
                 exit(0);
             }
 
         } else {
-
             contador = 0;
         }
         sleep(5);   //tiempo de comprobacion para acabar el sistema
