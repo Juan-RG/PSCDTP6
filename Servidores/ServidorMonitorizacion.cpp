@@ -19,8 +19,7 @@ void conectarConServidores(string ipServerRegistro, int puertoServerRegistro, So
 void conectar(Socket &chan, int &socket_fd);
 
 void controlarCierre(Socket &chan, Socket &chan2, Socket &chan3, Socket &chan4, const int &socket_fd, const int &socket_fd2,
-                const int &socket_fd3,
-                const int &socket_fd4, string ip, int puerto, bool &continuar);
+                const int &socket_fd3, const int &socket_fd4, string ip, int puerto, bool &continuar);
 
 void mandarMensaje(Socket &chan, const int &socket_fd, const string &mensaje);
 
@@ -99,17 +98,12 @@ int main(int argc, char *argv[]) {
                  << "Buscadores Combinados en el sistema: " + buscadoresCombinadosTmp.get(1) + "\n";
         }
         semaforoMutex.signal();
-        //sleep(1);           //tiempo de refresco de los datos
+
         usleep(120);
     }
 
-    //ESPERAR.notify_one(); //notifico al hilo de control que puede cerrar los servers
-    //esperaCierre.signal();
-    controlDesconectar.join(); //espero a que acabe
+    controlDesconectar.join(); // espera al hilo
     exit(0);
-    //cout << "\033[2J\033[1;1H";
-    //cout<< "\rSistema sin clientes, ni modificaciones" << endl;
-    //cout << "Se ha cerrado de forma segura el sistema" << endl;
 }
 
 
@@ -144,8 +138,6 @@ void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServe
 
         semaforoMutex.wait(); // accede en exclusión mutua a LindaDriver
         pizarra.RDN(totalTuplas, totalTuplasTmp);
-
-        //leer numero clientes
         pizarra.RDN(publicadores, publicadoresTmp);
         pizarra.RDN(buscadores, buscadoresTmp);
         pizarra.RDN(buscadoresCombinados, buscadoresCombinadosTmp);
