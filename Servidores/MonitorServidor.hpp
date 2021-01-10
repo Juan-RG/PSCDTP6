@@ -30,14 +30,13 @@ private:
     struct comodines;
     struct comodinesComunes;
 
-    void comodines_comunes(comodines arrayComodinesp1[], comodines arrayComodinesp2[],
-                           comodinesComunes arrayComodinesComunes[], int &numComodinesComunes, int numComodinesp1,
-                           int numComodinesp2);
+    void obtenerComodinesComunes(comodines arrayComodinesp1[], comodines arrayComodinesp2[],
+                                 comodinesComunes arrayComodinesComunes[], int &numComodinesComunes, int numComodinesp1,
+                                 int numComodinesp2);
 
-    void
-    buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numComodinesComunes, comodinesComunes arrayComodinesComunes[]);
+    void busquedaDoble(Tupla &p1, Tupla &p2, bool &encontrado, int numComodinesComunes, comodinesComunes arrayComodinesComunes[]);
 
-    void proceso_comodines(Tupla p, comodines arrayComodinesp[], int &numComodinesp);
+    void obtenerComodines(Tupla p, comodines arrayComodinesp[], int &numComodinesp);
 
 public:
     //------------------------- constructor

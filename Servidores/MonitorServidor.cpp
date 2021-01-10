@@ -133,7 +133,7 @@ struct MonitorServidor::comodinesComunes {
 //
 // Post: Busca los comodines de la tupla p, y los devuelve por referencia mediante un array de comodines junto al número de
 //       comodines en numComodinesp.
-void MonitorServidor::proceso_comodines(Tupla p, comodines arrayComodinesp[], int &numComodinesp) {
+void MonitorServidor::obtenerComodines(Tupla p, comodines arrayComodinesp[], int &numComodinesp) {
     regex e("\\?[A-Z]");
     bool estaba = false;
     for (int i = 0; i < p.size(); i++) {
@@ -165,9 +165,9 @@ void MonitorServidor::proceso_comodines(Tupla p, comodines arrayComodinesp[], in
 //
 // Post: Compara los comodines de los dos arrays introducidos y devuelve los que coinciden junto a las posiciones mediante
 //       un array de comodinesComunes, junto al numero de comodines comunes en numComodinesComunes.
-void MonitorServidor::comodines_comunes(comodines arrayComodinesp1[], comodines arrayComodinesp2[],
-                                        comodinesComunes arrayComodinesComunes[], int &numComodinesComunes,
-                                        int numComodinesp1, int numComodinesp2) {
+void MonitorServidor::obtenerComodinesComunes(comodines arrayComodinesp1[], comodines arrayComodinesp2[],
+                                              comodinesComunes arrayComodinesComunes[], int &numComodinesComunes,
+                                              int numComodinesp1, int numComodinesp2) {
     numComodinesComunes = 0;
 
     // Se juntan los comodines de ambas en el vector de estructuras de comodines comunes
@@ -200,7 +200,7 @@ void MonitorServidor::comodines_comunes(comodines arrayComodinesp1[], comodines 
 // Post: Obtiene pares de tuplas diferentes del almacen, y si hacen match con p1 y p2, teniendo en cuenta sus comodines comunes
 //       indicados en comodinesComunes junto a su número en numComodinesComunes, las devuelve como resultado en p1 y p2.
 //       En el caso de no encontrarlas devuelve las tuplas originales p1 y p2.
-void MonitorServidor::buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numComodinesComunes,
+void MonitorServidor::busquedaDoble(Tupla &p1, Tupla &p2, bool &encontrado, int numComodinesComunes,
                                comodinesComunes arrayComodinesComunes[]) {
     // Se declaran los iteradores externo(itr) e interno(itr2)
     // tuplaTemp1 contendrá las tuplas obtenidas en el iterador externo
@@ -295,14 +295,14 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {
         comodinesComunes arrayComodinesComunes[p1.size()];  // max: el tamaño de la menor o de cualquiera de las dos
         // Se guardan los comodines de la tupla p1 junto a los índices donde aparecen
         int numComodinesp1 = 0;
-        proceso_comodines(p1, arrayComodinesp1, numComodinesp1);
+        obtenerComodines(p1, arrayComodinesp1, numComodinesp1);
         int numComodinesp2 = 0;
-        proceso_comodines(p2, arrayComodinesp2, numComodinesp2);
-        comodines_comunes(arrayComodinesp1, arrayComodinesp2, arrayComodinesComunes, numComodinesComunes,
+        obtenerComodines(p2, arrayComodinesp2, numComodinesp2);
+        obtenerComodinesComunes(arrayComodinesp1, arrayComodinesp2, arrayComodinesComunes, numComodinesComunes,
                           numComodinesp1, numComodinesp2);
         while (!encontrado) {
 
-            buscando(p1, p2, encontrado, numComodinesComunes, arrayComodinesComunes);
+            busquedaDoble(p1, p2, encontrado, numComodinesComunes, arrayComodinesComunes);
             if (!encontrado) {
                 cout << "Operacion RDN_2 bloqueada\n";
                 enEspera.wait(lck);
@@ -341,13 +341,13 @@ void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {
         // Se guardan los comodines de la tupla p1 junto a los índices donde aparecen
 
         int numComodinesp1 = 0;
-        proceso_comodines(p1, arrayComodinesp1, numComodinesp1);
+        obtenerComodines(p1, arrayComodinesp1, numComodinesp1);
         int numComodinesp2 = 0;
-        proceso_comodines(p2, arrayComodinesp2, numComodinesp2);
-        comodines_comunes(arrayComodinesp1, arrayComodinesp2, arrayComodinesComunes, numComodinesComunes,
+        obtenerComodines(p2, arrayComodinesp2, numComodinesp2);
+        obtenerComodinesComunes(arrayComodinesp1, arrayComodinesp2, arrayComodinesComunes, numComodinesComunes,
                           numComodinesp1, numComodinesp2);
         while (!encontrado) {
-            buscando(p1, p2, encontrado, numComodinesComunes, arrayComodinesComunes);
+            busquedaDoble(p1, p2, encontrado, numComodinesComunes, arrayComodinesComunes);
             if (!encontrado) {
                 cout << "Operacion RN_2 bloqueada\n";
                 enEspera.wait(lck);
