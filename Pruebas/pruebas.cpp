@@ -9,6 +9,39 @@
 using namespace std;
 
 int main() {
+    /*                                                                          ///eliminarrr
+    //comprobacion de los datos
+    unsigned t0, t1;
+    //pasar los datos por el constructor
+    LindaDriver pizarra("localhost", 2020);
+    int numeroTuplas;
+    //extraeremos la tupla de RN['totalTuplas',?totalTuplas]
+    srand(time(NULL)); //reseteamos la semilla
+    int n = 0;
+    auto start = std::chrono::system_clock::now();
+    while (n < 1000){ //eliminar
+            Tupla nuevaTupla("1"+to_string(n),"zaragoza","ok","120");
+            pizarra.PN(nuevaTupla);
+        n++;
+    }
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+    std::cout << "finished computation at " << std::ctime(&end_time)
+              << "Execution time: " << elapsed_seconds.count() << "s\n";
+    n = 0;
+    Tupla primeraOferta("?A","?B","?C","?D");
+
+
+    while (n < 10){ //eliminar
+        cout<<"paso "<<n<<"\n";
+        Tupla primeraOfertaLocal(4);
+        Tupla segundaOfertaLocal(4);
+        pizarra.RN(primeraOferta,primeraOfertaLocal);
+        n++;
+    }
+*/
+
 
 
     regex e("\\?[A-Z]");
