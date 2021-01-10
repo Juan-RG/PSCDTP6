@@ -3,6 +3,13 @@
 !*.hpp
 !Makefile*
 !Socket
+!Clientes
+!Semaphore_V4
+!Servidores
+!Pruebas
+!LindaDriver
+!Tupla
+
 
 cmake-build-debug/
 cmake-build-debug/*
