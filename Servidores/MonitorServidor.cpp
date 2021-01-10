@@ -69,7 +69,6 @@ void MonitorServidor::RdN(Tupla &tupla) {
 
         }
         if (!bandera) {
-            cout << "Operacion RdN bloqueada\n";
             enEspera.wait(lck);
         }
     }
@@ -106,7 +105,6 @@ void MonitorServidor::RN(Tupla &tupla) {
             }
         }
         if (!bandera) {
-            cout << "Operacion RN bloqueada\n";
             enEspera.wait(lck);
         }
     }
