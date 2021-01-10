@@ -1,11 +1,10 @@
 //--------------------------------------------------------------------------------------------------
 // File:    MonitorServidor.hpp
-// Author:
-// Date:    diciembre 2020
-// Coms:	Este fichero contiene la declaración de las funciones y variables del MonitorServidor.
+// Date:    Enero 2021
+// Coms:	Este fichero contiene la declaración de las funciones y variables del MonitorServidor, que implementa
+//          un monitor para el acceso concurrente al espacio de tuplas por parte de un servidorLinda.
 //--------------------------------------------------------------------------------------------------
 
-//Fichero: MonitorServidor.hpp
 #ifndef MONITOR_SERVIDOR_HPP
 #define MONITOR_SERVIDOR_HPP
 
@@ -20,11 +19,12 @@ using namespace std; //mutex, condition_variable, etc.
 
 class MonitorServidor {
 private:
-    mutex mtx; //para la ejecución de procs en exclusión mutua
+    mutex mtx; // Para la ejecución de las operaciones en exclusión mutua
 
-    condition_variable enEspera;
+    condition_variable enEspera;    // Condición de espera de operaciones RDN, RN, RDN_2 y RN_2
+                                    // que no han encontrado un resultado a devolver
 
-    unordered_multiset<Tupla, TuplaHash> almacen;
+    unordered_multiset<Tupla, TuplaHash> almacen; // almacen de las tuplas
 
     // Estructuras y funciones auxiliares a RDN_2 y RN_2
     struct comodines;
