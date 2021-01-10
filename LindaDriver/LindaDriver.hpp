@@ -1,7 +1,6 @@
 //--------------------------------------------------------------------------------------------------
 // File:    LindaDriver.hpp
-// Author:
-// Date:    diciembre 2020
+// Date:    Enero 2021
 // Comms:   LindaDriver que permite a los clientes comunicarse con servidores Linda
 //--------------------------------------------------------------------------------------------------
 
@@ -78,9 +77,7 @@ private:
 
     // Funciones auxiliares
     void conectar(Socket &chan, int &socket_fd);
-
     void mandarMensaje(Socket &chan, const int &socket_fd, const string &mensaje);
-
     void recibirMensaje(Socket &chan, const int &socket_fd, string &buffer);
 };
 

@@ -1,7 +1,6 @@
 //--------------------------------------------------------------------------------------------------
 // File:    LindaDriver.cpp
-// Author:
-// Date:    diciembre 2020
+// Date:    Enero 2021
 // Comms:   LindaDriver que permite a los clientes comunicarse con servidores Linda
 //--------------------------------------------------------------------------------------------------
 
@@ -11,8 +10,7 @@
 
 #include "../Socket/Socket.hpp"
 #include <iostream> // mensajes de error
-#include <sstream>  // stringstream para reemplazar sscanf
-#include <regex>    // regex para reconocer mensajes del servidor de registro
+#include <sstream>  // stringstream para cortar cadenas
 
 //constructor -----------------------------
 // Pre: ipServerRegistro y puertoServerRegistro representan direcciones IP y puertos válidos, respectivamente.
@@ -309,8 +307,7 @@ void LindaDriver::RDN_2(const Tupla p1, const Tupla p2, Tupla &t1,
         getline(s_stream, substr, ';');
         t2.from_string(substr);
     } else {
-        //std::cout << std::endl;
-        std::cerr << "LindaDriver(RDN_2): Los tamaños de las tuplas no coinciden, acabo." << std::endl;
+        std::cerr << "LindaDriver(RDN_2): Los tamaños de las tuplas no coinciden." << std::endl;
     }
 }
 
