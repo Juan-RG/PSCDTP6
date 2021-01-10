@@ -27,7 +27,6 @@ void recibirMensaje(Socket &chan, const int &socket_fd, string &buffer);
 
 static const string MENSAJE_CERRAR = "CERRAR";
 
-
 Semaphore semaforoMutex(0,""); // acceso en exclusión mutua a LindaDriver
 
 int main(int argc, char *argv[]) {
@@ -61,7 +60,7 @@ int main(int argc, char *argv[]) {
     // Se instancia el LindaDriver
     LindaDriver pizarra(ipServidorDespliegue, puerto);
 
-    //tuplas de valores
+    //tuplas de valores del sistema
     Tupla peticionesLectura("PeticionesLectura", "?X");
     Tupla peticionesEscritura("PeticionesEscritura", "?X");
     Tupla totalTuplas("TotalTuplas", "?X");
@@ -107,8 +106,10 @@ int main(int argc, char *argv[]) {
 
 
 /**
- * metodo que comprueba si hay publicadores buscadores o buscadores combinados y comprueba si se ha actualizado el numero de tuplas del servidor
+ * pre:tuplas de control puestas
+ * post: El método comprueba si hay publicadores buscadores o buscadores combinados y comprueba si se ha actualizado el número de tuplas en el servidor
  * Si en 3 iteraciones de x segundos esto no se cumple cierra todos los servidores y acaba
+
  */
 void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServer3, Socket &chanRegistro,
                      const int &fdChanServer1, const int &fdChanServer2,
@@ -162,7 +163,7 @@ void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServe
                 cout << "\033[2J\033[1;1H";
                 cout<< "\rSistema sin clientes ni modificaciones realizadas." << endl;
                 cout << "Se ha cerrado de forma segura el sistema." << endl;
-
+                //cierre controlado
                 exit(0);
             }
 
@@ -173,7 +174,8 @@ void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServe
     }
 
 }
-
+// Pre: --
+// Post: conecta con los 3 servidores linda a traves del servidor de despliegue
 void conectarConServidores(string ipServerRegistro, int puertoServerRegistro, Socket &chanServer1,
                            Socket &chanServer2, Socket &chanServer3, Socket &chanRegistro, int &fdChanServer1,
                            int &fdChanServer2, int &fdChanServer3, int &fdRegistro) {
@@ -227,7 +229,8 @@ void conectarConServidores(string ipServerRegistro, int puertoServerRegistro, So
     conectar(chanRegistro, fdRegistro);
 }
 
-
+// Pre: --
+// Post: conexta con el servidor
 void conectar(Socket &chan, int &socket_fd) {
     const int NUM_MAX_INTENTOS = 10;
     int count = 0;
@@ -260,7 +263,8 @@ void mandarMensaje(Socket &chan, const int &socket_fd, const string &mensaje) {
     }
 }
 
-
+// Pre: --
+// Post: recibe "mensaje" por el socket con fd indicados, tratando los errores
 void recibirMensaje(Socket &chan, const int &socket_fd, string &buffer) {
     int read_bytes = chan.Recv(socket_fd, buffer, MESSAGE_SIZE);
 

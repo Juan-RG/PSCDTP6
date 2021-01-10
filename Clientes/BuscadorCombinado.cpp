@@ -1,4 +1,8 @@
-
+//--------------------------------------------------------------------------------------------------
+// File:    BuscadorCombinado.cpp
+// Date:    Enero 2021
+// Comms:   BuscadorCombinado busca 2 ofertas en las cuales se pasa por una ciudad intermedia
+//--------------------------------------------------------------------------------------------------
 #include <iostream>
 #include "../LindaDriver/LindaDriver.hpp"
 #include "../Tupla/Tupla.hpp"

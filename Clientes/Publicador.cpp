@@ -1,4 +1,8 @@
-
+//--------------------------------------------------------------------------------------------------
+// File:    Publicador.cpp
+// Date:    Enero 2021
+// Comms:   Publicador coloca las ofertas en la pizarra
+//--------------------------------------------------------------------------------------------------
 #include <iostream>
 #include <chrono>
 #include "../LindaDriver/LindaDriver.hpp"
@@ -7,8 +11,9 @@ using namespace std;
 
 static const int NUMERO_TOTAL_TUPLAS = 1000;
 /**
- * Metodo que asigna una ciudad aleatoria de las 10 colocadas en el switch
- * @param ciudad
+ * // Pre: --
+ * // Post: devuelve una ciudad aleatoria entre Barcelona|Madrid|Valencia|Sevilla|La Coruña|Tenerife|
+ *          Bilbao|Badajoz|Zaragoza|Teruel
  */
 void asignarCiudad(string *ciudad) {
     int valorMin = 1, valorMax = 10;

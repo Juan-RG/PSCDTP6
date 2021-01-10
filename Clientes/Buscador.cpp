@@ -1,4 +1,8 @@
-
+//--------------------------------------------------------------------------------------------------
+// File:    Buscador.cpp
+// Date:    Enero 2021
+// Comms:   buscador busca ofertas en la pizarra tal y como indica el enunciado
+//--------------------------------------------------------------------------------------------------
 #include <iostream>
 #include "../LindaDriver/LindaDriver.hpp"
 #include "../Tupla/Tupla.hpp"

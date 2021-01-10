@@ -1,4 +1,8 @@
-
+//--------------------------------------------------------------------------------------------------
+// File:    InitTuplas.cpp
+// Date:    Enero 2021
+// Comms:   InitTuplas coloca las tuplas de control en la pizarra
+//--------------------------------------------------------------------------------------------------
 #include <iostream>
 #include "../LindaDriver/LindaDriver.hpp"
 #include "../Tupla/Tupla.hpp"
