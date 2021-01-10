@@ -117,7 +117,7 @@ int main(int argc, char *argv[]) {
             //Genero la nueva tupla con los datos
             Tupla nuevaTupla(to_string(numeroTuplas), origen, destino, to_string(precio));
             //escribo la Tupla
-            cout << "Oferta escrita: " << nuevaTupla.to_string() << "\n";
+            //cout << "Oferta escrita: " << nuevaTupla.to_string() << "\n";
             pizarra.PN(nuevaTupla);
             //actualizo el valor y lo escribo en la pizarra
             totalTuplasB.set(1, to_string(numeroTuplas));

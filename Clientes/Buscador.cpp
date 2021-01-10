@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
                     oferta.set(3, "?Z");
                     pizarra.RDN(oferta, oferta);
                 }
-                cout << "Oferta leida: " + oferta.to_string() << "\n";
+                //cout << "Oferta leida: " + oferta.to_string() << "\n";
                 sleep(1);
             }
         }
@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
         numeroTuplas = numeroTuplas - 1;
         buscadores.set(1, to_string(numeroTuplas));
         pizarra.PN(buscadores);
-        cout<<"No hay tuplas ni publicadores acabo\n";
+        //cout<<"No hay tuplas ni publicadores acabo\n";
     }
 
     return 0;

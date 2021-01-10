@@ -69,8 +69,8 @@ int main(int argc, char *argv[]) {
             //_-------------------------------------------------------
             //realizamos la busqueda doble
             pizarra.RDN_2(primeraOferta, segundaOferta, primeraOfertaLocal, segundaOfertaLocal);
-            cout << "Oferta combinada seleccioanda: " << primeraOfertaLocal.to_string() << " ---- "
-                 << segundaOfertaLocal.to_string() << "\n";
+            //cout << "Oferta combinada seleccionada: " + primeraOfertaLocal.to_string() + " ---- "
+            //     + segundaOfertaLocal.to_string() + "\n";
             sleep(1);
         }
         //escribimos en la pizarra la tupla de control
@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
         numeroTuplas = numeroTuplas - 1;
         buscadoresCombinados.set(1, to_string(numeroTuplas));
         pizarra.PN(buscadoresCombinados);
-        cout<<"No hay tuplas ni publicadores acabo\n";
+        //cout<<"No hay tuplas ni publicadores acabo\n";
     }
 
     return 0;
