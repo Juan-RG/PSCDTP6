@@ -84,6 +84,7 @@ int main(int argc, char *argv[]) {
                     pizarra.RDN(oferta, oferta);
                 }
                 cout << "Oferta leida: " + oferta.to_string() << "\n";
+                sleep(1);
             }
         }
         //escribo el testigo para el siguiente buscador

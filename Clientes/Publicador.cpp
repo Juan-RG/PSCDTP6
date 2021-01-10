@@ -5,7 +5,7 @@
 
 using namespace std;
 
-static const int NUMERO_TOTAL_TUPLAS = 70;
+static const int NUMERO_TOTAL_TUPLAS = 1000;
 /**
  * Metodo que asigna una ciudad aleatoria de las 10 colocadas en el switch
  * @param ciudad
@@ -49,39 +49,6 @@ void asignarCiudad(string *ciudad) {
 }
 
 int main(int argc, char *argv[]) {
-/*                                                                          ///eliminarrr
-    //comprobacion de los datos
-    unsigned t0, t1;
-    //pasar los datos por el constructor
-    LindaDriver pizarra("localhost", 2020);
-    int numeroTuplas;
-    //extraeremos la tupla de RN['totalTuplas',?totalTuplas]
-    srand(time(NULL)); //reseteamos la semilla
-    int n = 0;
-    auto start = std::chrono::system_clock::now();
-    while (n < 1000){ //eliminar
-            Tupla nuevaTupla("1"+to_string(n),"zaragoza","ok","120");
-            pizarra.PN(nuevaTupla);
-        n++;
-    }
-    auto end = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsed_seconds = end-start;
-    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
-    std::cout << "finished computation at " << std::ctime(&end_time)
-              << "Execution time: " << elapsed_seconds.count() << "s\n";
-    n = 0;
-    Tupla primeraOferta("?A","?B","?C","?D");
-
-
-    while (n < 10){ //eliminar
-        cout<<"paso "<<n<<"\n";
-        Tupla primeraOfertaLocal(4);
-        Tupla segundaOfertaLocal(4);
-        pizarra.RN(primeraOferta,primeraOfertaLocal);
-        n++;
-    }
-*/
-
 
     if (argc != 3) {
         cerr << "Numero de parametros introducios incorrecto:" + string(strerror(errno)) + "\n";
@@ -140,30 +107,27 @@ int main(int argc, char *argv[]) {
         //declaro la tupla de control
         Tupla totalTuplas("TotalTuplas", "?X");
         //cojo la tupla de control del total de tuplas
-        cout << "Cliente envia " << totalTuplas.to_string() << "\n";
         Tupla totalTuplasB(2);
         pizarra.RN(totalTuplas, totalTuplasB);
-        cout << "Cliente recibe " << totalTuplasB.to_string() << "\n";
         //extraigo el numero de tuplas actuales
         numeroTuplas = stoi(totalTuplasB.get(1));
         if (numeroTuplas != NUMERO_TOTAL_TUPLAS){
-            cout << numeroTuplas << "\n";
             //aumento en 1 con la publicada
             numeroTuplas = numeroTuplas + 1;
             //Genero la nueva tupla con los datos
             Tupla nuevaTupla(to_string(numeroTuplas), origen, destino, to_string(precio));
             //escribo la Tupla
-
+            cout << "Oferta escrita: " << nuevaTupla.to_string() << "\n";
             pizarra.PN(nuevaTupla);
             //actualizo el valor y lo escribo en la pizarra
             totalTuplasB.set(1, to_string(numeroTuplas));
-            cout << "cliente escribe en pizarra " << totalTuplasB.to_string() << "\n";
+
             pizarra.PN(totalTuplasB);
         }else{
             pizarra.PN(totalTuplasB);
         }
 
-        //usleep(5);
+        sleep(1);
     }
     //diminuyo nº de publicadores
     //cojo la tupla de control del total de publicadores

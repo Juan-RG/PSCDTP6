@@ -71,6 +71,7 @@ int main(int argc, char *argv[]) {
             pizarra.RDN_2(primeraOferta, segundaOferta, primeraOfertaLocal, segundaOfertaLocal);
             cout << "Oferta combinada seleccioanda: " << primeraOfertaLocal.to_string() << " ---- "
                  << segundaOfertaLocal.to_string() << "\n";
+            sleep(1);
         }
         //escribimos en la pizarra la tupla de control
         pizarra.PN(tuplaControl);
