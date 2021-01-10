@@ -23,16 +23,8 @@ void comprobarErrorEnvio(Socket &soc, int client_fd, int send_bytes);
 
 //-------------------------------------------------------------
 /**
- * metodo para atender las peticiones de los clientes con RCP
- * @param soc
- * @param client_fd
- * @param i
- * @param ip1
- * @param ip2
- * @param ip3
- * @param puerto1
- * @param puerto2
- * @param puerto3
+ *pre: espera la cadena PETICION_DATOS
+ * post: devuelve los datos con formato ip1,ip2,ip3,puerto1,puerto2,puerto3
  */
 void servCliente(Socket &soc, int client_fd, const string ip1, const string ip2,
                  const string ip3, const int puerto1, const int puerto2, const int puerto3) {
@@ -43,7 +35,7 @@ void servCliente(Socket &soc, int client_fd, const string ip1, const string ip2,
     /*******************************************************************           Compruebo que la conexion es correcta */
     rcv_bytes = soc.Recv(client_fd, buffer, length);
     comprobarErrorRecepcion(soc, client_fd, rcv_bytes);
-    cout << "Mensaje del cliente recibido : " + buffer + "\n";
+    //cout << "Mensaje del cliente recibido : " + buffer + "\n";
 
     if (buffer == MENSAJE) {
         string datosConexion = ip1 + "," + ip2 + "," + ip3 + "," + to_string(puerto1) + "," + to_string(puerto2) + "," +
@@ -52,11 +44,11 @@ void servCliente(Socket &soc, int client_fd, const string ip1, const string ip2,
         int send_bytes = soc.Send(client_fd, datosConexion);
         comprobarErrorEnvio(soc, client_fd, send_bytes);
     } else if (buffer == MENSAJE_CERRAR) {
-        cout << "Recibido mensaje de cierre del servidor, terminando la ejecución..." << endl;
+       // cout << "Recibido mensaje de cierre del servidor, terminando la ejecución..." << endl;
         exit(0);
     } else {
         //si mensaje erroneo cerramos conexion
-        cerr << "Mensaje incorrecto del cliente recibido : " + buffer + "\n";
+        //cerr << "Mensaje incorrecto del cliente recibido : " + buffer + "\n";
         //cerrar
         soc.Close(client_fd);
         pthread_exit(NULL);
@@ -96,16 +88,13 @@ void comprobarErrorRecepcion(Socket &soc, int client_fd, int rcv_bytes) {
 
 //-------------------------------------------------------------
 int main(int numArg, char *args[]) {
-    //Ejecutar con ./MainServidor IP1 IP2 IP3 PUERTO1 PUERTO2 PUERTO3 puertoServerDespliegue
-
-
-    //Realizar un mejor control de er
+    //control de errores
     if (numArg != 8) {
         cerr << "Numero de parametros introducios incorrecto:" + string(strerror(errno)) + "\n";
         exit(1);
     }
 
-
+    //asigno los valores
     string ip1 = args[1];
     string ip2 = args[2];
     string ip3 = args[3];
@@ -113,15 +102,9 @@ int main(int numArg, char *args[]) {
     int puerto2 = stoi(args[5]);
     int puerto3 = stoi(args[6]);
 
-    //string ip1="localhost";
-    //string ip2="localhost";
-    //string ip3="localhost";
-    //int puerto1 = 2023;
-    //int puerto2 = 2024;
-    //int puerto3 = 2025;
 
     //total de conexiones;
-    const int N = 5000;                      //INTENTAR MIRAR PARA NO LIMITAR
+    const int N = 5000;
 
     thread cliente[N];
     int client_fd[N];
@@ -150,7 +133,7 @@ int main(int numArg, char *args[]) {
         exit(1);
     }
 
-    printf("Servidor arrancado esperando clientes\n");
+    //printf("Servidor arrancado esperando clientes\n");
     for (int i = 0; i < N; i++) {
         // Accept
         client_fd[i] = chan.Accept(); //bloquea hasta que se acepta conexion
@@ -178,7 +161,7 @@ int main(int numArg, char *args[]) {
     }
 
     // Despedida
-    cout << "Bye bye" << endl;
+    //cout << "Bye bye" << endl;
 
     return error_code;
 }
