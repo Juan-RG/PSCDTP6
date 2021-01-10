@@ -1,4 +1,9 @@
-// Clase auxiliar para implementar la función de Hash del contenedor (unordered_multiset) de Tuplas
+//--------------------------------------------------------------------------------------------------
+// File:    TuplaHash.cpp
+// Date:    Enero 2021
+// Comms:   Clase auxiliar para implementar la función de Hash del contenedor (unordered_multiset) de Tuplas
+//--------------------------------------------------------------------------------------------------
+
 #include "../Tupla/Tupla.hpp"
 
 using namespace std;
