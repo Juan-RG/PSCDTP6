@@ -1,8 +1,8 @@
 //--------------------------------------------------------------------------------------------------
 // File:    ServidorLinda.cpp
-// Author:
-// Date:    diciembre 2020
-// Comms:   Servidor que provee recursos a múltiples clientes.
+// Date:    Enero 2021
+// Comms:   Servidor que provee acceso al espacio de tuplas mediante las operaciones PN, RN, RDN, RN_2 y RDN_2
+//          a múltiples clientes.
 //--------------------------------------------------------------------------------------------------
 
 #include "../Socket/Socket.hpp"
@@ -11,10 +11,8 @@
 
 #include <iostream>
 #include <thread>
-#include <cstdlib>
-#include <cstring>
 #include <string>
-#include <sstream>  // stringstream para reemplazar sscanf
+#include <sstream>  // stringstream para cortar cadenas
 
 using namespace std;
 
@@ -26,8 +24,6 @@ static const string MENSAJE_RDN_2 = "RDN_2";
 static const string MENSAJE_DESCONEXION = "DESCONEXION";
 static const string MENSAJE_CERRAR = "CERRAR";
 static const string RECIBIDO = "OK";
-
-//-------------------------------------------------------------
 
 
 // Pre:  Recibimos tres strings, la cadena a trocear (s), y dos variables (t1 y t2) por referencia.
@@ -42,7 +38,7 @@ void trocea(string s, string &t1, string &t2) {
 }
 
 // Pre:  Recibimos tres strings, la cadena a trocear (s), y dos variables (t1 y t2) por referencia.
-// Post: Trocea la cadena s y guarda en t1 los caracteres antes de llegar a un "]" y el resto lo guarda en t2
+// Post: Trocea la cadena s y guarda en t1 los caracteres antes de llegar a un ";", y el resto lo guarda en t2
 void troceaTuplaDoble(string s, string &t1, string &t2) {
     stringstream s_stream(s);
     string substr;
@@ -53,13 +49,12 @@ void troceaTuplaDoble(string s, string &t1, string &t2) {
 }
 
 
-//-------------------------------------------------------------
-
 // Pre:  Funcion usada en cada hilo para cada cliente que recibe el socket, el numero de cliente y el monitor por referencia
 //       inicializado en el main.
 // Post: Se encarga de recibir la tupla, trocearla y dependiendo de que operacion a realizar recibe, llamara a una funcion
 //       del monitor u otra (PN, RN, RdN, RN_2, RdN_2). Si es PN, envia mensaje de OK y si es RN o RdN (de una o dos tuplas),
-//       envia la tupla encontrada. Finalizara cuando reciba mensaje de desconexion ("DESCONEXION").
+//       envia la tupla encontrada. Finalizará cuando reciba mensaje de desconexion ("DESCONEXION").
+//       Si recibe MENSAJE_CERRAR, cierra todos los hilos junto al proceso principal.
 void servCliente(Socket &soc, int client_fd, MonitorServidor &mS) {
 
     // Buffer para recibir el mensaje
@@ -89,7 +84,7 @@ void servCliente(Socket &soc, int client_fd, MonitorServidor &mS) {
             std::terminate();
         }
 
-        if (buffer == MENSAJE_DESCONEXION) {  //Salimos del bucle
+        if (buffer == MENSAJE_DESCONEXION) {  // Salimos del bucle
             out = true;
         } else if (buffer == MENSAJE_CERRAR) {
             cout << "Recibido mensaje de cierre del servidor, terminando la ejecución...\n";
@@ -179,7 +174,7 @@ int main(int argc, char *argv[]) {
     }
 
 
-    const int N = 5000;                                                                                                    // FIXME: AUMENTAR O HACER INFINITO
+    const int N = 5000;
     //Creamos el tipo de set que vamos a usar (donde guardamos las tuplas)
     unordered_multiset<Tupla, TuplaHash> almacen;
     MonitorServidor mS(&almacen);
