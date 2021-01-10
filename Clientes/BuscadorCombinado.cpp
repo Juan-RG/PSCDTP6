@@ -20,6 +20,11 @@ int main(int argc, char *argv[]) {
     //pasar los datos por el constructor
     LindaDriver pizarra(ipServidorDespliegue, puerto);
 
+
+    //genero la tupla de testigo
+    Tupla tuplaControl("BUSCADOR");
+    //cojo la tupla de testigo
+    pizarra.RN(tuplaControl, tuplaControl);
     //aumento numero de Buscadores combinados
     Tupla buscadoresCombinados("BuscadoresCombinados", "?X");
     //cojo la tupla de control de total buscadores combinados
@@ -42,10 +47,6 @@ int main(int argc, char *argv[]) {
 
     if (stoi(totalTuplas.get(1)) != 0 || stoi(totalTuplas.get(1)) != 0) {
 
-        //genero la tupla de testigo
-        Tupla tuplaControl("BUSCADOR");
-        //cojo la tupla de testigo
-        pizarra.RN(tuplaControl, tuplaControl);
         //creo las 2 tuplas para la busqueda doble
         Tupla primeraOferta("?A", "?B", "?C", "?D");
         Tupla segundaOferta("?E", "?C", "?F", "?G");
@@ -97,6 +98,7 @@ int main(int argc, char *argv[]) {
         buscadoresCombinados.set(1, to_string(numeroTuplas));
         pizarra.PN(buscadoresCombinados);
         //cout<<"No hay tuplas ni publicadores acabo\n";
+        pizarra.PN(tuplaControl);
     }
 
     return 0;

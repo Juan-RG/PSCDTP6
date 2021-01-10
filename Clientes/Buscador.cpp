@@ -19,6 +19,11 @@ int main(int argc, char *argv[]) {
     //pasar los datos por el constructor
     LindaDriver pizarra(ipServidorDespliegue, puerto);
 
+    //Genero la tupla de testigo
+    Tupla tuplaControl("BUSCADOR");
+    //cojo el testigo de la pizarra
+    pizarra.RN(tuplaControl, tuplaControl);
+
     //aumento numero de Buscadores
     Tupla buscadores("Buscadores", "?X");
     //cojo la tupla de control de total buscadores
@@ -40,10 +45,6 @@ int main(int argc, char *argv[]) {
     pizarra.RDN(totalTuplas, totalTuplas);
 
     if (stoi(totalTuplas.get(1)) != 0 || stoi(totalTuplas.get(1)) != 0) {
-        //Genero la tupla de testigo
-        Tupla tuplaControl("BUSCADOR");
-        //cojo el testigo de la pizarra
-        pizarra.RN(tuplaControl, tuplaControl);
         srand(time(NULL)); //reseteamos la semilla
 
         for (int i = 0; i < 10; i++) {
@@ -112,6 +113,7 @@ int main(int argc, char *argv[]) {
         buscadores.set(1, to_string(numeroTuplas));
         pizarra.PN(buscadores);
         //cout<<"No hay tuplas ni publicadores acabo\n";
+        pizarra.PN(tuplaControl);
     }
 
     return 0;
