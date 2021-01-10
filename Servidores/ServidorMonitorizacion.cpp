@@ -27,7 +27,6 @@ void recibirMensaje(Socket &chan, const int &socket_fd, string &buffer);
 
 static const string MENSAJE_CERRAR = "CERRAR";
 
-//Semaphore semaforoMutex(1,""); // acceso en exclusión mutua a LindaDriver
 
 Semaphore semaforoMutex(0,""); // acceso en exclusión mutua a LindaDriver
 
@@ -78,7 +77,6 @@ int main(int argc, char *argv[]) {
         Tupla buscadoresTmp("", "");
         Tupla buscadoresCombinadosTmp("", "");
 
-        //semaforoMutex.wait(); // accede en exclusión mutua a LindaDriver
         if (continuar) { // el hilo puede haber cerrado las conexiones ya
             //leer tuplas de estado
             pizarra.RDN(peticionesLectura, peticionesLecturaTmp);
@@ -99,7 +97,6 @@ int main(int argc, char *argv[]) {
                  << "Buscadores en el sistema: " + buscadoresTmp.get(1) + "\n"
                  << "Buscadores Combinados en el sistema: " + buscadoresCombinadosTmp.get(1) + "\n";
         }
-        //semaforoMutex.signal();
 
         usleep(120);
     }
@@ -117,8 +114,6 @@ void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServe
                      const int &fdChanServer1, const int &fdChanServer2,
                      const int &fdChanServer3, const int &fdRegistro, string ipServidorDespliegue, int puerto,
                      bool &continuar) {
-    //mutex mtx;  //mutex personal del hilo para frenarlo
-    //unique_lock<mutex> lck(mtx);
     // Se instancia el LindaDriver
     LindaDriver pizarra(ipServidorDespliegue, puerto);
 
@@ -157,15 +152,12 @@ void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServe
             contador++;
             if (contador == 3) {
                 continuar = false;
-                //ESPERAR.wait(lck);
-                //esperaCierre.wait();
 
                 semaforoMutex.wait(); // accede en exclusión mutua a la comunicación con los servidores y lo mantiene
                 mandarMensaje(chanServer1, fdChanServer1, MENSAJE_CERRAR);
                 mandarMensaje(chanServer2, fdChanServer2, MENSAJE_CERRAR);
                 mandarMensaje(chanServer3, fdChanServer3, MENSAJE_CERRAR);
                 mandarMensaje(chanRegistro, fdRegistro, MENSAJE_CERRAR);
-                //semaforoMutex.signal();
 
                 cout << "\033[2J\033[1;1H";
                 cout<< "\rSistema sin clientes ni modificaciones realizadas." << endl;
