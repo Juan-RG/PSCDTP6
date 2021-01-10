@@ -1,8 +1,7 @@
 //--------------------------------------------------------------------------------------------------
 // File:    MonitorServidor.cpp
-// Author:
-// Date:    diciembre 2020
-// Coms:	Este fichero contiene la especificación de las funciones del MonitorServidor.
+// Date:    Enero 2021
+// Coms:	Especificación de las funciones del MonitorServidor.
 //--------------------------------------------------------------------------------------------------
 
 #include "MonitorServidor.hpp"
@@ -45,8 +44,6 @@ void MonitorServidor::PN(Tupla &tupla) {
 //       En caso de no encontrarla en el almacén, el proceso se quedará bloqueado hasta que se realice un nuevo
 //       PostNote, y procederá a buscar de nuevo la tupla en el almacén.
 //       Este ciclo se repite hasta encontrar una coincidencia.
-//
-
 void MonitorServidor::RdN(Tupla &tupla) {
     unique_lock<mutex> lck(mtx);
     Tupla resultado("");
@@ -82,7 +79,6 @@ void MonitorServidor::RdN(Tupla &tupla) {
 //       En caso de no encontrarla en el almacén, el proceso se quedará bloqueado hasta que se realice un nuevo
 //       PostNote, y procederá a buscar de nuevo la tupla en el almacén.
 //       Este ciclo se repite hasta encontrar una coincidencia.
-//
 void MonitorServidor::RN(Tupla &tupla) {
     unique_lock<mutex> lck(mtx);
     Tupla resultado(tupla);
@@ -135,9 +131,8 @@ struct MonitorServidor::comodinesComunes {
 
 // Pre:  Existe un MonitorServidor y una Tupla p.
 //
-// Post: Busca los comodines de la tupla p, los devuelve por referencia mediante un array de comodines y el numero de
+// Post: Busca los comodines de la tupla p, y los devuelve por referencia mediante un array de comodines junto al número de
 //       comodines en numComodinesp.
-
 void MonitorServidor::proceso_comodines(Tupla p, comodines arrayComodinesp[], int &numComodinesp) {
     regex e("\\?[A-Z]");
     bool estaba = false;
@@ -158,8 +153,8 @@ void MonitorServidor::proceso_comodines(Tupla p, comodines arrayComodinesp[], in
                 arrayComodinesp[numComodinesp].indices[arrayComodinesp[numComodinesp].numIndices] = i;
                 arrayComodinesp[numComodinesp].numIndices++;
                 numComodinesp++;
-            } else {
-                // se resetea estaba para la siguiente iteración
+            } else { // ya estaba
+                // se resetea para la siguiente iteración
                 estaba = false;
             }
         }
@@ -168,25 +163,26 @@ void MonitorServidor::proceso_comodines(Tupla p, comodines arrayComodinesp[], in
 
 // Pre:  Existe un MonitorServidor y dos arrays de comodines.
 //
-// Post: Compara los comodines de los arrays y los devuelve  los que coinciden mediante un array de comodinesComunes
-//       y el numero de comodines comunes en numComodinesComunes
-//
+// Post: Compara los comodines de los dos arrays introducidos y devuelve los que coinciden junto a las posiciones mediante
+//       un array de comodinesComunes, junto al numero de comodines comunes en numComodinesComunes.
 void MonitorServidor::comodines_comunes(comodines arrayComodinesp1[], comodines arrayComodinesp2[],
                                         comodinesComunes arrayComodinesComunes[], int &numComodinesComunes,
                                         int numComodinesp1, int numComodinesp2) {
-    // Se juntan los comodines de ambas en el vector de estructuras de
-    // comodines comunes
     numComodinesComunes = 0;
+
+    // Se juntan los comodines de ambas en el vector de estructuras de comodines comunes
     for (int i = 0; i < numComodinesp1; i++) {
         for (int j = 0; j < numComodinesp2; j++) {
-            // si dos coinciden , se añade un nuevo comodín común
-            // se sabe que en ninguno de los dos hay comodines repetidos
+            // Si dos coinciden, se añade un nuevo comodín común
+            // Se sabe que en ninguno de los dos hay comodines repetidos
             if (arrayComodinesp1[i].valor == arrayComodinesp2[j].valor) {
                 arrayComodinesComunes[numComodinesComunes].valor = arrayComodinesp1[i].valor;
                 arrayComodinesComunes[numComodinesComunes].numIndicesp1 = arrayComodinesp1[i].numIndices;
+
                 // copia el vector de indices de comodinesp1 en el de comunes para p1
                 std::copy(arrayComodinesp1[i].indices, arrayComodinesp1[i].indices + 6,
                           arrayComodinesComunes[numComodinesComunes].indicesp1);
+
                 // hace lo mismo para p2
                 arrayComodinesComunes[numComodinesComunes].numIndicesp2 = arrayComodinesp2[j].numIndices;
                 // copia el vector de indices de comodinesp2 en el de comunes para p2
@@ -201,24 +197,30 @@ void MonitorServidor::comodines_comunes(comodines arrayComodinesp1[], comodines 
 
 // Pre:  Existe un MonitorServidor y dos tuplas p1 y p2.
 //
-// Post: Busca las tuplas pasadas como argumento en el almacen y las devuelve el resultado.
-//       En el caso de no encontrarlas devolveria las tuplas originales p1 y p2.
+// Post: Obtiene pares de tuplas diferentes del almacen, y si hacen match con p1 y p2, teniendo en cuenta sus comodines comunes
+//       indicados en comodinesComunes junto a su número en numComodinesComunes, las devuelve como resultado en p1 y p2.
+//       En el caso de no encontrarlas devuelve las tuplas originales p1 y p2.
 void MonitorServidor::buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numComodinesComunes,
                                comodinesComunes arrayComodinesComunes[]) {
+    // Se declaran los iteradores externo(itr) e interno(itr2)
+    // tuplaTemp1 contendrá las tuplas obtenidas en el iterador externo
+    // tuplaTemp2 contendrá las tuplas obtenidas en el iterador interno
     unordered_multiset<Tupla, TuplaHash>::iterator itr;
     unordered_multiset<Tupla, TuplaHash>::iterator itr2;
     bool sigueLocal = true;
+
     for (itr = almacen.begin(); itr != almacen.end();) {
         Tupla tuplaTemp1(*itr);
         if (p1.size() == tuplaTemp1.size()) { // Si la tupla obtenida es de tamaño distinto a p1, se salta
             for (itr2 = almacen.begin(); itr2 != almacen.end();) {
-                if (itr != itr2) { // si el objeto al que apuntan ambos iteradores es el mismo, se descarta
+                if (itr != itr2) { // Si el objeto al que apuntan ambos iteradores es el mismo, se descarta
                     Tupla tuplaTemp2(*itr2);
                     if (p2.size() == tuplaTemp2.size()) { // Si la tupla obtenida es de tamaño distinto a p2, se salta
-                        if (numComodinesComunes == 0) { // si no hay índices comunes
+                        if (numComodinesComunes == 0) { // si no hay índices comunes, solo necesitan hacer match
                             if (p1.match(tuplaTemp1) && p2.match(tuplaTemp2)) {
                                 p1.from_string(tuplaTemp1.to_string());
                                 p2.from_string(tuplaTemp2.to_string());
+                                // forzamos la salida de los bucles, ya se han encontrado
                                 encontrado = true;
                                 itr2 = almacen.end();
                             } else {
@@ -237,11 +239,12 @@ void MonitorServidor::buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numCo
                                     }
                                 }
                             }
-                            if (sigueLocal) { // si todos los pares de posiciones son iguales
-                                // las hemos encontrado
+                            if (sigueLocal) { // si todos los pares de posiciones respecto a los comodines comunes son iguales,
+                                              // necesitamos comprobar si hacen match con p1 y p2 respectivamente
                                 if (p1.match(tuplaTemp1) && p2.match(tuplaTemp2)) {
                                     p1.from_string(tuplaTemp1.to_string());
                                     p2.from_string(tuplaTemp2.to_string());
+                                    // forzamos la salida de los bucles, ya se han encontrado
                                     encontrado = true;
                                     itr2 = almacen.end();
                                 }
@@ -265,14 +268,12 @@ void MonitorServidor::buscando(Tupla &p1, Tupla &p2, bool &encontrado, int numCo
     }
 }
 
-// Pre:  Existe un MonitorServidor y dos tuplas pasadas como argumentos.
+// Pre:  p1.size() == p2.size()
 //
-//
-// Post: Busca las dos tuplas pasadas como argumentos en el almacén y las devuelve como resultado.
-//       En caso de no encontrarla en el almacén, el proceso se quedará bloqueado hasta que se realice un nuevo
-//       PostNote, y procederá a buscarlas de nuevo las tuplas en el almacén.
-//       Este ciclo se repite hasta encontrar una coincidencia.
-//
+// Post: Busca un par de tuplas en el almacén que hagan match con p1 y p2 respectivamente, teniendo en cuenta que el
+//       contenido de las posiciones de ambas tuplas que coincidan con posiciones en p1 y p2 que tengan comodines comunes
+//       a ambas deben ser iguales en las dos. En caso de que se encuentren, se devuelven en p1 y p2.
+//       En caso de no encontrar ningún par de tuplas, se esperará a la condición enEspera a un nuevo PN.
 void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {
     unique_lock<mutex> lck(mtx);
     bool encontrado = false;
@@ -283,7 +284,6 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {
         int numComodinesComunes = 0;
 
         // acotados a los tamaños de cada una de las tuplas
-        //?x -> arrayComodines[0] y los valores
         comodines arrayComodinesp1[p1.size()];
         for (int i = 0; i < p1.size(); ++i) {
             arrayComodinesp1[i].numIndices = 0;
@@ -292,12 +292,7 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {
         for (int i = 0; i < p2.size(); ++i) {
             arrayComodinesp2[i].numIndices = 0;
         }
-        comodinesComunes arrayComodinesComunes[p1.size()]; // max: el tamaño
-        // de la menor
-        // o de cualquiera
-        // de las dos
-
-
+        comodinesComunes arrayComodinesComunes[p1.size()];  // max: el tamaño de la menor o de cualquiera de las dos
         // Se guardan los comodines de la tupla p1 junto a los índices donde aparecen
         int numComodinesp1 = 0;
         proceso_comodines(p1, arrayComodinesp1, numComodinesp1);
@@ -311,20 +306,17 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {
             if (!encontrado) {
                 cout << "Operacion RDN_2 bloqueada\n";
                 enEspera.wait(lck);
-            }
+            } // else: se han sobreescrito p1 y p2 con las tuplas resultado
         }
-        // devolvemos las tuplas
     }
 }
 
-// Pre:  Existe un MonitorServidor y dos tuplas pasadas como argumentos.
+// Pre:  p1.size() == p2.size()
 //
-//
-// Post: Busca las dos tuplas pasadas como argumentos en el almacén y borra 2 que coincidan.
-//       En caso de no encontrarlas en el almacén, el proceso se quedará bloqueado hasta que se realice un nuevo
-//       PostNote, y procederá a buscar de nuevo las tuplas en el almacén.
-//       Este ciclo se repite hasta encontrar una coincidencia.
-//
+// Post: Busca un par de tuplas en el almacén que hagan match con p1 y p2 respectivamente, teniendo en cuenta que el
+//       contenido de las posiciones de ambas tuplas que coincidan con posiciones en p1 y p2 que tengan comodines comunes
+//       a ambas deben ser iguales en las dos. En caso de que se encuentren, se devuelven en p1 y p2 y se eliminan del almacen.
+//       En caso de no encontrar ningún par de tuplas, se esperará a la condición enEspera a un nuevo PN.
 void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {
     unique_lock<mutex> lck(mtx);
     bool encontrado = false;
@@ -335,7 +327,6 @@ void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {
         int numComodinesComunes = 0;
 
         // acotados a los tamaños de cada una de las tuplas
-        //?x -> arrayComodines[0] y los valores
         comodines arrayComodinesp1[p1.size()];
         for (int i = 0; i < p1.size(); ++i) {
             arrayComodinesp1[i].numIndices = 0;
@@ -345,14 +336,9 @@ void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {
         for (int i = 0; i < p2.size(); ++i) {
             arrayComodinesp2[i].numIndices = 0;
         }
-        comodinesComunes arrayComodinesComunes[p1.size()]; // max: el tamaño
-        // de la menor
-        // o de cualquiera
-        // de las dos
-
+        comodinesComunes arrayComodinesComunes[p1.size()]; // max: el tamaño de la menor o de cualquiera de las dos
 
         // Se guardan los comodines de la tupla p1 junto a los índices donde aparecen
-
 
         int numComodinesp1 = 0;
         proceso_comodines(p1, arrayComodinesp1, numComodinesp1);
@@ -367,11 +353,11 @@ void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {
                 enEspera.wait(lck);
             }
         }
-        if (encontrado) {
+        if (encontrado) { // Las tuplas p1 y p2 se han sobreescrito con el resultado, ahora se borran del almacen
             almacen.erase(almacen.equal_range(p1).first);
             almacen.erase(almacen.equal_range(p2).first);
         }
-        // devolvemos las tuplas
+
     }
 }
 
