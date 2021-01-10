@@ -1,17 +1,15 @@
-//*****************************************************************
-// File:   Tupla.cpp
-// Author: PSCD-Unizar
-// Date:   noviembre 2020
-// Coms:
-//*****************************************************************
+//--------------------------------------------------------------------------------------------------
+// File:    Tupla.cpp
+// Date:    Enero 2021
+// Comms:   Implementación de Tupla.
+//--------------------------------------------------------------------------------------------------
 
 #include <vector>
 #include <string>
 #include <cassert>
 #include "Tupla.hpp"
-#include <iostream> //                                                              <<-------------------------------------BOrrame pls
-#include <sstream>  // stringstream para reemplazar sscanf
-#include <regex>
+#include <sstream>  // stringstream para cortar cadenas
+#include <regex>    // Para reconocercomodines
 
 Tupla::Tupla(int n) {
     data = new vector<string>(n, "");
@@ -80,14 +78,14 @@ Tupla::Tupla(const Tupla &t) {
 // Operador iguales para el unordered multiset, devuelve true si y solo si las dos tuplas tienen el mismo tamaño y contenido
 bool Tupla::operator==(const Tupla &b) const {
     if (data->size() != b.size()) {
-        return false; // ya sabemos que no son iguales
+        return false; // Ya sabemos que no son iguales
     } else {
         for (int i = 0; i < data->size(); i++) {
             if (data->at(i) != b.get(i)) {
-                return false; // si hay una posición en la que sus strings no sean iguales, se devuelve false
+                return false; // Si hay una posición en la que sus strings no sean iguales, se devuelve false
             }
         }
-        return true; // ya sabemos que lo son
+        return true; // Ya sabemos que lo son
     }
 }
 
@@ -117,12 +115,12 @@ void Tupla::set(int pos, string value) {
 }
 
 void Tupla::trocear(string elem[], int strings, string s) {
-    stringstream s_stream(s); //create string stream from the string
+    stringstream s_stream(s);
     string substr;
     int i;
-    getline(s_stream, substr, '['); //get first string delimited by comma
+    getline(s_stream, substr, '[');
     for (i = 0; i < strings - 1; i++) {
-        getline(s_stream, substr, ','); //get first string delimited by comma
+        getline(s_stream, substr, ',');
         elem[i] = substr;
     }
     getline(s_stream, substr, ']');
@@ -152,7 +150,7 @@ void Tupla::from_string(string s) {
 }
 
 bool Tupla::match(Tupla p) const {
-    if (p.size() != data->size()) { // si las tuplas tienen dif tamaño
+    if (p.size() != data->size()) { // Si las tuplas tienen diferente tamaño ya no coinciden
         return false;
     }
     bool rep;

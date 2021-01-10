@@ -1,16 +1,15 @@
-//*****************************************************************
-// File:   Tupla.hpp
-// Author: PSCD-Unizar
-// Date:   noviembre 2020
-// Coms:   
-//*****************************************************************
+//--------------------------------------------------------------------------------------------------
+// File:    Tupla.hpp
+// Date:    Enero 2021
+// Comms:   Especificación de una Tupla Linda.
+//--------------------------------------------------------------------------------------------------
 
 #ifndef TUPLA
 #define TUPLA
 
 #include <iostream>
 #include <string>
-#include <vector> //estudiar la clase "vector" de C++
+#include <vector>
 
 using namespace std;
 
@@ -81,8 +80,7 @@ private:
     //la tupla se almacenará como un vector de strings. Dado que antes
     //de su declaración no se conoce el número de componentes, declaramos
     //"data" como un puntero para el que se reservará memoria en el constructor,
-    //momento en el que conocerá el tamaño. No olvidar liberar la memoria en 
-    //el destructor
+    //momento en el que conocerá el tamaño.
     vector<string> *data;
 };
 
