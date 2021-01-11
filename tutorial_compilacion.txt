@@ -1,0 +1,54 @@
+Servidor de monitorización y de registro:
+    Editar la línea de compilación de Hendrix del Makefile tal que no esté comentada (sin #)
+        Se puede hacer desde hendrix con "pico Makefile" -> moverse con las flechas -> borrar el # -> darle a Ctrl-O, a Enter y a Ctrl-X
+    Meter archivos en hendrix
+    
+        Hendrix01 (ventana 1):
+            make clean
+            make servidor_monitorizacion
+            make server_registro
+            ./Servidores/ServidorRegistro 155.210.152.12 155.210.152.12 155.210.152.12 32015 32014 32013 2030
+        
+        Hendrix01 (ventana 2): 
+            ./Servidores/ServidorMonitorizacion localhost 2030 <---------------- NO EJECUTAR HASTA QUE LOS SERVIDORES LINDA ESTÉN ARRIBA
+            
+            
+Servidores Linda:            
+    Meter archivos en hendrix (las carpetas se comparten entre los dos)
+    
+    Conectarse a pilgor.cps.unizar.es
+        make clean
+        make server_linda
+        ./Servidores/ServidorLinda 32015&
+        ./Servidores/ServidorLinda 32014&           <---- no olvidar poner & al final, o ejecutar cada uno en una ventana/pestaña diferente
+        ./Servidores/ServidorLinda 32013& 
+        
+
+Clientes:
+    Abrir terminal 1
+        make clean
+        make
+        ejecutar ejecutaPublicadores.bash <----- PRIMERO, O LOS BUSCADORES SE SALDRÁN, INDICAR QUE INITTUPLAS TAMBIÉN SE EJECUTA AQUÍ
+    
+    Abrir terminal 2
+        ejecutar ejecutaBuscadores.bash 
+        
+        
+    Si se piden más clientes, NO volver a ejecutar ejecutaPublicadores.bash 
+    (duplicaría a InitTuplas y rompería todo), si no que se pone:
+        ./Clientes/InitTuplas 155.210.152.183 2030&
+        
+        o
+        
+        ./Clientes/Buscador 155.210.152.183 2030&
+        
+        o
+        
+        ./Clientes/BuscadorCombinado 155.210.152.183 2030&
+        
+        
+Carga:
+
+    Abrir terminal
+        make
+        ./Pruebas/clienteCarga 1000 155.210.152.183 2030& <----- cambiar 1000 por Num tuplas a poner y quitar

@@ -20,7 +20,7 @@
 
 #include "../LindaDriver/LindaDriver.hpp"
 #include "../Tupla/Tupla.hpp"
-
+#include <chrono>
 using namespace std;
 //-----------------------------------------------------
 void errorInvocacion() {
@@ -32,6 +32,9 @@ void errorInvocacion() {
 }
 //-----------------------------------------------------
 int main(int argc, char* argv[]) {
+    unsigned t0, t1;
+    auto start = std::chrono::system_clock::now();
+
     const int MAX_LENGTH = 6; //máx longitud tuplas
     //faltan argumentos en la invocación?
     if (argc < 4 ) {
@@ -100,4 +103,10 @@ int main(int argc, char* argv[]) {
         delete tuplas[i];
     }
     //-----------------------------------------------------
+
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+    std::cout << "Ejecución terminada en " << std::ctime(&end_time)
+              << "Tiempo de ejecución: " << elapsed_seconds.count() << "s\n";
 }
