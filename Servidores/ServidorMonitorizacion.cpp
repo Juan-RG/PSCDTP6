@@ -27,7 +27,7 @@ void recibirMensaje(Socket &chan, const int &socket_fd, string &buffer);
 
 static const string MENSAJE_CERRAR = "CERRAR";
 
-Semaphore semaforoMutex(0,""); // acceso en exclusión mutua a LindaDriver
+Semaphore acabado(0,""); // Semáforo indicador de que el proceso principal ha terminado de comunicarse con los servidores Linda
 
 int main(int argc, char *argv[]) {
     if (argc != 3) {
@@ -99,17 +99,16 @@ int main(int argc, char *argv[]) {
 
         usleep(120);
     }
-    semaforoMutex.signal();
+    acabado.signal(); // indica al hilo que se ha terminado de comunicar con los servidores y se puede cerrar
     controlDesconectar.join(); // espera al hilo
     exit(0);
 }
 
 
-/**
- * pre:tuplas de control puestas
- * post: El método comprueba si hay publicadores buscadores o buscadores combinados y comprueba si se ha actualizado el número de tuplas en el servidor
- * Si en 3 iteraciones de x segundos esto no se cumple cierra todos los servidores y acaba
-
+/*
+ * Pre: Las tuplas de control se encuentran en el espacio de tuplas
+ * Post: El método comprueba si hay publicadores buscadores o buscadores combinados y comprueba si se ha actualizado el número de tuplas en el servidor
+ *       Si en 3 iteraciones de x segundos esto no se cumple cierra todos los servidores y acaba
  */
 void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServer3, Socket &chanRegistro,
                      const int &fdChanServer1, const int &fdChanServer2,
@@ -122,7 +121,7 @@ void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServe
     int numeroTuplasPasado = -1;
     bool nuevasTuplas = true;
 
-    //tuplas de valores
+    //tuplas de control
     Tupla totalTuplas("TotalTuplas", "?X");
     Tupla publicadores("Publicadores", "?X");
     Tupla buscadores("Buscadores", "?X");
@@ -134,12 +133,10 @@ void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServe
         Tupla buscadoresTmp("", "");
         Tupla buscadoresCombinadosTmp("", "");
 
-        //semaforoMutex.wait(); // accede en exclusión mutua a LindaDriver
         pizarra.RDN(totalTuplas, totalTuplasTmp);
         pizarra.RDN(publicadores, publicadoresTmp);
         pizarra.RDN(buscadores, buscadoresTmp);
         pizarra.RDN(buscadoresCombinados, buscadoresCombinadosTmp);
-        //semaforoMutex.signal();
 
         if (numeroTuplasPasado != stoi(totalTuplasTmp.get(1))) {
             numeroTuplasPasado = stoi(totalTuplasTmp.get(1));
@@ -152,9 +149,9 @@ void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServe
             stoi(buscadoresCombinadosTmp.get(1)) == 0 && !nuevasTuplas) {
             contador++;
             if (contador == 3) {
-                continuar = false;
+                continuar = false; // indica al proceso principal que se van a cerrar los servidores
 
-                semaforoMutex.wait(); // accede en exclusión mutua a la comunicación con los servidores y lo mantiene
+                acabado.wait(); // Espera a que el proceso principal deje de comunicarse con los servidores
                 mandarMensaje(chanServer1, fdChanServer1, MENSAJE_CERRAR);
                 mandarMensaje(chanServer2, fdChanServer2, MENSAJE_CERRAR);
                 mandarMensaje(chanServer3, fdChanServer3, MENSAJE_CERRAR);
@@ -170,7 +167,7 @@ void controlarCierre(Socket &chanServer1, Socket &chanServer2, Socket &chanServe
         } else {
             contador = 0;
         }
-        sleep(5);   //tiempo de comprobacion para acabar el sistema
+        sleep(5);   // tiempo de comprobación para acabar el sistema
     }
 
 }
