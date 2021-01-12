@@ -21,8 +21,14 @@ class MonitorServidor {
 private:
     mutex mtx; // Para la ejecución de las operaciones en exclusión mutua
 
-    condition_variable enEspera;    // Condición de espera de operaciones RDN, RN, RDN_2 y RN_2
-                                    // que no han encontrado un resultado a devolver
+    // Condiciones de espera de operaciones RDN, RN, RDN_2 y RN_ que no han encontrado un resultado a devolver
+    // Según el tamaño de la tupla de la operación, se avisará o esperará en la condición correspondiente.
+    condition_variable enEsperaTam1;
+    condition_variable enEsperaTam2;
+    condition_variable enEsperaTam3;
+    condition_variable enEsperaTam4;
+    condition_variable enEsperaTam5;
+    condition_variable enEsperaTam6;
 
     unordered_multiset<Tupla, TuplaHash> almacen; // almacen de las tuplas
 

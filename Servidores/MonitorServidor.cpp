@@ -33,8 +33,20 @@ void MonitorServidor::PN(Tupla &tupla) {
     almacen.insert(tupla);          // Guardamos la tupla que pasamos a la operacion del monitor
     unordered_multiset<Tupla, TuplaHash>::iterator itr;
 
-    enEspera.notify_all();          //Avisamos a todos que estan en espera de que se ha anyadido una nueva tupla
-
+    // Avisamos a todos que están en espera de que se ha añadido una nueva tupla, según el tamaño de la misma
+    if (tupla.size() == 1) {
+        enEsperaTam1.notify_all();
+    } else if (tupla.size() == 2) {
+        enEsperaTam2.notify_all();
+    } else if (tupla.size() == 3) {
+        enEsperaTam3.notify_all();
+    } else if (tupla.size() == 4) {
+        enEsperaTam4.notify_all();
+    } else if (tupla.size() == 5) {
+        enEsperaTam5.notify_all();
+    } else {
+        enEsperaTam6.notify_all();
+    }
 }
 
 // Pre:  Existe un MonitorServidor y una tupla pasada como argumento.
@@ -66,7 +78,20 @@ void MonitorServidor::RdN(Tupla &tupla) {
 
         }
         if (!bandera) {
-            enEspera.wait(lck);
+            // Esperamos, según el tamaño de la tupla, a que se introduzca una con el mismo tamaño
+            if (tupla.size() == 1) {
+                enEsperaTam1.wait(lck);
+            } else if (tupla.size() == 2) {
+                enEsperaTam2.wait(lck);
+            } else if (tupla.size() == 3) {
+                enEsperaTam3.wait(lck);
+            } else if (tupla.size() == 4) {
+                enEsperaTam4.wait(lck);
+            } else if (tupla.size() == 5) {
+                enEsperaTam5.wait(lck);
+            } else {
+                enEsperaTam6.wait(lck);
+            }
         }
     }
     tupla.from_string(resultado.to_string());
@@ -101,7 +126,20 @@ void MonitorServidor::RN(Tupla &tupla) {
             }
         }
         if (!bandera) {
-            enEspera.wait(lck);
+            // Esperamos, según el tamaño de la tupla, a que se introduzca una con el mismo tamaño
+            if (tupla.size() == 1) {
+                enEsperaTam1.wait(lck);
+            } else if (tupla.size() == 2) {
+                enEsperaTam2.wait(lck);
+            } else if (tupla.size() == 3) {
+                enEsperaTam3.wait(lck);
+            } else if (tupla.size() == 4) {
+                enEsperaTam4.wait(lck);
+            } else if (tupla.size() == 5) {
+                enEsperaTam5.wait(lck);
+            } else {
+                enEsperaTam6.wait(lck);
+            }
         }
     }
 
@@ -304,8 +342,19 @@ void MonitorServidor::RdN_2(Tupla &p1, Tupla &p2) {
 
             busquedaDoble(p1, p2, encontrado, numComodinesComunes, arrayComodinesComunes);
             if (!encontrado) {
-                cout << "Operacion RDN_2 bloqueada\n";
-                enEspera.wait(lck);
+                if (p1.size() == 1) {
+                    enEsperaTam1.wait(lck);
+                } else if (p1.size() == 2) {
+                    enEsperaTam2.wait(lck);
+                } else if (p1.size() == 3) {
+                    enEsperaTam3.wait(lck);
+                } else if (p1.size() == 4) {
+                    enEsperaTam4.wait(lck);
+                } else if (p1.size() == 5) {
+                    enEsperaTam5.wait(lck);
+                } else {
+                    enEsperaTam6.wait(lck);
+                }
             } // else: se han sobreescrito p1 y p2 con las tuplas resultado
         }
     }
@@ -349,8 +398,19 @@ void MonitorServidor::RN_2(Tupla &p1, Tupla &p2) {
         while (!encontrado) {
             busquedaDoble(p1, p2, encontrado, numComodinesComunes, arrayComodinesComunes);
             if (!encontrado) {
-                cout << "Operacion RN_2 bloqueada\n";
-                enEspera.wait(lck);
+                if (p1.size() == 1) {
+                    enEsperaTam1.wait(lck);
+                } else if (p1.size() == 2) {
+                    enEsperaTam2.wait(lck);
+                } else if (p1.size() == 3) {
+                    enEsperaTam3.wait(lck);
+                } else if (p1.size() == 4) {
+                    enEsperaTam4.wait(lck);
+                } else if (p1.size() == 5) {
+                    enEsperaTam5.wait(lck);
+                } else {
+                    enEsperaTam6.wait(lck);
+                }
             }
         }
         if (encontrado) { // Las tuplas p1 y p2 se han sobreescrito con el resultado, ahora se borran del almacen
