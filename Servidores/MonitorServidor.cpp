@@ -18,12 +18,12 @@ MonitorServidor::MonitorServidor(unordered_multiset<Tupla, TuplaHash> *almacen) 
 }
 
 //------------------------- destructor
-// Pre:  Existe un MonitorServidor.
+// Pre:  --
 //
 // Post: Libera la memoria dinámica usada por el MonitorServidor.
 MonitorServidor::~MonitorServidor() {}
 
-// Pre:  Existe un MonitorServidor y una tupla pasada como argumento.
+// Pre:  --
 //
 //
 // Post: Inserta la tupla pasada como argumento en el almacen.
@@ -49,7 +49,7 @@ void MonitorServidor::PN(Tupla &tupla) {
     }
 }
 
-// Pre:  Existe un MonitorServidor y una tupla pasada como argumento.
+// Pre:  --
 //
 //
 // Post: Busca la tupla pasada como argumento en el almacén y la devuelve como resultado.
@@ -97,7 +97,7 @@ void MonitorServidor::RdN(Tupla &tupla) {
     tupla.from_string(resultado.to_string());
 }
 
-// Pre:  Existe un MonitorServidor y una tupla pasada como argumento.
+// Pre:  --
 //
 //
 // Post: Busca la tupla pasada como argumento en el almacén y la elimina.
@@ -147,7 +147,7 @@ void MonitorServidor::RN(Tupla &tupla) {
     tupla.from_string(resultado.to_string());
 }
 
-// Pre:  Existe un MonitorServidor.
+// Pre:  --
 //
 // Post: Crea una estructura comodines con 3 variables.
 struct MonitorServidor::comodines {
@@ -156,7 +156,7 @@ struct MonitorServidor::comodines {
     int indices[6]; // tamaño máximo de una tupla
 };
 
-// Pre:  Existe un MonitorServidor.
+// Pre:  --
 //
 // Post: Crea una estructura comodinesComunes con 5 variables.
 struct MonitorServidor::comodinesComunes {
@@ -167,7 +167,7 @@ struct MonitorServidor::comodinesComunes {
     int indicesp2[6];
 };
 
-// Pre:  Existe un MonitorServidor y una Tupla p.
+// Pre:  --
 //
 // Post: Busca los comodines de la tupla p, y los devuelve por referencia mediante un array de comodines junto al número de
 //       comodines en numComodinesp.
@@ -199,7 +199,7 @@ void MonitorServidor::obtenerComodines(Tupla p, comodines arrayComodinesp[], int
     }
 }
 
-// Pre:  Existe un MonitorServidor y dos arrays de comodines.
+// Pre:  --
 //
 // Post: Compara los comodines de los dos arrays introducidos y devuelve los que coinciden junto a las posiciones mediante
 //       un array de comodinesComunes, junto al numero de comodines comunes en numComodinesComunes.
@@ -233,7 +233,7 @@ void MonitorServidor::obtenerComodinesComunes(comodines arrayComodinesp1[], como
     }
 }
 
-// Pre:  Existe un MonitorServidor y dos tuplas p1 y p2.
+// Pre:  --
 //
 // Post: Obtiene pares de tuplas diferentes del almacen, y si hacen match con p1 y p2, teniendo en cuenta sus comodines comunes
 //       indicados en comodinesComunes junto a su número en numComodinesComunes, las devuelve como resultado en p1 y p2.
